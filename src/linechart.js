@@ -52,13 +52,6 @@ charterflight.LineChart.prototype.Draw = function()
     varNames.push(d['key']);
   });
 
-
-  /*var varNames = d3.keys(data)
-    .filter(function (key) {
-
-      return key;});*/
-
-
   var x = d3.time.scale()
     .range([0, width]);
 
@@ -162,7 +155,7 @@ charterflight.LineChart.prototype.Draw = function()
       return color(d.key);
     });
 
-  // Append dots that indicate data points
+  // Append dots to display data points
   countries.append("g").selectAll("circle")
     .data(function(d) {
       return d.values
@@ -242,7 +235,6 @@ if (this.ShowLegend == true)
   // We give access to svg object
   this.svg = svg;
 }
-
 
 charterflight.LineChart.prototype.Blurb = function()
 {

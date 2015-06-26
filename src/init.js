@@ -1,6 +1,3 @@
-// This is a temporary place where to place this prototype code
-// I will place this code in a separate file to be shared by the whole application
-
 (function(global) {
 
     var charterflight = {
@@ -8,7 +5,7 @@
     };
 
     if (global.charterflight) {
-        throw new Error('Charterflight has alread been defined');
+        throw new Error('Charterflight has already been defined');
     } else {
         global.charterflight = charterflight;
     };
