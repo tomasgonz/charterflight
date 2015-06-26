@@ -244,7 +244,7 @@ if (this.ShowLegend == true)
 }
 
 
-CharterFlight.LineChart.prototype.Blurb = function()
+charterflight.LineChart.prototype.Blurb = function()
 {
   var currClass = d3.select(this).attr("class");
   d3.select(this).attr("class", currClass + " current");
