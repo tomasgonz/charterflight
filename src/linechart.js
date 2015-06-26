@@ -1,5 +1,3 @@
-// Define an object that will serve to place charts
-
 charterflight.LineChart = function LineChart()
 {
 
