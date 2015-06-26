@@ -1,6 +1,5 @@
 charterflight.BarChart = function BarChart()
 {
-
   this.ShowLegend = false;
   this.Width = 200;
   this.Height = 200;
@@ -11,18 +10,18 @@ charterflight.BarChart = function BarChart()
     right: 20,
     bottom: 20,
     left: 20
-  }
+  };
 
   this.BlurbPlaceHolder = null;
   this.ChartPlaceHolder = "";
 
   this.Data = null;
-}
+};
 
 charterflight.BarChart.prototype.Draw = function() {
 
-      width = this.Width - this.Margin.left - this.Margin.right,
-        height = this.Height - this.Margin.top - this.Margin.bottom;
+      width = this.Width - this.Margin.left - this.Margin.right;
+      height = this.Height - this.Margin.top - this.Margin.bottom;
 
 // Coerce the data into the right formats
     data = data.map(function(d) {
@@ -36,13 +35,13 @@ charterflight.BarChart.prototype.Draw = function() {
         .range([ height, 0]);
 
     var x = d3.scale.ordinal()
-        .rangeRoundBands([0, width], .1)
+        .rangeRoundBands([0, width], 0.1)
         .domain(d3.entries(data).map(function(d) {
             return d.value.country;
         }));
 
     y.domain([d3.min(data, function(d) {
-        return d.value
+        return d.value;
     }), d3.max(data, function(d) {
         return d.value;
     })]);
@@ -81,7 +80,7 @@ charterflight.BarChart.prototype.Draw = function() {
         .enter().append("rect")
         .attr("class", "bar")
         .attr("x", function(d) {
-            return x(d.country)
+            return x(d.country);
         })
         .attr("width", x.rangeBand())
         .attr("y", function(d) {
@@ -98,8 +97,8 @@ charterflight.BarChart.prototype.Draw = function() {
         .attr("dx", "-.8em")
         .attr("dy", ".15em")
         .attr("transform", function(d) {
-            return "rotate(-90)"
+            return "rotate(-90)";
         });
 
     return svg;
-}
+};
