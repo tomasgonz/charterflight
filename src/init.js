@@ -1,7 +1,8 @@
+
 (function(global) {
 
     var charterflight = {
-        'version': '1.0'
+        'version': '0.1'
     };
 
     if (global.charterflight) {
