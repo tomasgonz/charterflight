@@ -1,6 +1,6 @@
 // Define an object that will serve to place charts
 
-function LineChart()
+CharterFlight.LineChart = function LineChart()
 {
 
   this.ShowLegend = false;
@@ -22,7 +22,7 @@ function LineChart()
 
 }
 
-LineChart.prototype.Draw = function()
+CharterFlight.LineChart.prototype.Draw = function()
 {
   width = this.Width - this.Margin.left - this.Margin.right,
     height = this.Height - this.Margin.top - this.Margin.bottom;
@@ -244,7 +244,7 @@ if (this.ShowLegend == true)
 }
 
 
-LineChart.prototype.Blurb = function()
+CharterFlight.LineChart.prototype.Blurb = function()
 {
   var currClass = d3.select(this).attr("class");
   d3.select(this).attr("class", currClass + " current");
