@@ -1,6 +1,6 @@
 {
   "name": "charterflight",
-  "version": "1.2.3",
+  "version": "0.1",
   "description": "Chart library based on d3",
   "main": [
     "dist/charterflight.min.js"
