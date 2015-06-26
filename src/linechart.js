@@ -1,6 +1,6 @@
 // Define an object that will serve to place charts
 
-CharterFlight.LineChart = function LineChart()
+charterflight.LineChart = function LineChart()
 {
 
   this.ShowLegend = false;
@@ -22,7 +22,7 @@ CharterFlight.LineChart = function LineChart()
 
 }
 
-CharterFlight.LineChart.prototype.Draw = function()
+charterflight.LineChart.prototype.Draw = function()
 {
   width = this.Width - this.Margin.left - this.Margin.right,
     height = this.Height - this.Margin.top - this.Margin.bottom;

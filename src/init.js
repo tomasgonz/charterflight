@@ -3,14 +3,14 @@
 
 (function(global) {
 
-    var CharterFlight = {
+    var charterflight = {
         'version': '1.0'
     };
 
-    if (global.CharterFlight) {
+    if (global.charterflight) {
         throw new Error('Charterflight has alread been defined');
     } else {
-        global.CharterFlight = CharterFlight;
+        global.charterflight = charterflight;
     };
 
 })(typeof window === 'undefined' ? this : window);
