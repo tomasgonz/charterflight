@@ -1,4 +1,26 @@
-charterflight.BarChart = function BarChart() {
+charterflight.BarChart = function BarChart()
+{
+
+  this.ShowLegend = false;
+  this.Width = 200;
+  this.Height = 200;
+  this.svg = null;
+
+  this.Margin = {
+    top: 20,
+    right: 20,
+    bottom: 20,
+    left: 20
+  }
+
+  this.BlurbPlaceHolder = null;
+  this.ChartPlaceHolder = "";
+
+  this.Data = null;
+
+}
+
+charterflight.BarChart.prototype.Draw = function() {
 
       width = this.Width - this.Margin.left - this.Margin.right,
         height = this.Height - this.Margin.top - this.Margin.bottom;
