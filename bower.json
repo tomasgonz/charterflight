@@ -3,7 +3,7 @@
   "version": "1.2.3",
   "description": "Chart library based on d3",
   "main": [
-    "build/CharterFlight.min.js"
+    "dist/CharterFlight.min.js"
   ],
   "dependencies": {
     "d3": "~3.5.5"
