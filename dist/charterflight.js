@@ -33,6 +33,8 @@
 
 charterflight.BarChart.prototype.Draw = function() {
 
+  this.svg = null;
+
       width = this.Width - this.Margin.left - this.Margin.right;
       height = this.Height - this.Margin.top - this.Margin.bottom;
 
