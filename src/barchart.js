@@ -17,7 +17,6 @@ charterflight.BarChart = function BarChart()
   this.ChartPlaceHolder = "";
 
   this.Data = null;
-
 }
 
 charterflight.BarChart.prototype.Draw = function() {
@@ -103,5 +102,4 @@ charterflight.BarChart.prototype.Draw = function() {
         });
 
     return svg;
-
 }
