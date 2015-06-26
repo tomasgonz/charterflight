@@ -1,0 +1,4 @@
+# Ignore node module folder
+
+/node_modules
+/bower_components

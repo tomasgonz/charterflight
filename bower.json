@@ -1,0 +1,32 @@
+{
+  "name": "CharterFlight",
+  "version": "1.2.3",
+  "description": "Chart library based on d3",
+  "main": [
+    "build/CharterFlight.min.js"
+  ],
+  "dependencies": {
+    "d3": "~3.5.5"
+  },
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "chart",
+    "d3"
+  ],
+  "authors": [
+    "Tomas Gonzalez <tomasgonz@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "src",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "homepage": "whereistomas.org"
+}
