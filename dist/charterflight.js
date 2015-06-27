@@ -77,7 +77,7 @@ charterflight.BarChart.prototype.Draw = function() {
 
     svg.append("g")
         .attr("class", "x axis")
-        .attr("transform", "translate(0," + this.Height + ")")
+        .attr("transform", "translate(0," + height + ")")
         .call(xAxis);
 
     svg.append("g")
