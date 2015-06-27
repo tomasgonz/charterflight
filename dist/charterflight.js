@@ -69,7 +69,7 @@ charterflight.BarChart.prototype.Draw = function() {
         .scale(y)
         .orient("left");
 
-    var svg = d3.select("body").append("svg")
+    var svg = d3.select(this.ChartPlaceHolder).append("svg")
         .attr("width", this.Width + this.Margin.left + this.Margin.right)
         .attr("height", this.Height + this.Margin.top + this.Margin.bottom)
         .append("g")
