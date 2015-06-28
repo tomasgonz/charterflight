@@ -294,7 +294,7 @@ charterflight.LineChart.prototype.Draw = function()
     .attr("d", function(d) {
       return line(d.values);
     })
-    .on("mouseover", function() {
+    .on("mouseover", function(d) {
 
       var currClass = d3.select("#" + d).attr("class");
       d3.select("#" + d).attr("class", currClass + " current");
@@ -305,7 +305,7 @@ charterflight.LineChart.prototype.Draw = function()
         }
       }
     )
-    .on("mouseout", function()
+    .on("mouseout", function(d)
     {
       var currClass = d3.select("#" + d).attr("class");
       var prevClass = currClass.substring(0, currClass.length - 8);
