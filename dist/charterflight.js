@@ -295,13 +295,22 @@ charterflight.LineChart.prototype.Draw = function()
       return line(d.values);
     })
     .on("mouseover", function() {
+
+      var currClass = d3.select("#" + d).attr("class");
+      d3.select("#" + d).attr("class", currClass + " current");
+
       if (this.BlurbPlaceHolder !== null)
         {
           Blurb();
         }
       }
     )
-    .on("mouseout", onmouseout)
+    .on("mouseout", function()
+    {
+      var currClass = d3.select("#" + d).attr("class");
+      var prevClass = currClass.substring(0, currClass.length - 8);
+      d3.select("#" + d).attr("class", prevClass);
+    })
     .style("stroke", function(d) {
       return color(d.key);
     });
