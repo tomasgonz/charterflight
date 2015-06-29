@@ -13,7 +13,7 @@ charterflight.LineChart = function LineChart()
     left: 20
   };
 
-  this.BlurbPlaceHolder = null;
+  this.BlurbPlaceHolder = "";
   this.ChartPlaceHolder = "";
 
   this.Data = null;
@@ -22,6 +22,9 @@ charterflight.LineChart = function LineChart()
 
 charterflight.LineChart.prototype.Draw = function()
 {
+  // Necessary to keep a reference within an event handler
+  var _self = this;
+
   width = this.Width - this.Margin.left - this.Margin.right;
   height = this.Height - this.Margin.top - this.Margin.bottom;
 
@@ -132,6 +135,7 @@ charterflight.LineChart.prototype.Draw = function()
     .attr("class", "tooltip")
     .style("opacity", 0);
 
+
   countries.append("svg:path")
     .attr("class", "line")
     .attr("id", function (d)
@@ -142,21 +146,23 @@ charterflight.LineChart.prototype.Draw = function()
       return line(d.values);
     })
     .on("mouseover", function(d) {
+      var currClass = d3.select("#" + d.key).attr("class");
+      d3.select("#" + d.key).attr("class", currClass + " current");
 
-      var currClass = d3.select("#" + d).attr("class");
-      d3.select("#" + d).attr("class", currClass + " current");
 
-      if (this.BlurbPlaceHolder !== null)
+      if (_self.BlurbPlaceHolder !== "")
         {
-          Blurb();
+          b = new charterflight.Blurb();
+          b.BlurbPlaceHolder = this.BlurbPlaceHolder;
+          b.Draw();
         }
       }
     )
     .on("mouseout", function(d)
     {
-      var currClass = d3.select("#" + d).attr("class");
+      var currClass = d3.select("#" + d.key).attr("class");
       var prevClass = currClass.substring(0, currClass.length - 8);
-      d3.select("#" + d).attr("class", prevClass);
+      d3.select("#" + d.key).attr("class", prevClass);
     })
     .style("stroke", function(d) {
       return color(d.key);

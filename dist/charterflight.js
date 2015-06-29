@@ -11,6 +11,52 @@
     };
 
 })(typeof window === 'undefined' ? this : window);
+;function getMinOfArray(numArray) {
+  return Math.min.apply(null, numArray);
+}
+
+function getMaxOfArray(numArray) {
+  return Math.max.apply(null, numArray);
+}
+;charterflight.Blurb = function Blurb()
+{
+  this.BlurbPlaceHolder = "";
+};
+
+charterflight.Blurb.prototype.Draw = function()
+{
+  var currClass = d3.select(this).attr("class");
+  d3.select(this).attr("class", currClass + " current");
+  var countryCode = d.key;
+  /*var countryVals = startEnd[countryCode];
+  var percentChange = 100 * (countryVals['endVal'] - countryVals['startVal']) / countryVals['startVal'];*/
+
+  /* Put years in array to calculate max and min*/
+  years = [];
+  values = [];
+
+  d.values.forEach(function(e) {
+
+    years.push(e.date.getFullYear());
+
+    values.push(e.value);
+
+  });
+
+  minValue = getMinOfArray(values);
+
+  maxValue = getMaxOfArray(values);
+
+  var blurb = '<h2>' + countryCode + '</h2>';
+
+  blurb += "Min value:" + minValue + " max value: " + maxValue;
+
+  blurb += "<p>";
+
+  blurb += "</p>";
+
+  $(this.BlurbPlaceHolder).html(blurb);
+};
 ;charterflight.BarChart = function BarChart()
 {
   this.ShowLegend = false;
@@ -25,7 +71,7 @@
     left: 20
   };
 
-  this.BlurbPlaceHolder = null;
+  this.BlurbPlaceHolder = "";
   this.ChartPlaceHolder = "";
 
   this.Data = null;
@@ -117,40 +163,6 @@ charterflight.BarChart.prototype.Draw = function() {
 
     return svg;
 };
-;charterflight.Blurb = function Blurb()
-{
-  var currClass = d3.select(this).attr("class");
-  d3.select(this).attr("class", currClass + " current");
-  var countryCode = d["key"];
-  /*var countryVals = startEnd[countryCode];
-  var percentChange = 100 * (countryVals['endVal'] - countryVals['startVal']) / countryVals['startVal'];*/
-
-  /* Put years in array to calculate max and min*/
-  years = [];
-  values = [];
-
-  d.values.forEach(function(e) {
-
-    years.push(e.date.getFullYear());
-
-    values.push(e.value);
-
-  });
-
-  minValue = getMinOfArray(values);
-
-  maxValue = getMaxOfArray(values)
-
-  var blurb = '<h2>' + countryCode + '</h2>';
-
-  blurb += "Min value:" + minValue + " max value: " + maxValue;
-
-  blurb += "<p>";
-
-  blurb += "</p>"
-
-  $("#blurb-content").html(blurb);
-}
 ;charterflight.LineChart = function LineChart()
 {
 
@@ -166,7 +178,7 @@ charterflight.BarChart.prototype.Draw = function() {
     left: 20
   };
 
-  this.BlurbPlaceHolder = null;
+  this.BlurbPlaceHolder = "";
   this.ChartPlaceHolder = "";
 
   this.Data = null;
@@ -175,6 +187,9 @@ charterflight.BarChart.prototype.Draw = function() {
 
 charterflight.LineChart.prototype.Draw = function()
 {
+  // Necessary to keep a reference within an event handler
+  var _self = this;
+
   width = this.Width - this.Margin.left - this.Margin.right;
   height = this.Height - this.Margin.top - this.Margin.bottom;
 
@@ -285,6 +300,7 @@ charterflight.LineChart.prototype.Draw = function()
     .attr("class", "tooltip")
     .style("opacity", 0);
 
+
   countries.append("svg:path")
     .attr("class", "line")
     .attr("id", function (d)
@@ -295,21 +311,23 @@ charterflight.LineChart.prototype.Draw = function()
       return line(d.values);
     })
     .on("mouseover", function(d) {
+      var currClass = d3.select("#" + d.key).attr("class");
+      d3.select("#" + d.key).attr("class", currClass + " current");
 
-      var currClass = d3.select("#" + d).attr("class");
-      d3.select("#" + d).attr("class", currClass + " current");
 
-      if (this.BlurbPlaceHolder !== null)
+      if (_self.BlurbPlaceHolder !== "")
         {
-          Blurb();
+          b = new charterflight.Blurb();
+          b.BlurbPlaceHolder = this.BlurbPlaceHolder;
+          b.Draw();
         }
       }
     )
     .on("mouseout", function(d)
     {
-      var currClass = d3.select("#" + d).attr("class");
+      var currClass = d3.select("#" + d.key).attr("class");
       var prevClass = currClass.substring(0, currClass.length - 8);
-      d3.select("#" + d).attr("class", prevClass);
+      d3.select("#" + d.key).attr("class", prevClass);
     })
     .style("stroke", function(d) {
       return color(d.key);

@@ -1,8 +1,13 @@
 charterflight.Blurb = function Blurb()
 {
+  this.BlurbPlaceHolder = "";
+};
+
+charterflight.Blurb.prototype.Draw = function()
+{
   var currClass = d3.select(this).attr("class");
   d3.select(this).attr("class", currClass + " current");
-  var countryCode = d["key"];
+  var countryCode = d.key;
   /*var countryVals = startEnd[countryCode];
   var percentChange = 100 * (countryVals['endVal'] - countryVals['startVal']) / countryVals['startVal'];*/
 
@@ -20,7 +25,7 @@ charterflight.Blurb = function Blurb()
 
   minValue = getMinOfArray(values);
 
-  maxValue = getMaxOfArray(values)
+  maxValue = getMaxOfArray(values);
 
   var blurb = '<h2>' + countryCode + '</h2>';
 
@@ -28,7 +33,7 @@ charterflight.Blurb = function Blurb()
 
   blurb += "<p>";
 
-  blurb += "</p>"
+  blurb += "</p>";
 
-  $("#blurb-content").html(blurb);
-}
+  $(this.BlurbPlaceHolder).html(blurb);
+};

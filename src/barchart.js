@@ -12,7 +12,7 @@ charterflight.BarChart = function BarChart()
     left: 20
   };
 
-  this.BlurbPlaceHolder = null;
+  this.BlurbPlaceHolder = "";
   this.ChartPlaceHolder = "";
 
   this.Data = null;
