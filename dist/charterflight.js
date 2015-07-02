@@ -20,6 +20,7 @@ function getMaxOfArray(numArray) {
 }
 ;charterflight.Blurb = function Blurb()
 {
+  this.Data = null;
   this.BlurbPlaceHolder = "";
 };
 
@@ -27,7 +28,7 @@ charterflight.Blurb.prototype.Draw = function()
 {
   var currClass = d3.select(this).attr("class");
   d3.select(this).attr("class", currClass + " current");
-  var countryCode = d.key;
+  var countryCode = this.Data.key;
   /*var countryVals = startEnd[countryCode];
   var percentChange = 100 * (countryVals['endVal'] - countryVals['startVal']) / countryVals['startVal'];*/
 
@@ -35,7 +36,7 @@ charterflight.Blurb.prototype.Draw = function()
   years = [];
   values = [];
 
-  d.values.forEach(function(e) {
+  this.Data.values.forEach(function(e) {
 
     years.push(e.date.getFullYear());
 
@@ -300,7 +301,6 @@ charterflight.LineChart.prototype.Draw = function()
     .attr("class", "tooltip")
     .style("opacity", 0);
 
-
   countries.append("svg:path")
     .attr("class", "line")
     .attr("id", function (d)
@@ -314,11 +314,17 @@ charterflight.LineChart.prototype.Draw = function()
       var currClass = d3.select("#" + d.key).attr("class");
       d3.select("#" + d.key).attr("class", currClass + " current");
 
+      if (_self.ShowLegend === true)
+      {
+        currClass = d3.select("#legend-" + d.key).attr("class");
+        d3.select("#legend-" + d.key).attr("class", currClass + " current-legend");
+      }
 
       if (_self.BlurbPlaceHolder !== "")
         {
           b = new charterflight.Blurb();
           b.BlurbPlaceHolder = this.BlurbPlaceHolder;
+          b.Data = d;
           b.Draw();
         }
       }
@@ -328,6 +334,13 @@ charterflight.LineChart.prototype.Draw = function()
       var currClass = d3.select("#" + d.key).attr("class");
       var prevClass = currClass.substring(0, currClass.length - 8);
       d3.select("#" + d.key).attr("class", prevClass);
+
+      if (_self.ShowLegend === true)
+      {
+        currClass = d3.select("#legend-" + d.key).attr("class");
+        prevClass = currClass.substring(0, currClass.length - 14);
+        d3.select("#legend-" + d.key).attr("class", prevClass);
+      }
     })
     .style("stroke", function(d) {
       return color(d.key);
@@ -373,17 +386,26 @@ if (this.ShowLegend === true)
         // Highlight series when hover over legend
         var currClass = d3.select("#" + d).attr("class");
         d3.select("#" + d).attr("class", currClass + " current");
+
+
+
     })
     .on("mouseout", function(d, i) {
       var currClass = d3.select("#" + d).attr("class");
       var prevClass = currClass.substring(0, currClass.length - 8);
       d3.select("#" + d).attr("class", prevClass);
+
+
+
     });
 
     legend.append("text")
       .attr("x", width + 20)
       .attr("y", 6)
       .attr("dy", ".35em")
+      .attr("id", function(d){
+        return "legend-" + d;
+      })
       .style("text-anchor", "end")
       .style("fill", color)
       .text(function(d) {

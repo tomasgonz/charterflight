@@ -1,5 +1,6 @@
 charterflight.Blurb = function Blurb()
 {
+  this.Data = null;
   this.BlurbPlaceHolder = "";
 };
 
@@ -7,7 +8,7 @@ charterflight.Blurb.prototype.Draw = function()
 {
   var currClass = d3.select(this).attr("class");
   d3.select(this).attr("class", currClass + " current");
-  var countryCode = d.key;
+  var countryCode = this.Data.key;
   /*var countryVals = startEnd[countryCode];
   var percentChange = 100 * (countryVals['endVal'] - countryVals['startVal']) / countryVals['startVal'];*/
 
@@ -15,7 +16,7 @@ charterflight.Blurb.prototype.Draw = function()
   years = [];
   values = [];
 
-  d.values.forEach(function(e) {
+  this.Data.values.forEach(function(e) {
 
     years.push(e.date.getFullYear());
 
