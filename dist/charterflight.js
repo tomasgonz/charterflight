@@ -301,23 +301,25 @@ charterflight.LineChart.prototype.Draw = function()
     .attr("class", "tooltip")
     .style("opacity", 0);
 
+// We need to replaceAll spaces with underscore
+// to avoid issues during event handler
   countries.append("svg:path")
     .attr("class", "line")
     .attr("id", function (d)
     {
-      return d.key;
+      return d.key.sanitize();
     })
     .attr("d", function(d) {
       return line(d.values);
     })
     .on("mouseover", function(d) {
-      var currClass = d3.select("#" + d.key).attr("class");
-      d3.select("#" + d.key).attr("class", currClass + " current");
+      var currClass = d3.select("#" + d.key.sanitize()).attr("class");
+      d3.select("#" + d.key.sanitize()).attr("class", currClass + " current");
 
       if (_self.ShowLegend === true)
       {
-        currClass = d3.select("#legend-" + d.key).attr("class");
-        d3.select("#legend-" + d.key).attr("class", currClass + " current-legend");
+        currClass = d3.select("#legend-" + d.key.sanitize()).attr("class");
+        d3.select("#legend-" + d.key.sanitize()).attr("class", currClass + " current-legend");
       }
 
       if (_self.BlurbPlaceHolder !== "")
@@ -331,15 +333,15 @@ charterflight.LineChart.prototype.Draw = function()
     )
     .on("mouseout", function(d)
     {
-      var currClass = d3.select("#" + d.key).attr("class");
+      var currClass = d3.select("#" + d.key.sanitize()).attr("class");
       var prevClass = currClass.substring(0, currClass.length - 8);
-      d3.select("#" + d.key).attr("class", prevClass);
+      d3.select("#" + d.key.sanitize()).attr("class", prevClass);
 
       if (_self.ShowLegend === true)
       {
-        currClass = d3.select("#legend-" + d.key).attr("class");
+        currClass = d3.select("#legend-" + d.key.sanitize()).attr("class");
         prevClass = currClass.substring(0, currClass.length - 14);
-        d3.select("#legend-" + d.key).attr("class", prevClass);
+        d3.select("#legend-" + d.key.sanitize()).attr("class", prevClass);
       }
     })
     .style("stroke", function(d) {
@@ -384,19 +386,13 @@ if (this.ShowLegend === true)
       return "translate(55," + i * 20 + ")";
     }).on("mouseover", function(d, i) {
         // Highlight series when hover over legend
-        var currClass = d3.select("#" + d).attr("class");
-        d3.select("#" + d).attr("class", currClass + " current");
-
-
-
+        var currClass = d3.select("#" + d.sanitize()).attr("class");
+        d3.select("#" + d.sanitize()).attr("class", currClass + " current");
     })
     .on("mouseout", function(d, i) {
-      var currClass = d3.select("#" + d).attr("class");
+      var currClass = d3.select("#" + d.sanitize()).attr("class");
       var prevClass = currClass.substring(0, currClass.length - 8);
-      d3.select("#" + d).attr("class", prevClass);
-
-
-
+      d3.select("#" + d.sanitize()).attr("class", prevClass);
     });
 
     legend.append("text")
@@ -404,7 +400,8 @@ if (this.ShowLegend === true)
       .attr("y", 6)
       .attr("dy", ".35em")
       .attr("id", function(d){
-        return "legend-" + d;
+        console.log("legend-" + d.sanitize());
+        return "legend-" + d.sanitize();
       })
       .style("text-anchor", "end")
       .style("fill", color)
@@ -413,7 +410,7 @@ if (this.ShowLegend === true)
       })
       .on("mouseover", function(d, i)
       {
-        var currClass = d3.select("#" + d).attr("class");
+        var currClass = d3.select("#" + d.sanitize()).attr("class");
         d3.select(this).attr("class", currClass + " current-legend");
       })
       .on("mouseout", function(d, i) {
@@ -426,4 +423,16 @@ if (this.ShowLegend === true)
 
   // We give access to svg object
   this.svg = svg;
+};
+;// This function is used to create return id's that do not contains
+// characters that conflict with event handlers
+String.prototype.replaceAll = function (find, replace) {
+  return this.replace(new RegExp(find, 'g'), replace);
+};
+
+String.prototype.sanitize = function () {
+
+  var s = this.replaceAll(" ", "_");
+  s = s.replaceAll(",", "");
+  return s;
 };
