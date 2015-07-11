@@ -1,7 +1,6 @@
 charterflight.LineChart = function LineChart()
 {
 
-  this.ShowLegend = false;
   this.Width = 200;
   this.Height = 200;
   this.svg = null;
@@ -13,6 +12,7 @@ charterflight.LineChart = function LineChart()
     left: 20
   };
 
+  this.LegendPlaceHolder = "";
   this.BlurbPlaceHolder = "";
   this.ChartPlaceHolder = "";
 
@@ -141,6 +141,8 @@ charterflight.LineChart.prototype.Draw = function()
     .attr("class", "line")
     .attr("id", function (d)
     {
+      $(_self.LegendPlaceHolder).append('<div class="legend-item" id="legend-' + d.key.sanitize()  + '" style="color:' + color(d.key) + '">' + d.key + "</div>");
+
       return d.key.sanitize();
     })
     .attr("d", function(d) {
@@ -150,10 +152,13 @@ charterflight.LineChart.prototype.Draw = function()
       var currClass = d3.select("#" + d.key.sanitize()).attr("class");
       d3.select("#" + d.key.sanitize()).attr("class", currClass + " current");
 
-      if (_self.ShowLegend === true)
+      if (_self.LegendPlaceHolder !== "")
       {
         currClass = d3.select("#legend-" + d.key.sanitize()).attr("class");
-        d3.select("#legend-" + d.key.sanitize()).attr("class", currClass + " current-legend");
+        //d3.select("#legend-" + d.key.sanitize()).attr("class", currClass + " current-legend");
+        d3.select("#legend-" + d.key.sanitize()).style('background-color', color(d.key));
+        d3.select("#legend-" + d.key.sanitize()).style('color', "#fff");
+
       }
 
       if (_self.BlurbPlaceHolder !== "")
@@ -171,11 +176,13 @@ charterflight.LineChart.prototype.Draw = function()
       var prevClass = currClass.substring(0, currClass.length - 8);
       d3.select("#" + d.key.sanitize()).attr("class", prevClass);
 
-      if (_self.ShowLegend === true)
+      if (_self.LegendPlaceHolder !== "")
       {
         currClass = d3.select("#legend-" + d.key.sanitize()).attr("class");
         prevClass = currClass.substring(0, currClass.length - 14);
-        d3.select("#legend-" + d.key.sanitize()).attr("class", prevClass);
+        d3.select("#legend-" + d.key.sanitize()).style('background-color', "#fff" );
+        d3.select("#legend-" + d.key.sanitize()).style('color', color(d.key));
+        //d3.select("#legend-" + d.key.sanitize()).attr("class", prevClass);
       }
     })
     .style("stroke", function(d) {
@@ -209,9 +216,13 @@ charterflight.LineChart.prototype.Draw = function()
       div.transition().duration(4000).style("opacity", 0);
     });
 
-if (this.ShowLegend === true)
+if (this.LegendPlaceHolder !== "")
 {
+
+
   // Legend with country names
+  /*
+
   var legend = svg.selectAll(".legend")
     .data(varNames.slice().reverse())
     .enter().append("g")
@@ -251,7 +262,7 @@ if (this.ShowLegend === true)
         var currClass = d3.select(this).attr("class");
         var prevClass = currClass.substring(0, currClass.length - 14);
         d3.select(this).attr("class", prevClass);
-      });
+      });*/
 
   }
 
