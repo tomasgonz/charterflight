@@ -181,7 +181,6 @@ charterflight.BarChart.prototype.Draw = function() {
   this.LegendPlaceHolder = "";
   this.BlurbPlaceHolder = "";
   this.ChartPlaceHolder = "";
-
   this.Data = null;
 
 };
@@ -307,8 +306,43 @@ charterflight.LineChart.prototype.Draw = function()
     .attr("class", "line")
     .attr("id", function (d)
     {
-      $(_self.LegendPlaceHolder).append('<div class="legend-item" id="legend-' + d.key.sanitize()  + '" style="color:' + color(d.key) + '">' + d.key + "</div>");
+      if (_self.LegendPlaceHolder !== "")
+      {
+        $(_self.LegendPlaceHolder)
+        .append('<div class="legend-item" id="legend-' +
+        d.key.sanitize()  + '" style="color:' + color(d.key) + '">' +
+        d.key + "</div>");
 
+        // Highlight line when hovering over legend
+
+        d3.select("#legend-" + d.key.sanitize()).on("mouseover", function()
+        {
+
+          var currClass = d3.select("#" + d.key.sanitize()).attr("class");
+          d3.select("#" + d.key.sanitize()).attr("class", currClass + " current");
+
+          currClass = d3.select("#legend-" + d.key.sanitize()).attr("class");
+          //d3.select("#legend-" + d.key.sanitize()).attr("class", currClass + " current-legend");
+          d3.select("#legend-" + d.key.sanitize()).style('background-color', color(d.key));
+          d3.select("#legend-" + d.key.sanitize()).style('color', "#fff");
+
+        });
+
+        d3.select("#legend-" + d.key.sanitize()).on("mouseout", function()
+        {
+          var currClass = d3.select("#" + d.key.sanitize()).attr("class");
+          var prevClass = currClass.substring(0, currClass.length - 8);
+          d3.select("#" + d.key.sanitize()).attr("class", prevClass);
+
+          currClass = d3.select("#legend-" + d.key.sanitize()).attr("class");
+          prevClass = currClass.substring(0, currClass.length - 14);
+          d3.select("#legend-" + d.key.sanitize()).style('background-color', "#fff" );
+          d3.select("#legend-" + d.key.sanitize()).style('color', color(d.key));
+
+        });
+
+
+      }
       return d.key.sanitize();
     })
     .attr("d", function(d) {
