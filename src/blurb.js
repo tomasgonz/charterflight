@@ -6,20 +6,19 @@ charterflight.Blurb = function Blurb()
 
 charterflight.Blurb.prototype.Draw = function()
 {
-  var currClass = d3.select(this).attr("class");
-  d3.select(this).attr("class", currClass + " current");
+  //var currClass = d3.select(this).attr("class");
+  //d3.select(this).attr("class", currClass + " current");
   var countryCode = this.Data.key;
   /*var countryVals = startEnd[countryCode];
   var percentChange = 100 * (countryVals['endVal'] - countryVals['startVal']) / countryVals['startVal'];*/
 
   /* Put years in array to calculate max and min*/
-  years = [];
-  values = [];
+  var years = [];
+  var values = [];
 
   this.Data.values.forEach(function(e) {
 
     years.push(e.date.getFullYear());
-
     values.push(e.value);
 
   });
@@ -37,4 +36,5 @@ charterflight.Blurb.prototype.Draw = function()
   blurb += "</p>";
 
   $(this.BlurbPlaceHolder).html(blurb);
+
 };

@@ -26,20 +26,19 @@ function getMaxOfArray(numArray) {
 
 charterflight.Blurb.prototype.Draw = function()
 {
-  var currClass = d3.select(this).attr("class");
-  d3.select(this).attr("class", currClass + " current");
+  //var currClass = d3.select(this).attr("class");
+  //d3.select(this).attr("class", currClass + " current");
   var countryCode = this.Data.key;
   /*var countryVals = startEnd[countryCode];
   var percentChange = 100 * (countryVals['endVal'] - countryVals['startVal']) / countryVals['startVal'];*/
 
   /* Put years in array to calculate max and min*/
-  years = [];
-  values = [];
+  var years = [];
+  var values = [];
 
   this.Data.values.forEach(function(e) {
 
     years.push(e.date.getFullYear());
-
     values.push(e.value);
 
   });
@@ -57,6 +56,7 @@ charterflight.Blurb.prototype.Draw = function()
   blurb += "</p>";
 
   $(this.BlurbPlaceHolder).html(blurb);
+
 };
 ;charterflight.BarChart = function BarChart()
 {
@@ -177,7 +177,7 @@ charterflight.BarChart.prototype.Draw = function() {
     bottom: 20,
     left: 20
   };
-  
+
   this.LegendPlaceHolder = "";
   this.BlurbPlaceHolder = "";
   this.ChartPlaceHolder = "";
@@ -326,6 +326,14 @@ charterflight.LineChart.prototype.Draw = function()
           d3.select("#legend-" + d.key.sanitize()).style('background-color', color(d.key));
           d3.select("#legend-" + d.key.sanitize()).style('color', "#fff");
 
+          if (_self.BlurbPlaceHolder !== "")
+            {
+              b = new charterflight.Blurb();
+              b.BlurbPlaceHolder = _self.BlurbPlaceHolder;
+              b.Data = d;
+              b.Draw();
+            }
+            
         });
 
         d3.select("#legend-" + d.key.sanitize()).on("mouseout", function()
@@ -340,7 +348,6 @@ charterflight.LineChart.prototype.Draw = function()
           d3.select("#legend-" + d.key.sanitize()).style('color', color(d.key));
 
         });
-
 
       }
       return d.key.sanitize();
@@ -364,7 +371,7 @@ charterflight.LineChart.prototype.Draw = function()
       if (_self.BlurbPlaceHolder !== "")
         {
           b = new charterflight.Blurb();
-          b.BlurbPlaceHolder = this.BlurbPlaceHolder;
+          b.BlurbPlaceHolder = _self.BlurbPlaceHolder;
           b.Data = d;
           b.Draw();
         }

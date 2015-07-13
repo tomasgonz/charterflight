@@ -11,7 +11,7 @@ charterflight.LineChart = function LineChart()
     bottom: 20,
     left: 20
   };
-  
+
   this.LegendPlaceHolder = "";
   this.BlurbPlaceHolder = "";
   this.ChartPlaceHolder = "";
@@ -160,6 +160,14 @@ charterflight.LineChart.prototype.Draw = function()
           d3.select("#legend-" + d.key.sanitize()).style('background-color', color(d.key));
           d3.select("#legend-" + d.key.sanitize()).style('color', "#fff");
 
+          if (_self.BlurbPlaceHolder !== "")
+            {
+              b = new charterflight.Blurb();
+              b.BlurbPlaceHolder = _self.BlurbPlaceHolder;
+              b.Data = d;
+              b.Draw();
+            }
+            
         });
 
         d3.select("#legend-" + d.key.sanitize()).on("mouseout", function()
@@ -174,7 +182,6 @@ charterflight.LineChart.prototype.Draw = function()
           d3.select("#legend-" + d.key.sanitize()).style('color', color(d.key));
 
         });
-
 
       }
       return d.key.sanitize();
@@ -198,7 +205,7 @@ charterflight.LineChart.prototype.Draw = function()
       if (_self.BlurbPlaceHolder !== "")
         {
           b = new charterflight.Blurb();
-          b.BlurbPlaceHolder = this.BlurbPlaceHolder;
+          b.BlurbPlaceHolder = _self.BlurbPlaceHolder;
           b.Data = d;
           b.Draw();
         }
