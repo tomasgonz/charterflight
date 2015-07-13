@@ -177,7 +177,7 @@ charterflight.BarChart.prototype.Draw = function() {
     bottom: 20,
     left: 20
   };
-
+  
   this.LegendPlaceHolder = "";
   this.BlurbPlaceHolder = "";
   this.ChartPlaceHolder = "";

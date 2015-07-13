@@ -11,7 +11,7 @@ charterflight.LineChart = function LineChart()
     bottom: 20,
     left: 20
   };
-
+  
   this.LegendPlaceHolder = "";
   this.BlurbPlaceHolder = "";
   this.ChartPlaceHolder = "";
