@@ -326,6 +326,7 @@ charterflight.LineChart.prototype.Draw = function()
           d3.select("#legend-" + d.key.sanitize()).style('background-color', color(d.key));
           d3.select("#legend-" + d.key.sanitize()).style('color', "#fff");
 
+          // Print blurb if a placeholder has been specified
           if (_self.BlurbPlaceHolder !== "")
             {
               b = new charterflight.Blurb();
@@ -333,7 +334,7 @@ charterflight.LineChart.prototype.Draw = function()
               b.Data = d;
               b.Draw();
             }
-            
+
         });
 
         d3.select("#legend-" + d.key.sanitize()).on("mouseout", function()
@@ -484,7 +485,14 @@ String.prototype.replaceAll = function (find, replace) {
 
 String.prototype.sanitize = function () {
 
-  var s = this.replaceAll(" ", "_");
+  /*var s = this.replaceAll(" ", "_");
   s = s.replaceAll(",", "");
+  s = s.replace("&", "");
+  s = s.replace(":", "");
+  s = s.replace(".", "");
+  s = s.replace(/\(|\)/g,'');
+  console.log(s);*/
+
+  var s = this.replace(/\W+/g, " ");
   return s;
 };
