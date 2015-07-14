@@ -322,7 +322,6 @@ charterflight.LineChart.prototype.Draw = function()
           d3.select("#" + d.key.sanitize()).attr("class", currClass + " current");
 
           currClass = d3.select("#legend-" + d.key.sanitize()).attr("class");
-          //d3.select("#legend-" + d.key.sanitize()).attr("class", currClass + " current-legend");
           d3.select("#legend-" + d.key.sanitize()).style('background-color', color(d.key));
           d3.select("#legend-" + d.key.sanitize()).style('color', "#fff");
 
@@ -363,7 +362,6 @@ charterflight.LineChart.prototype.Draw = function()
       if (_self.LegendPlaceHolder !== "")
       {
         currClass = d3.select("#legend-" + d.key.sanitize()).attr("class");
-        //d3.select("#legend-" + d.key.sanitize()).attr("class", currClass + " current-legend");
         d3.select("#legend-" + d.key.sanitize()).style('background-color', color(d.key));
         d3.select("#legend-" + d.key.sanitize()).style('color', "#fff");
 
@@ -390,7 +388,6 @@ charterflight.LineChart.prototype.Draw = function()
         prevClass = currClass.substring(0, currClass.length - 14);
         d3.select("#legend-" + d.key.sanitize()).style('background-color', "#fff" );
         d3.select("#legend-" + d.key.sanitize()).style('color', color(d.key));
-        //d3.select("#legend-" + d.key.sanitize()).attr("class", prevClass);
       }
     })
     .style("stroke", function(d) {
@@ -493,6 +490,7 @@ String.prototype.sanitize = function () {
   s = s.replace(/\(|\)/g,'');
   console.log(s);*/
 
-  var s = this.replace(/\W+/g, " ");
+  var s = this.replace(/\W+/g, "");
+  console.log(s);
   return s;
 };

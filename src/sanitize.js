@@ -14,6 +14,7 @@ String.prototype.sanitize = function () {
   s = s.replace(/\(|\)/g,'');
   console.log(s);*/
 
-  var s = this.replace(/\W+/g, " ");
+  var s = this.replace(/\W+/g, "");
+  console.log(s);
   return s;
 };
