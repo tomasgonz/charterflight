@@ -491,6 +491,5 @@ String.prototype.sanitize = function () {
   console.log(s);*/
 
   var s = this.replace(/\W+/g, "");
-  console.log(s);
   return s;
 };
