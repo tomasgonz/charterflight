@@ -32,16 +32,16 @@ charterflight.LineChart.prototype.Draw = function()
   // Coerce the data into the right formats
   data = this.Data.map(function(d) {
     return {
-      country: d.country,
+      entity: d.entity,
       date: parseDate(d.date),
       value: +d.value
     };
   });
 
-  // then we need to nest the data on country since we want to only draw one
-  // line per country
+  // then we need to nest the data on entity since we want to only draw one
+  // line per entity
   data = d3.nest().key(function(d) {
-    return d.country;
+    return d.entity;
   }).entries(data);
 
   // varNames and color.domain are important to link colors of lines
@@ -86,7 +86,7 @@ charterflight.LineChart.prototype.Draw = function()
     .attr("transform", "translate(" + this.Margin.left + "," + this.Margin.top + ")");
 
   color.domain(d3.keys(data[0]).filter(function(key) {
-    return key == "country";
+    return key == "entity";
   }));
 
   color.domain(varNames);
@@ -122,12 +122,12 @@ charterflight.LineChart.prototype.Draw = function()
     .attr("class", "y axis")
     .call(yAxis);
 
-  var countries = svg.selectAll(".country")
+  var entities = svg.selectAll(".entity")
     .data(data, function(d) {
       return d.key;
     })
     .enter().append("g")
-    .attr("class", "country");
+    .attr("class", "entity");
 
   // DIV que funciona como tooltip
   var div = d3.select("body").append("div")
@@ -136,7 +136,7 @@ charterflight.LineChart.prototype.Draw = function()
 
 // We need to replaceAll spaces with underscore
 // to avoid issues during event handler
-  countries.append("svg:path")
+  entities.append("svg:path")
     .attr("class", "line")
     .attr("id", function (d)
     {
@@ -229,7 +229,7 @@ charterflight.LineChart.prototype.Draw = function()
     });
 
   // Append dots to display data points
-  countries.append("g").selectAll("circle")
+  entities.append("g").selectAll("circle")
     .data(function(d) {
       return d.values;
     })
@@ -243,67 +243,17 @@ charterflight.LineChart.prototype.Draw = function()
       return y(dd.value);
     })
     .style("fill", function(d) {
-      return color(d.country);
+      return color(d.entity);
     })
     .attr("stroke", "none")
     .on("mouseover", function(d) {
       div.style("left", d3.event.pageX + "px").style("top", d3.event.pageY + "px");
       div.transition().duration(100).style("opacity", 100);
-      div.html('<p>Country: ' + d.country + '<br />Date: ' + d.date.getFullYear() + '<br/>Value: ' + d.value + '</p>');
+      div.html('<p>entity: ' + d.entity + '<br />Date: ' + d.date.getFullYear() + '<br/>Value: ' + d.value + '</p>');
     })
     .on("mouseout", function(d) {
       div.transition().duration(4000).style("opacity", 0);
     });
-
-if (this.LegendPlaceHolder !== "")
-{
-
-
-  // Legend with country names
-  /*
-
-  var legend = svg.selectAll(".legend")
-    .data(varNames.slice().reverse())
-    .enter().append("g")
-    .attr("class", "legend")
-    .attr("transform", function(d, i) {
-      return "translate(55," + i * 20 + ")";
-    }).on("mouseover", function(d, i) {
-        // Highlight series when hover over legend
-        var currClass = d3.select("#" + d.sanitize()).attr("class");
-        d3.select("#" + d.sanitize()).attr("class", currClass + " current");
-    })
-    .on("mouseout", function(d, i) {
-      var currClass = d3.select("#" + d.sanitize()).attr("class");
-      var prevClass = currClass.substring(0, currClass.length - 8);
-      d3.select("#" + d.sanitize()).attr("class", prevClass);
-    });
-
-    legend.append("text")
-      .attr("x", width + 20)
-      .attr("y", 6)
-      .attr("dy", ".35em")
-      .attr("id", function(d){
-        console.log("legend-" + d.sanitize());
-        return "legend-" + d.sanitize();
-      })
-      .style("text-anchor", "end")
-      .style("fill", color)
-      .text(function(d) {
-        return d;
-      })
-      .on("mouseover", function(d, i)
-      {
-        var currClass = d3.select("#" + d.sanitize()).attr("class");
-        d3.select(this).attr("class", currClass + " current-legend");
-      })
-      .on("mouseout", function(d, i) {
-        var currClass = d3.select(this).attr("class");
-        var prevClass = currClass.substring(0, currClass.length - 14);
-        d3.select(this).attr("class", prevClass);
-      });*/
-
-  }
 
   // We give access to svg object
   this.svg = svg;

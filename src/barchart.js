@@ -28,7 +28,7 @@ charterflight.BarChart.prototype.Draw = function() {
 // Coerce the data into the right formats
     data = data.map(function(d) {
         return {
-            country: d.country,
+            entity: d.entity,
             value: +d.value
         };
     });
@@ -39,7 +39,7 @@ charterflight.BarChart.prototype.Draw = function() {
     var x = d3.scale.ordinal()
         .rangeRoundBands([0, width], 0.1)
         .domain(d3.entries(data).map(function(d) {
-            return d.value.country;
+            return d.value.entity;
         }));
 
     y.domain([d3.min(data, function(d) {
@@ -82,7 +82,7 @@ charterflight.BarChart.prototype.Draw = function() {
         .enter().append("rect")
         .attr("class", "bar")
         .attr("x", function(d) {
-            return x(d.country);
+            return x(d.entity);
         })
         .attr("width", x.rangeBand())
         .attr("y", function(d) {
