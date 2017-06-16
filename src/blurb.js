@@ -8,9 +8,9 @@ charterflight.Blurb.prototype.Draw = function()
 {
   //var currClass = d3.select(this).attr("class");
   //d3.select(this).attr("class", currClass + " current");
-  var countryCode = this.Data.key;
-  /*var countryVals = startEnd[countryCode];
-  var percentChange = 100 * (countryVals['endVal'] - countryVals['startVal']) / countryVals['startVal'];*/
+  var entityCode = this.Data.key;
+  /*var entityVals = startEnd[entityCode];
+  var percentChange = 100 * (entityVals['endVal'] - entityVals['startVal']) / entityVals['startVal'];*/
 
   /* Put years in array to calculate max and min*/
   var years = [];
@@ -27,7 +27,7 @@ charterflight.Blurb.prototype.Draw = function()
 
   maxValue = getMaxOfArray(values);
 
-  var blurb = '<h2>' + countryCode + '</h2>';
+  var blurb = '<h2>' + entityCode + '</h2>';
 
   blurb += "Min value:" + minValue + " max value: " + maxValue;
 
