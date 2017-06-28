@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 
-(function(global) {
+((global => {
 
     var charterflight = {
         'version': '0.1'
@@ -12,4 +12,4 @@ import * as d3 from 'd3';
         global.charterflight = charterflight;
     }
 
-})(typeof window === 'undefined' ? this : window);
+}))(typeof window === 'undefined' ? this : window);
