@@ -9,7 +9,7 @@
     "webpack": "^3.0.0"
   },
   "description": "An implementation of the wonderful d3 library to generate charts quickly.",
-  "main": "index.js",
+  "main": "dist/charterflight.js",
   "dependencies": {
     "d3": "^4.9.1"
   },
