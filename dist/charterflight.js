@@ -1,4 +1,14 @@
-/******/ (function(modules) { // webpackBootstrap
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define("CharterFlight", [], factory);
+	else if(typeof exports === 'object')
+		exports["CharterFlight"] = factory();
+	else
+		root["CharterFlight"] = factory();
+})(this, function() {
+return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -67,41 +77,31 @@
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(1);
-__webpack_require__(3);
-__webpack_require__(4);
-__webpack_require__(5);
-__webpack_require__(6);
-module.exports = __webpack_require__(7);
+"use strict";
 
+
+var _d = __webpack_require__(1);
+
+var d3 = _interopRequireWildcard(_d);
+
+var _linechart = __webpack_require__(2);
+
+var _linechart2 = _interopRequireDefault(_linechart);
+
+var _barchart = __webpack_require__(3);
+
+var _barchart2 = _interopRequireDefault(_barchart);
+
+var _blurb = __webpack_require__(4);
+
+var _blurb2 = _interopRequireDefault(_blurb);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 /***/ }),
 /* 1 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_d3__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_d3___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_d3__);
-
-
-((global => {
-
-    var charterflight = {
-        'version': '0.1'
-    };
-
-    if (global.charterflight) {
-        throw new Error('Charterflight has already been defined');
-    } else {
-        global.charterflight = charterflight;
-    }
-
-}))(typeof window === 'undefined' ? this : window);
-
-
-/***/ }),
-/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // https://d3js.org Version 4.9.1. Copyright 2017 Mike Bostock.
@@ -16973,181 +16973,24 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 
 /***/ }),
-/* 3 */
-/***/ (function(module, exports) {
-
-function getMinOfArray(numArray) {
-  return Math.min.apply(null, numArray);
-}
-
-function getMaxOfArray(numArray) {
-  return Math.max.apply(null, numArray);
-}
-
-
-/***/ }),
-/* 4 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-class BarChart {
-  constructor()
-  {
-    this.ShowLegend = false;
-    this.Width = 200;
-    this.Height = 200;
-    this.svg = null;
-
-    this.Margin = {
-      top: 20,
-      right: 20,
-      bottom: 20,
-      left: 20
-    };
-
-    this.BlurbPlaceHolder = "";
-    this.ChartPlaceHolder = "";
-
-    this.Data = null;
-  }
-
-  Draw () {
-    this.svg = null;
-
-        width = this.Width - this.Margin.left - this.Margin.right;
-        height = this.Height - this.Margin.top - this.Margin.bottom;
-
-  // Coerce the data into the right formats
-      data = data.map(d => ({
-          entity: d.entity,
-          value: +d.value
-      }));
-
-      var y = d3.scale.linear()
-          .range([ height, 0]);
-
-      var x = d3.scale.ordinal()
-          .rangeRoundBands([0, width], 0.1)
-          .domain(d3.entries(data).map(d => d.value.entity));
-
-      y.domain([d3.min(data, d => d.value), d3.max(data, d => d.value)]);
-
-      var xAxis = d3.svg.axis()
-          .scale(x)
-          .orient("bottom");
-
-      var yAxis = d3.svg.axis()
-          .scale(y)
-          .orient("left");
-
-      var svg = d3.select(this.ChartPlaceHolder).append("svg")
-          .attr("width", this.Width + this.Margin.left + this.Margin.right)
-          .attr("height", this.Height + this.Margin.top + this.Margin.bottom)
-          .append("g")
-          .attr("transform", "translate(" + this.Margin.left + "," + this.Margin.top + ")");
-
-      svg.append("g")
-          .attr("class", "x axis")
-          .attr("transform", "translate(0," + height + ")")
-          .call(xAxis);
-
-      svg.append("g")
-          .attr("class", "y axis")
-          .call(yAxis)
-          .append("text")
-          .attr("transform", "rotate(-90)")
-          .attr("y", 6)
-          .attr("dy", ".71em")
-          .style("text-anchor", "end");
-      //.text("Percent");
-
-      svg.selectAll(".bar")
-          .data(data)
-          .enter().append("rect")
-          .attr("class", "bar")
-          .attr("x", d => x(d.entity))
-          .attr("width", x.rangeBand())
-          .attr("y", d => y(d.value))
-          .attr("height", d => height - y(d.value))
-          .style("fill", "#1684ca");
 
 
-          svg.selectAll(".x.axis text")
-          .style("text-anchor", "end")
-          .attr("dx", "-.8em")
-          .attr("dy", ".15em")
-          .attr("transform", d => "rotate(-90)");
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-      return svg;
-  }
-}
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-/* harmony default export */ __webpack_exports__["default"] = (BarChart);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var LineChart = function () {
+  function LineChart() {
+    _classCallCheck(this, LineChart);
 
-/***/ }),
-/* 5 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-class Blurb {
-  constructor()
-  {
-    this.Data = null;
-    this.BlurbPlaceHolder = "";
-  }
-
-  Draw()
-  {
-    //var currClass = d3.select(this).attr("class");
-    //d3.select(this).attr("class", currClass + " current");
-    var entityCode = this.Data.key;
-    /*var entityVals = startEnd[entityCode];
-    var percentChange = 100 * (entityVals['endVal'] - entityVals['startVal']) / entityVals['startVal'];*/
-
-    /* Put years in array to calculate max and min*/
-    var years = [];
-    var values = [];
-
-    this.Data.values.forEach(function(e) {
-
-      years.push(e.date.getFullYear());
-      values.push(e.value);
-
-    });
-
-    minValue = getMinOfArray(values);
-
-    maxValue = getMaxOfArray(values);
-
-    var blurb = '<h2>' + entityCode + '</h2>';
-
-    blurb += "Min value:" + minValue + " max value: " + maxValue;
-
-    blurb += "<p>";
-
-    blurb += "</p>";
-
-    $(this.BlurbPlaceHolder).html(blurb);
-  }
-
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (Blurb);
-
-
-/***/ }),
-/* 6 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-class LineChart
-{
-  constructor()
-  {
     this.Width = 200;
     this.Height = 200;
     this.svg = null;
@@ -17165,226 +17008,385 @@ class LineChart
     this.Data = null;
   }
 
-  Draw()
-  {
-    // Necessary to keep a reference within an event handler
-    const _self = this;
+  _createClass(LineChart, [{
+    key: "Draw",
+    value: function Draw() {
+      // Necessary to keep a reference within an event handler
+      var _self = this;
 
-    width = this.Width - this.Margin.left - this.Margin.right;
-    height = this.Height - this.Margin.top - this.Margin.bottom;
+      width = this.Width - this.Margin.left - this.Margin.right;
+      height = this.Height - this.Margin.top - this.Margin.bottom;
 
-    const parseDate = d3.time.format("%Y").parse;
+      var parseDate = d3.time.format("%Y").parse;
 
-    // Coerce the data into the right formats
-    data = this.Data.map(({entity, date, value}) => ({
-      entity,
-      date: parseDate(date),
-      value: +value
-    }));
+      // Coerce the data into the right formats
+      data = this.Data.map(function (_ref) {
+        var entity = _ref.entity,
+            date = _ref.date,
+            value = _ref.value;
+        return {
+          entity: entity,
+          date: parseDate(date),
+          value: +value
+        };
+      });
 
-    // then we need to nest the data on entity since we want to only draw one
-    // line per entity
-    data = d3.nest().key(({entity}) => entity).entries(data);
+      // then we need to nest the data on entity since we want to only draw one
+      // line per entity
+      data = d3.nest().key(function (_ref2) {
+        var entity = _ref2.entity;
+        return entity;
+      }).entries(data);
 
-    // varNames and color.domain are important to link colors of lines
-    // to the legend
-    const varNames = [];
+      // varNames and color.domain are important to link colors of lines
+      // to the legend
+      var varNames = [];
 
-    data.forEach(({key}) => {
-      varNames.push(key);
-    });
+      data.forEach(function (_ref3) {
+        var key = _ref3.key;
 
-    const x = d3.time.scale()
-      .range([0, width]);
+        varNames.push(key);
+      });
 
-    const y = d3.scale.linear()
-      .range([height, 0]);
+      var x = d3.time.scale().range([0, width]);
 
-    const color = d3.scale.category10();
+      var y = d3.scale.linear().range([height, 0]);
 
-    const xAxis = d3.svg.axis()
-      .scale(x)
-      .orient("bottom");
+      var color = d3.scale.category10();
 
-    const yAxis = d3.svg.axis()
-      .scale(y)
-      .orient("left");
+      var xAxis = d3.svg.axis().scale(x).orient("bottom");
 
-    const line = d3.svg.line()
-      .interpolate("basis")
-      .x(({date}) => x(date))
-      .y(({value}) => y(value)).defined(({value}) => value);
+      var yAxis = d3.svg.axis().scale(y).orient("left");
 
-    const svg = d3.select(this.ChartPlaceHolder).append("svg")
-      .attr("width", width + this.Margin.left + this.Margin.right)
-      .attr("height", height + this.Margin.top + this.Margin.bottom)
-      .append("g")
-      .attr("transform", `translate(${this.Margin.left},${this.Margin.top})`);
+      var line = d3.svg.line().interpolate("basis").x(function (_ref4) {
+        var date = _ref4.date;
+        return x(date);
+      }).y(function (_ref5) {
+        var value = _ref5.value;
+        return y(value);
+      }).defined(function (_ref6) {
+        var value = _ref6.value;
+        return value;
+      });
 
-    color.domain(d3.keys(data[0]).filter(key => key == "entity"));
+      var svg = d3.select(this.ChartPlaceHolder).append("svg").attr("width", width + this.Margin.left + this.Margin.right).attr("height", height + this.Margin.top + this.Margin.bottom).append("g").attr("transform", "translate(" + this.Margin.left + "," + this.Margin.top + ")");
 
-    color.domain(varNames);
+      color.domain(d3.keys(data[0]).filter(function (key) {
+        return key == "entity";
+      }));
 
-    x.domain([d3.min(data, ({values}) => d3.min(values, ({date}) => date)),
-      d3.max(data, ({values}) => d3.max(values, ({date}) => date))
-    ]);
+      color.domain(varNames);
 
-    y.domain([d3.min(data, ({values}) => d3.min(values, ({value}) => value)), d3.max(data, ({values}) => d3.max(values, ({value}) => value))]);
+      x.domain([d3.min(data, function (_ref7) {
+        var values = _ref7.values;
+        return d3.min(values, function (_ref8) {
+          var date = _ref8.date;
+          return date;
+        });
+      }), d3.max(data, function (_ref9) {
+        var values = _ref9.values;
+        return d3.max(values, function (_ref10) {
+          var date = _ref10.date;
+          return date;
+        });
+      })]);
 
-    svg.append("g")
-      .attr("class", "x axis")
-      .attr("transform", `translate(0,${height})`)
-      .call(xAxis);
+      y.domain([d3.min(data, function (_ref11) {
+        var values = _ref11.values;
+        return d3.min(values, function (_ref12) {
+          var value = _ref12.value;
+          return value;
+        });
+      }), d3.max(data, function (_ref13) {
+        var values = _ref13.values;
+        return d3.max(values, function (_ref14) {
+          var value = _ref14.value;
+          return value;
+        });
+      })]);
 
-    svg.append("g")
-      .attr("class", "y axis")
-      .call(yAxis);
+      svg.append("g").attr("class", "x axis").attr("transform", "translate(0," + height + ")").call(xAxis);
 
-    const entities = svg.selectAll(".entity")
-      .data(data, ({key}) => key)
-      .enter().append("g")
-      .attr("class", "entity");
+      svg.append("g").attr("class", "y axis").call(yAxis);
 
-    // DIV que funciona como tooltip
-    const div = d3.select("body").append("div")
-      .attr("class", "tooltip")
-      .style("opacity", 0);
+      var entities = svg.selectAll(".entity").data(data, function (_ref15) {
+        var key = _ref15.key;
+        return key;
+      }).enter().append("g").attr("class", "entity");
 
-  // We need to replaceAll spaces with underscore
-  // to avoid issues during event handler
-    entities.append("svg:path")
-      .attr("class", "line")
-      .attr("id", d => {
-      if (_self.LegendPlaceHolder !== "")
-      {
-        $(_self.LegendPlaceHolder)
-        .append(`<div class="legend-item" id="legend-${d.key.sanitize()}" style="color:${color(d.key)}">${d.key}</div>`);
+      // DIV que funciona como tooltip
+      var div = d3.select("body").append("div").attr("class", "tooltip").style("opacity", 0);
 
-        // Highlight line when hovering over legend
+      // We need to replaceAll spaces with underscore
+      // to avoid issues during event handler
+      entities.append("svg:path").attr("class", "line").attr("id", function (d) {
+        if (_self.LegendPlaceHolder !== "") {
+          $(_self.LegendPlaceHolder).append("<div class=\"legend-item\" id=\"legend-" + d.key.sanitize() + "\" style=\"color:" + color(d.key) + "\">" + d.key + "</div>");
 
-        d3.select(`#legend-${d.key.sanitize()}`).on("mouseover", () => {
+          // Highlight line when hovering over legend
 
-          let currClass = d3.select(`#${d.key.sanitize()}`).attr("class");
-          d3.select(`#${d.key.sanitize()}`).attr("class", `${currClass} current`);
+          d3.select("#legend-" + d.key.sanitize()).on("mouseover", function () {
 
-          currClass = d3.select(`#legend-${d.key.sanitize()}`).attr("class");
-          d3.select(`#legend-${d.key.sanitize()}`).style('background-color', color(d.key));
-          d3.select(`#legend-${d.key.sanitize()}`).style('color', "#fff");
+            var currClass = d3.select("#" + d.key.sanitize()).attr("class");
+            d3.select("#" + d.key.sanitize()).attr("class", currClass + " current");
 
-          // Print blurb if a placeholder has been specified
-          if (_self.BlurbPlaceHolder !== "")
-            {
+            currClass = d3.select("#legend-" + d.key.sanitize()).attr("class");
+            d3.select("#legend-" + d.key.sanitize()).style('background-color', color(d.key));
+            d3.select("#legend-" + d.key.sanitize()).style('color', "#fff");
+
+            // Print blurb if a placeholder has been specified
+            if (_self.BlurbPlaceHolder !== "") {
               b = new charterflight.Blurb();
               b.BlurbPlaceHolder = _self.BlurbPlaceHolder;
               b.Data = d;
               b.Draw();
             }
+          });
 
-        });
+          d3.select("#legend-" + d.key.sanitize()).on("mouseout", function () {
+            var currClass = d3.select("#" + d.key.sanitize()).attr("class");
+            var prevClass = currClass.substring(0, currClass.length - 8);
+            d3.select("#" + d.key.sanitize()).attr("class", prevClass);
 
-        d3.select(`#legend-${d.key.sanitize()}`).on("mouseout", () => {
-          let currClass = d3.select(`#${d.key.sanitize()}`).attr("class");
-          let prevClass = currClass.substring(0, currClass.length - 8);
-          d3.select(`#${d.key.sanitize()}`).attr("class", prevClass);
+            currClass = d3.select("#legend-" + d.key.sanitize()).attr("class");
+            prevClass = currClass.substring(0, currClass.length - 14);
+            d3.select("#legend-" + d.key.sanitize()).style('background-color', "#fff");
+            d3.select("#legend-" + d.key.sanitize()).style('color', color(d.key));
+          });
+        }
+        return d.key.sanitize();
+      }).attr("d", function (_ref16) {
+        var values = _ref16.values;
+        return line(values);
+      }).on("mouseover", function (d) {
+        var currClass = d3.select("#" + d.key.sanitize()).attr("class");
+        d3.select("#" + d.key.sanitize()).attr("class", currClass + " current");
 
-          currClass = d3.select(`#legend-${d.key.sanitize()}`).attr("class");
+        if (_self.LegendPlaceHolder !== "") {
+          currClass = d3.select("#legend-" + d.key.sanitize()).attr("class");
+          d3.select("#legend-" + d.key.sanitize()).style('background-color', color(d.key));
+          d3.select("#legend-" + d.key.sanitize()).style('color', "#fff");
+        }
+
+        if (_self.BlurbPlaceHolder !== "") {
+          b = new charterflight.Blurb();
+          b.BlurbPlaceHolder = _self.BlurbPlaceHolder;
+          b.Data = d;
+          b.Draw();
+        }
+      }).on("mouseout", function (_ref17) {
+        var key = _ref17.key;
+
+        var currClass = d3.select("#" + key.sanitize()).attr("class");
+        var prevClass = currClass.substring(0, currClass.length - 8);
+        d3.select("#" + key.sanitize()).attr("class", prevClass);
+
+        if (_self.LegendPlaceHolder !== "") {
+          currClass = d3.select("#legend-" + key.sanitize()).attr("class");
           prevClass = currClass.substring(0, currClass.length - 14);
-          d3.select(`#legend-${d.key.sanitize()}`).style('background-color', "#fff" );
-          d3.select(`#legend-${d.key.sanitize()}`).style('color', color(d.key));
-
-        });
-
-      }
-      return d.key.sanitize();
-    })
-      .attr("d", ({values}) => line(values))
-      .on("mouseover", d => {
-        let currClass = d3.select(`#${d.key.sanitize()}`).attr("class");
-        d3.select(`#${d.key.sanitize()}`).attr("class", `${currClass} current`);
-
-        if (_self.LegendPlaceHolder !== "")
-        {
-          currClass = d3.select(`#legend-${d.key.sanitize()}`).attr("class");
-          d3.select(`#legend-${d.key.sanitize()}`).style('background-color', color(d.key));
-          d3.select(`#legend-${d.key.sanitize()}`).style('color', "#fff");
-
+          d3.select("#legend-" + key.sanitize()).style('background-color', "#fff");
+          d3.select("#legend-" + key.sanitize()).style('color', color(key));
         }
+      }).style("stroke", function (_ref18) {
+        var key = _ref18.key;
+        return color(key);
+      });
 
-        if (_self.BlurbPlaceHolder !== "")
-          {
-            b = new charterflight.Blurb();
-            b.BlurbPlaceHolder = _self.BlurbPlaceHolder;
-            b.Data = d;
-            b.Draw();
-          }
-        }
-      )
-      .on("mouseout", ({key}) => {
-      let currClass = d3.select(`#${key.sanitize()}`).attr("class");
-      let prevClass = currClass.substring(0, currClass.length - 8);
-      d3.select(`#${key.sanitize()}`).attr("class", prevClass);
+      // Append dots to display data points
+      entities.append("g").selectAll("circle").data(function (_ref19) {
+        var values = _ref19.values;
+        return values;
+      }).enter().append("circle").attr("r", 3).attr("cx", function (_ref20) {
+        var date = _ref20.date;
+        return x(date);
+      }).attr("cy", function (_ref21) {
+        var value = _ref21.value;
+        return y(value);
+      }).style("fill", function (_ref22) {
+        var entity = _ref22.entity;
+        return color(entity);
+      }).attr("stroke", "none").on("mouseover", function (_ref23) {
+        var entity = _ref23.entity,
+            date = _ref23.date,
+            value = _ref23.value;
 
-      if (_self.LegendPlaceHolder !== "")
-      {
-        currClass = d3.select(`#legend-${key.sanitize()}`).attr("class");
-        prevClass = currClass.substring(0, currClass.length - 14);
-        d3.select(`#legend-${key.sanitize()}`).style('background-color', "#fff" );
-        d3.select(`#legend-${key.sanitize()}`).style('color', color(key));
-      }
-    })
-      .style("stroke", ({key}) => color(key));
-
-    // Append dots to display data points
-    entities.append("g").selectAll("circle")
-      .data(({values}) => values)
-      .enter()
-      .append("circle")
-      .attr("r", 3)
-      .attr("cx", ({date}) => x(date))
-      .attr("cy", ({value}) => y(value))
-      .style("fill", ({entity}) => color(entity))
-      .attr("stroke", "none")
-      .on("mouseover", ({entity, date, value}) => {
-        div.style("left", `${d3.event.pageX}px`).style("top", `${d3.event.pageY}px`);
+        div.style("left", d3.event.pageX + "px").style("top", d3.event.pageY + "px");
         div.transition().duration(100).style("opacity", 100);
-        div.html(`<p>entity: ${entity}<br />Date: ${date.getFullYear()}<br/>Value: ${value}</p>`);
-      })
-      .on("mouseout", d => {
+        div.html("<p>entity: " + entity + "<br />Date: " + date.getFullYear() + "<br/>Value: " + value + "</p>");
+      }).on("mouseout", function (d) {
         div.transition().duration(4000).style("opacity", 0);
       });
 
-    // We give access to svg object
-    this.svg = svg;
-  }
-}
+      // We give access to svg object
+      this.svg = svg;
+    }
+  }]);
 
-/* harmony default export */ __webpack_exports__["default"] = (LineChart);
+  return LineChart;
+}();
 
+exports.default = LineChart;
 
 /***/ }),
-/* 7 */
-/***/ (function(module, exports) {
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
 
-// This function is used to create return id's that do not contains
-// characters that conflict with event handlers
-String.prototype.replaceAll = function (find, replace) {
-  return this.replace(new RegExp(find, 'g'), replace);
-};
+"use strict";
 
-String.prototype.sanitize = function () {
 
-  /*var s = this.replaceAll(" ", "_");
-  s = s.replaceAll(",", "");
-  s = s.replace("&", "");
-  s = s.replace(":", "");
-  s = s.replace(".", "");
-  s = s.replace(/\(|\)/g,'');
-  console.log(s);*/
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
-  var s = this.replace(/\W+/g, "");
-  return s;
-};
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var BarChart = function () {
+    function BarChart() {
+        _classCallCheck(this, BarChart);
+
+        this.ShowLegend = false;
+        this.Width = 200;
+        this.Height = 200;
+        this.svg = null;
+
+        this.Margin = {
+            top: 20,
+            right: 20,
+            bottom: 20,
+            left: 20
+        };
+
+        this.BlurbPlaceHolder = "";
+        this.ChartPlaceHolder = "";
+
+        this.Data = null;
+    }
+
+    _createClass(BarChart, [{
+        key: "Draw",
+        value: function Draw() {
+            this.svg = null;
+
+            width = this.Width - this.Margin.left - this.Margin.right;
+            height = this.Height - this.Margin.top - this.Margin.bottom;
+
+            // Coerce the data into the right formats
+            data = data.map(function (d) {
+                return {
+                    entity: d.entity,
+                    value: +d.value
+                };
+            });
+
+            var y = d3.scale.linear().range([height, 0]);
+
+            var x = d3.scale.ordinal().rangeRoundBands([0, width], 0.1).domain(d3.entries(data).map(function (d) {
+                return d.value.entity;
+            }));
+
+            y.domain([d3.min(data, function (d) {
+                return d.value;
+            }), d3.max(data, function (d) {
+                return d.value;
+            })]);
+
+            var xAxis = d3.svg.axis().scale(x).orient("bottom");
+
+            var yAxis = d3.svg.axis().scale(y).orient("left");
+
+            var svg = d3.select(this.ChartPlaceHolder).append("svg").attr("width", this.Width + this.Margin.left + this.Margin.right).attr("height", this.Height + this.Margin.top + this.Margin.bottom).append("g").attr("transform", "translate(" + this.Margin.left + "," + this.Margin.top + ")");
+
+            svg.append("g").attr("class", "x axis").attr("transform", "translate(0," + height + ")").call(xAxis);
+
+            svg.append("g").attr("class", "y axis").call(yAxis).append("text").attr("transform", "rotate(-90)").attr("y", 6).attr("dy", ".71em").style("text-anchor", "end");
+            //.text("Percent");
+
+            svg.selectAll(".bar").data(data).enter().append("rect").attr("class", "bar").attr("x", function (d) {
+                return x(d.entity);
+            }).attr("width", x.rangeBand()).attr("y", function (d) {
+                return y(d.value);
+            }).attr("height", function (d) {
+                return height - y(d.value);
+            }).style("fill", "#1684ca");
+
+            svg.selectAll(".x.axis text").style("text-anchor", "end").attr("dx", "-.8em").attr("dy", ".15em").attr("transform", function (d) {
+                return "rotate(-90)";
+            });
+
+            return svg;
+        }
+    }]);
+
+    return BarChart;
+}();
+
+exports.default = BarChart;
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Blurb = function () {
+  function Blurb() {
+    _classCallCheck(this, Blurb);
+
+    this.Data = null;
+    this.BlurbPlaceHolder = "";
+  }
+
+  _createClass(Blurb, [{
+    key: 'Draw',
+    value: function Draw() {
+      //var currClass = d3.select(this).attr("class");
+      //d3.select(this).attr("class", currClass + " current");
+      var entityCode = this.Data.key;
+      /*var entityVals = startEnd[entityCode];
+      var percentChange = 100 * (entityVals['endVal'] - entityVals['startVal']) / entityVals['startVal'];*/
+
+      /* Put years in array to calculate max and min*/
+      var years = [];
+      var values = [];
+
+      this.Data.values.forEach(function (e) {
+
+        years.push(e.date.getFullYear());
+        values.push(e.value);
+      });
+
+      minValue = getMinOfArray(values);
+
+      maxValue = getMaxOfArray(values);
+
+      var blurb = '<h2>' + entityCode + '</h2>';
+
+      blurb += "Min value:" + minValue + " max value: " + maxValue;
+
+      blurb += "<p>";
+
+      blurb += "</p>";
+
+      $(this.BlurbPlaceHolder).html(blurb);
+    }
+  }]);
+
+  return Blurb;
+}();
+
+exports.default = Blurb;
 
 /***/ })
 /******/ ]);
+});

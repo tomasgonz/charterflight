@@ -17,6 +17,7 @@ class LineChart
     this.BlurbPlaceHolder = "";
     this.ChartPlaceHolder = "";
     this.Data = null;
+
   }
 
   Draw()

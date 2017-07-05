@@ -1,15 +1,4 @@
 import * as d3 from 'd3';
-
-((global => {
-
-    var charterflight = {
-        'version': '0.1'
-    };
-
-    if (global.charterflight) {
-        throw new Error('Charterflight has already been defined');
-    } else {
-        global.charterflight = charterflight;
-    }
-
-}))(typeof window === 'undefined' ? this : window);
+import LineChart from './linechart';
+import BarChart from "./barchart";
+import Blurb from "./blurb";
