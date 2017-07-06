@@ -1,6 +1,7 @@
-class LineChart
-{
-  constructor()
+"use strict";
+export default class LineChart {
+
+  constructor ()
   {
     this.Width = 200;
     this.Height = 200;
@@ -20,7 +21,7 @@ class LineChart
 
   }
 
-  Draw()
+  Draw ()
   {
     // Necessary to keep a reference within an event handler
     const _self = this;
@@ -212,5 +213,3 @@ class LineChart
     this.svg = svg;
   }
 }
-
-export default LineChart;
