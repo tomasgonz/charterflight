@@ -1,7 +1,13 @@
 "use strict";
-export default class LineChart {
 
-  constructor ()
+import * as d3 from 'd3';
+import Blurb from "./blurb";
+import "./sanitize";
+import "./array";
+
+export default class LineChart
+{
+  constructor()
   {
     this.Width = 200;
     this.Height = 200;
@@ -18,25 +24,24 @@ export default class LineChart {
     this.BlurbPlaceHolder = "";
     this.ChartPlaceHolder = "";
     this.Data = null;
-
   }
 
-  Draw ()
+  Draw(el)
   {
     // Necessary to keep a reference within an event handler
     const _self = this;
 
-    width = this.Width - this.Margin.left - this.Margin.right;
-    height = this.Height - this.Margin.top - this.Margin.bottom;
+    const width = this.Width - this.Margin.left - this.Margin.right;
+    const height = this.Height - this.Margin.top - this.Margin.bottom;
 
-    const parseDate = d3.time.format("%Y").parse;
+    var parseTime = d3.timeParse("%y");
 
     // Coerce the data into the right formats
-    data = this.Data.map(({entity, date, value}) => ({
+    var data = this.Data.map(({entity, date, value}) => ({
       entity,
-      date: parseDate(date),
+      date: parseTime(date),
       value: +value
-    }));
+    }), this);
 
     // then we need to nest the data on entity since we want to only draw one
     // line per entity
@@ -50,28 +55,24 @@ export default class LineChart {
       varNames.push(key);
     });
 
-    const x = d3.time.scale()
+    const x = d3.scaleTime()
       .range([0, width]);
 
-    const y = d3.scale.linear()
+    const y = d3.scaleLinear()
       .range([height, 0]);
 
-    const color = d3.scale.category10();
+    const color = d3.scaleOrdinal(d3.schemeCategory10);
 
-    const xAxis = d3.svg.axis()
-      .scale(x)
-      .orient("bottom");
+    const xAxis = d3.axisBottom(x);
 
-    const yAxis = d3.svg.axis()
-      .scale(y)
-      .orient("left");
+    const yAxis = d3.axisLeft(y);
 
-    const line = d3.svg.line()
-      .interpolate("basis")
+    const line = d3.line()
+      .curve(d3.curveBasis)
       .x(({date}) => x(date))
       .y(({value}) => y(value)).defined(({value}) => value);
 
-    const svg = d3.select(this.ChartPlaceHolder).append("svg")
+    const svg = d3.select(el).append("svg")
       .attr("width", width + this.Margin.left + this.Margin.right)
       .attr("height", height + this.Margin.top + this.Margin.bottom)
       .append("g")
@@ -130,7 +131,7 @@ export default class LineChart {
           // Print blurb if a placeholder has been specified
           if (_self.BlurbPlaceHolder !== "")
             {
-              b = new charterflight.Blurb();
+              b = new Blurb();
               b.BlurbPlaceHolder = _self.BlurbPlaceHolder;
               b.Data = d;
               b.Draw();

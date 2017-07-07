@@ -1,8 +1,9 @@
 import resolve from 'rollup-plugin-node-resolve';
 
 export default {
-  entry: 'src/index.js',
+  entry: 'src/linechart.js',
   format: 'umd',
+  moduleName: "charterflight",
   plugins: [
    resolve()
  ],

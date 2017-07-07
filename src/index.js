@@ -1,5 +1,5 @@
-//import * as d3 from 'd3';
+import * as d3 from 'd3';
 import LineChart from './linechart';
-import BarChart from './barchart';
+import BarChart from './BarChart';
 
-var lc = new LineChart();
+export default { LineChart };
