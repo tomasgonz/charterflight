@@ -1,14 +1,19 @@
 "use strict";
 
-import * as d3 from 'd3';
-import Blurb from "./blurb";
 import "./sanitize";
 import "./array";
+import './charterflight.css';
+
+import * as d3 from 'd3';
+import Blurb from "./blurb";
 
 export default class LineChart
 {
-  constructor()
+  constructor(el)
   {
+
+    this.el = el;
+
     this.Width = 200;
     this.Height = 200;
     this.svg = null;
@@ -34,7 +39,7 @@ export default class LineChart
     const width = this.Width - this.Margin.left - this.Margin.right;
     const height = this.Height - this.Margin.top - this.Margin.bottom;
 
-    var parseTime = d3.timeParse("%y");
+    var parseTime = d3.timeParse("%Y");
 
     // Coerce the data into the right formats
     var data = this.Data.map(({entity, date, value}) => ({
@@ -72,6 +77,11 @@ export default class LineChart
       .x(({date}) => x(date))
       .y(({value}) => y(value)).defined(({value}) => value);
 
+      // First we have to remove svg
+      // in case we are redrawing
+      // the chart.
+      d3.select(el).select("svg").remove();
+      
     const svg = d3.select(el).append("svg")
       .attr("width", width + this.Margin.left + this.Margin.right)
       .attr("height", height + this.Margin.top + this.Margin.bottom)

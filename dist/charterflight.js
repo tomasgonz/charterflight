@@ -4,6 +4,37 @@
 	(global.charterflight = factory());
 }(this, (function () { 'use strict';
 
+function __$styleInject(css, returnValue) {
+  if (typeof document === 'undefined') {
+    return returnValue;
+  }
+  css = css || '';
+  var head = document.head || document.getElementsByTagName('head')[0];
+  var style = document.createElement('style');
+  style.type = 'text/css';
+  if (style.styleSheet){
+    style.styleSheet.cssText = css;
+  } else {
+    style.appendChild(document.createTextNode(css));
+  }
+  head.appendChild(style);
+  return returnValue;
+}
+
+// This function is used to create return id's that do not contains
+// characters that conflict with event handlers
+String.prototype.replaceAll = function (find, replace) {
+  return this.replace(new RegExp(find, 'g'), replace);
+};
+
+String.prototype.sanitize = function () {
+  
+  var s = this.replace(/\W+/g, "");
+  return s;
+};
+
+__$styleInject("path.line\r\n{\r\n    fill: none;\r\n}\r\n",undefined);
+
 var ascending = function(a, b) {
   return a < b ? -1 : a > b ? 1 : a >= b ? 0 : NaN;
 };
@@ -7034,22 +7065,13 @@ class Blurb {
 
 }
 
-// This function is used to create return id's that do not contains
-// characters that conflict with event handlers
-String.prototype.replaceAll = function (find, replace) {
-  return this.replace(new RegExp(find, 'g'), replace);
-};
-
-String.prototype.sanitize = function () {
-  
-  var s = this.replace(/\W+/g, "");
-  return s;
-};
-
 class LineChart
 {
-  constructor()
+  constructor(el)
   {
+
+    this.el = el;
+
     this.Width = 200;
     this.Height = 200;
     this.svg = null;
@@ -7075,7 +7097,7 @@ class LineChart
     const width = this.Width - this.Margin.left - this.Margin.right;
     const height = this.Height - this.Margin.top - this.Margin.bottom;
 
-    var parseTime = timeParse("%y");
+    var parseTime = timeParse("%Y");
 
     // Coerce the data into the right formats
     var data = this.Data.map(({entity, date: date$$1, value}) => ({
@@ -7113,6 +7135,11 @@ class LineChart
       .x(({date: date$$1}) => x(date$$1))
       .y(({value}) => y(value)).defined(({value}) => value);
 
+      // First we have to remove svg
+      // in case we are redrawing
+      // the chart.
+      select(el).select("svg").remove();
+      
     const svg = select(el).append("svg")
       .attr("width", width + this.Margin.left + this.Margin.right)
       .attr("height", height + this.Margin.top + this.Margin.bottom)
@@ -7259,3 +7286,4 @@ class LineChart
 return LineChart;
 
 })));
+//# sourceMappingURL=charterflight.js.map
