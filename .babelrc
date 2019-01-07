@@ -1,13 +1,6 @@
 {
-  "presets": [
-    [
-      "es2015",
-      {
-        "modules": false
-      }
-    ]
-  ],
+  "presets":["@babel/preset-env"],
   "plugins": [
-    "external-helpers"
+    "@babel/plugin-proposal-class-properties"
   ]
 }

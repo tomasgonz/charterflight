@@ -1,4 +1,7 @@
-class BarChart {
+"use strict";
+
+export default class BarChart {
+
   constructor()
   {
     this.ShowLegend = false;
@@ -89,5 +92,3 @@ class BarChart {
       return svg;
   }
 }
-
-export default BarChart;

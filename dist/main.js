@@ -91,7 +91,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./src/index.js");
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -28452,90 +28452,76 @@ function getMaxOfArray(numArray) {
 
 /***/ }),
 
-/***/ "./src/barchart.js":
-/*!*************************!*\
-  !*** ./src/barchart.js ***!
-  \*************************/
+/***/ "./src/blurb.js":
+/*!**********************!*\
+  !*** ./src/blurb.js ***!
+  \**********************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return BarChart; });
-
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var BarChart =
+var Blurb =
 /*#__PURE__*/
 function () {
-  function BarChart() {
-    _classCallCheck(this, BarChart);
+  function Blurb() {
+    _classCallCheck(this, Blurb);
 
-    this.ShowLegend = false;
-    this.Width = 200;
-    this.Height = 200;
-    this.svg = null;
-    this.Margin = {
-      top: 20,
-      right: 20,
-      bottom: 20,
-      left: 20
-    };
-    this.BlurbPlaceHolder = "";
-    this.ChartPlaceHolder = "";
     this.Data = null;
+    this.BlurbPlaceHolder = "";
   }
 
-  _createClass(BarChart, [{
+  _createClass(Blurb, [{
     key: "Draw",
     value: function Draw() {
-      this.svg = null;
-      width = this.Width - this.Margin.left - this.Margin.right;
-      height = this.Height - this.Margin.top - this.Margin.bottom; // Coerce the data into the right formats
+      //var currClass = d3.select(this).attr("class");
+      //d3.select(this).attr("class", currClass + " current");
+      var entityCode = this.Data.key;
+      /*var entityVals = startEnd[entityCode];
+      var percentChange = 100 * (entityVals['endVal'] - entityVals['startVal']) / entityVals['startVal'];*/
 
-      data = data.map(function (d) {
-        return {
-          entity: d.entity,
-          value: +d.value
-        };
-      });
-      var y = d3.scale.linear().range([height, 0]);
-      var x = d3.scale.ordinal().rangeRoundBands([0, width], 0.1).domain(d3.entries(data).map(function (d) {
-        return d.value.entity;
-      }));
-      y.domain([d3.min(data, function (d) {
-        return d.value;
-      }), d3.max(data, function (d) {
-        return d.value;
-      })]);
-      var xAxis = d3.svg.axis().scale(x).orient("bottom");
-      var yAxis = d3.svg.axis().scale(y).orient("left");
-      var svg = d3.select(this.ChartPlaceHolder).append("svg").attr("width", this.Width + this.Margin.left + this.Margin.right).attr("height", this.Height + this.Margin.top + this.Margin.bottom).append("g").attr("transform", "translate(" + this.Margin.left + "," + this.Margin.top + ")");
-      svg.append("g").attr("class", "x axis").attr("transform", "translate(0," + height + ")").call(xAxis);
-      svg.append("g").attr("class", "y axis").call(yAxis).append("text").attr("transform", "rotate(-90)").attr("y", 6).attr("dy", ".71em").style("text-anchor", "end"); //.text("Percent");
+      /* Put years in array to calculate max and min*/
 
-      svg.selectAll(".bar").data(data).enter().append("rect").attr("class", "bar").attr("x", function (d) {
-        return x(d.entity);
-      }).attr("width", x.rangeBand()).attr("y", function (d) {
-        return y(d.value);
-      }).attr("height", function (d) {
-        return height - y(d.value);
-      }).style("fill", "#1684ca");
-      svg.selectAll(".x.axis text").style("text-anchor", "end").attr("dx", "-.8em").attr("dy", ".15em").attr("transform", function (d) {
-        return "rotate(-90)";
+      var years = [];
+      var values = [];
+      this.Data.values.forEach(function (e) {
+        years.push(e.date.getFullYear());
+        values.push(e.value);
       });
-      return svg;
+      minValue = getMinOfArray(values);
+      maxValue = getMaxOfArray(values);
+      var blurb = '<h2>' + entityCode + '</h2>';
+      blurb += "Min value:" + minValue + " max value: " + maxValue;
+      blurb += "<p>";
+      blurb += "</p>";
+      $(this.BlurbPlaceHolder).html(blurb);
     }
   }]);
 
-  return BarChart;
+  return Blurb;
 }();
 
+/* harmony default export */ __webpack_exports__["default"] = (Blurb);
+
+/***/ }),
+
+/***/ "./src/charterflight.css":
+/*!*******************************!*\
+  !*** ./src/charterflight.css ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/*path.line
+{
+    fill: none;
+}*/
 
 
 /***/ }),
@@ -28598,7 +28584,16 @@ function () {
           return i - 0.25 + "em";
         }).attr("cx", 0).attr("r", "0.4em").style("fill", function (d) {
           return d.value.color;
-        });
+        }); // Reposition and resize the box
+        //
+
+        /*
+        var lbbox = li[0][0].getBBox();
+         lb.attr("x",(lbbox.x-legendPadding))
+            .attr("y",(lbbox.y-legendPadding))
+            .attr("height",(lbbox.height+2*legendPadding))
+            .attr("width",(lbbox.width+2*legendPadding));
+            */
       });
       return g;
     }
@@ -28608,27 +28603,6 @@ function () {
 }();
 
 
-
-/***/ }),
-
-/***/ "./src/index.js":
-/*!**********************!*\
-  !*** ./src/index.js ***!
-  \**********************/
-/*! no exports provided */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _linechart__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./linechart */ "./src/linechart.js");
-/* harmony import */ var _barchart__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./barchart */ "./src/barchart.js");
-
-
-
- // Expose the modules to the window object
-
-window.LineChart = _linechart__WEBPACK_IMPORTED_MODULE_0__["default"];
-window.barchart = _barchart__WEBPACK_IMPORTED_MODULE_1__["default"];
 
 /***/ }),
 
@@ -28646,8 +28620,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _sanitize__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_sanitize__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _array__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./array */ "./src/array.js");
 /* harmony import */ var _array__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_array__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
-/* harmony import */ var _d3legend__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./d3legend */ "./src/d3legend.js");
+/* harmony import */ var _charterflight_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./charterflight.css */ "./src/charterflight.css");
+/* harmony import */ var _charterflight_css__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_charterflight_css__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
+/* harmony import */ var _d3legend__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./d3legend */ "./src/d3legend.js");
+/* harmony import */ var _blurb__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./blurb */ "./src/blurb.js");
 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -28661,47 +28638,43 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 
 
+
+
 var LineChart =
 /*#__PURE__*/
 function () {
-  function LineChart() {
+  function LineChart(el) {
     _classCallCheck(this, LineChart);
 
-    this.el = null;
-    this.Width = 400;
-    this.Height = 400;
+    this.el = el;
+    this.Width = 200;
+    this.Height = 200;
     this.svg = null;
     this.Margin = {
-      top: 50,
-      right: 50,
-      bottom: 50,
-      left: 50
-    }; //Title of the chart
-
-    this.Title = ""; // Chart div stored here
-
-    this.DivChart = null; // Legend to be placed here
-
-    this.DivLegend = null; // Data
-
-    this.Data = null; // DataPointFormat
-
-    this.showDataPoint = true;
-    this.shapeDataPoint = "circle";
-    this.sizeDataPoint = 4;
+      top: 20,
+      right: 20,
+      bottom: 20,
+      left: 20
+    };
+    this.LegendPlaceHolder = "";
+    this.BlurbPlaceHolder = "";
+    this.ChartPlaceHolder = "";
+    this.Data = null;
   }
 
   _createClass(LineChart, [{
     key: "Draw",
-    value: function Draw() {
+    value: function Draw(el) {
+      var _this = this;
+
       // Necessary to keep a reference within an event handler
       var _self = this;
 
-      var width = _self.Width - _self.Margin.left - _self.Margin.right;
-      var height = _self.Height - _self.Margin.top - _self.Margin.bottom;
-      var parseTime = d3__WEBPACK_IMPORTED_MODULE_2__["timeParse"]("%Y"); // Coerce the data into the right format
+      var width = this.Width - this.Margin.left - this.Margin.right;
+      var height = this.Height - this.Margin.top - this.Margin.bottom;
+      var parseTime = d3__WEBPACK_IMPORTED_MODULE_3__["timeParse"]("%Y"); // Coerce the data into the right formats
 
-      var data = _self.Data.map(function (_ref) {
+      var data = this.Data.map(function (_ref) {
         var entity = _ref.entity,
             date = _ref.date,
             value = _ref.value;
@@ -28713,8 +28686,7 @@ function () {
       }, this); // then we need to nest the data on entity since we want to only draw one
       // line per entity
 
-
-      data = d3__WEBPACK_IMPORTED_MODULE_2__["nest"]().key(function (_ref2) {
+      data = d3__WEBPACK_IMPORTED_MODULE_3__["nest"]().key(function (_ref2) {
         var entity = _ref2.entity;
         return entity;
       }).entries(data); // varNames and color.domain are important to link colors of lines
@@ -28725,12 +28697,12 @@ function () {
         var key = _ref3.key;
         varNames.push(key);
       });
-      var x = d3__WEBPACK_IMPORTED_MODULE_2__["scaleTime"]().range([0, width]);
-      var y = d3__WEBPACK_IMPORTED_MODULE_2__["scaleLinear"]().range([height, 0]);
-      var color = d3__WEBPACK_IMPORTED_MODULE_2__["scaleOrdinal"](d3__WEBPACK_IMPORTED_MODULE_2__["schemeAccent"]);
-      var xAxis = d3__WEBPACK_IMPORTED_MODULE_2__["axisBottom"](x);
-      var yAxis = d3__WEBPACK_IMPORTED_MODULE_2__["axisLeft"](y);
-      var line = d3__WEBPACK_IMPORTED_MODULE_2__["line"]().curve(d3__WEBPACK_IMPORTED_MODULE_2__["curveBasis"]).x(function (_ref4) {
+      var x = d3__WEBPACK_IMPORTED_MODULE_3__["scaleTime"]().range([0, width]);
+      var y = d3__WEBPACK_IMPORTED_MODULE_3__["scaleLinear"]().range([height, 0]);
+      var color = d3__WEBPACK_IMPORTED_MODULE_3__["scaleOrdinal"](d3__WEBPACK_IMPORTED_MODULE_3__["schemeCategory10"]);
+      var xAxis = d3__WEBPACK_IMPORTED_MODULE_3__["axisBottom"](x);
+      var yAxis = d3__WEBPACK_IMPORTED_MODULE_3__["axisLeft"](y);
+      var line = d3__WEBPACK_IMPORTED_MODULE_3__["line"]().curve(d3__WEBPACK_IMPORTED_MODULE_3__["curveBasis"]).x(function (_ref4) {
         var date = _ref4.date;
         return x(date);
       }).y(function (_ref5) {
@@ -28739,63 +28711,50 @@ function () {
       }).defined(function (_ref6) {
         var value = _ref6.value;
         return value;
-      }); // Select the elemnt base don the chartplaceholder property
-
-      _self.el = document.getElementById(_self.ChartPlaceHolder); // Check that the #Chart element exists and, on the contrary, create it
-
-      if (d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select("#Chart").empty()) {
-        _self.DivChart = d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).append("div").attr("id", "Chart").style("margin", "50px");
-        _self.DivLegend = d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).append("div").attr("id", "Legend").style("margin", "50px");
-      } // First we have to remove svg
+      }); // First we have to remove svg
       // in case we are redrawing
       // the chart.
 
-
-      d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select("#Chart").select("svg").remove();
-      var svg = d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select("#Chart").append("svg").style("fill", "none").attr("width", width + _self.Margin.left + _self.Margin.right).attr("height", height + _self.Margin.top + _self.Margin.bottom).append("g").attr("transform", 'translate(' + _self.Margin.left + ',' + _self.Margin.top + ')');
-      color.domain(d3__WEBPACK_IMPORTED_MODULE_2__["keys"](data[0]).filter(function (key) {
+      d3__WEBPACK_IMPORTED_MODULE_3__["select"](el).select("#Chart").select("svg").remove();
+      var svg = d3__WEBPACK_IMPORTED_MODULE_3__["select"](el).select("#Chart").append("svg").attr("width", width + this.Margin.left + this.Margin.right).attr("height", height + this.Margin.top + this.Margin.bottom).append("g").attr("transform", 'translate(${this.Margin.left},${this.Margin.top})');
+      color.domain(d3__WEBPACK_IMPORTED_MODULE_3__["keys"](data[0]).filter(function (key) {
         return key == "entity";
       }));
       color.domain(varNames);
-      var maxDate = d3__WEBPACK_IMPORTED_MODULE_2__["max"](data, function (_ref7) {
+      x.domain([d3__WEBPACK_IMPORTED_MODULE_3__["min"](data, function (_ref7) {
         var values = _ref7.values;
-        return d3__WEBPACK_IMPORTED_MODULE_2__["max"](values, function (_ref8) {
+        return d3__WEBPACK_IMPORTED_MODULE_3__["min"](values, function (_ref8) {
           var date = _ref8.date;
           return date;
         });
-      });
-      var minDate = d3__WEBPACK_IMPORTED_MODULE_2__["min"](data, function (_ref9) {
+      }), d3__WEBPACK_IMPORTED_MODULE_3__["max"](data, function (_ref9) {
         var values = _ref9.values;
-        return d3__WEBPACK_IMPORTED_MODULE_2__["min"](values, function (_ref10) {
+        return d3__WEBPACK_IMPORTED_MODULE_3__["max"](values, function (_ref10) {
           var date = _ref10.date;
           return date;
         });
-      });
-      var maxValue = d3__WEBPACK_IMPORTED_MODULE_2__["max"](data, function (_ref11) {
+      })]);
+      y.domain([d3__WEBPACK_IMPORTED_MODULE_3__["min"](data, function (_ref11) {
         var values = _ref11.values;
-        return d3__WEBPACK_IMPORTED_MODULE_2__["max"](values, function (_ref12) {
+        return d3__WEBPACK_IMPORTED_MODULE_3__["min"](values, function (_ref12) {
           var value = _ref12.value;
           return value;
         });
-      });
-      var minValue = d3__WEBPACK_IMPORTED_MODULE_2__["min"](data, function (_ref13) {
+      }), d3__WEBPACK_IMPORTED_MODULE_3__["max"](data, function (_ref13) {
         var values = _ref13.values;
-        return d3__WEBPACK_IMPORTED_MODULE_2__["min"](values, function (_ref14) {
+        return d3__WEBPACK_IMPORTED_MODULE_3__["max"](values, function (_ref14) {
           var value = _ref14.value;
           return value;
         });
-      });
-      var y_padding = Math.round(maxValue - minValue) * 0.1;
-      x.domain([minDate, maxDate]);
-      y.domain([minValue, maxValue + y_padding]);
-      svg.append("g").attr("class", "x axis").style("font", "14px sans-serif").attr("transform", "translate(0,".concat(height, ")")).call(xAxis);
-      svg.append("g").attr("class", "y axis").style("font", "14px sans-serif").call(yAxis);
+      })]);
+      svg.append("g").attr("class", "x axis").attr("transform", "translate(0,".concat(height, ")")).call(xAxis);
+      svg.append("g").attr("class", "y axis").call(yAxis);
       var entities = svg.selectAll(".entity").data(data, function (_ref15) {
         var key = _ref15.key;
         return key;
       }).enter().append("g").attr("class", "entity"); // DIV que funciona como tooltip
 
-      var div = d3__WEBPACK_IMPORTED_MODULE_2__["select"]("body").append("div").attr("class", "tooltip").style("opacity", 0).style("float", "left").style("clear", "none"); // We need to replaceAll spaces with underscore
+      var div = d3__WEBPACK_IMPORTED_MODULE_3__["select"]("body").append("div").attr("class", "tooltip").style("opacity", 0); // We need to replaceAll spaces with underscore
       // to avoid issues during event handler
       // We add lines to the chart
       //
@@ -28809,56 +28768,48 @@ function () {
       }).attr("class", "line").attr("id", function (d) {
         // This function writes the legend
         //
-        var l = new _d3legend__WEBPACK_IMPORTED_MODULE_3__["default"]();
-        var legend = svg.append("g").attr("class", "legend").attr("transform", "translate(50,30)").style("font", "14px sans-serif").call(l.Legend);
+        var l = new _d3legend__WEBPACK_IMPORTED_MODULE_4__["default"]();
+        console.log(_this);
+        var legend = svg.append("g").attr("class", "legend").attr("transform", "translate(50,30)").attr().style("font-size", "12px").call(l.Legend);
         return d.key.sanitize();
       }).attr("d", function (_ref16) {
         var values = _ref16.values;
         return line(values);
       }).on("mouseover", function (d) {
-        var currClass = d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select("#".concat(d.key.sanitize())).attr("class");
-        d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select("#".concat(d.key.sanitize())).attr("class", "".concat(currClass, " current"));
+        var currClass = d3__WEBPACK_IMPORTED_MODULE_3__["select"](el).select("#".concat(d.key.sanitize())).attr("class");
+        d3__WEBPACK_IMPORTED_MODULE_3__["select"](el).select("#".concat(d.key.sanitize())).attr("class", "".concat(currClass, " current"));
       }).on("mouseout", function (_ref17) {
         var key = _ref17.key;
-        var currClass = d3__WEBPACK_IMPORTED_MODULE_2__["select"]("#".concat(key.sanitize())).attr("class");
+        var currClass = d3__WEBPACK_IMPORTED_MODULE_3__["select"]("#".concat(key.sanitize())).attr("class");
         var prevClass = currClass.substring(0, currClass.length - 8);
-        d3__WEBPACK_IMPORTED_MODULE_2__["select"]("#".concat(key.sanitize())).attr("class", prevClass);
+        d3__WEBPACK_IMPORTED_MODULE_3__["select"]("#".concat(key.sanitize())).attr("class", prevClass);
       }).style("stroke", function (_ref18) {
         var key = _ref18.key;
         return color(key);
-      });
+      }); // Append dots to display data points
 
-      if (_self.showDataPoint == true) {
-        // Append dots to display data points
-        entities.append("g").selectAll("circle").data(function (_ref19) {
-          var values = _ref19.values;
-          return values;
-        }).enter().append(_self.shapeDataPoint).attr("r", _self.sizeDataPoint).attr("cx", function (_ref20) {
-          var date = _ref20.date;
-          return x(date);
-        }).attr("cy", function (_ref21) {
-          var value = _ref21.value;
-          return y(value);
-        }).style("fill", function (_ref22) {
-          var entity = _ref22.entity;
-          return color(entity);
-        }).attr("stroke", "none").on("mouseover", function (_ref23) {
-          var entity = _ref23.entity,
-              date = _ref23.date,
-              value = _ref23.value;
-          div.style("left", "".concat(d3__WEBPACK_IMPORTED_MODULE_2__["event"].pageX, "px")).style("top", "".concat(d3__WEBPACK_IMPORTED_MODULE_2__["event"].pageY, "px")).style("border", "1px solid #DDDDDD").style("padding", "3px 5px 3px 5px").style("background-color", "#DDDDDD").style("position", "absolute");
-          div.transition().duration(100).style("opacity", 100);
-          div.html("<p>Entity: ".concat(entity, "<br />Date: ").concat(date.getFullYear(), "<br/>Value: ").concat(value, "</p>"));
-        }).on("mouseout", function (d) {
-          div.transition().duration(2000).style("opacity", 0);
-        });
-      } // Draw title of the chart
-
-
-      if (_self.Title !== "") {
-        svg.append("text").attr("x", _self.Width / 2).attr("y", 0 - _self.Margin.top / 2).attr("text-anchor", "middle").style("font-size", "16px").style("text-decoration", "underline").text(_self.Title);
-      } // We give access to svg object
-
+      entities.append("g").selectAll("circle").data(function (_ref19) {
+        var values = _ref19.values;
+        return values;
+      }).enter().append("circle").attr("r", 3).attr("cx", function (_ref20) {
+        var date = _ref20.date;
+        return x(date);
+      }).attr("cy", function (_ref21) {
+        var value = _ref21.value;
+        return y(value);
+      }).style("fill", function (_ref22) {
+        var entity = _ref22.entity;
+        return color(entity);
+      }).attr("stroke", "none").on("mouseover", function (_ref23) {
+        var entity = _ref23.entity,
+            date = _ref23.date,
+            value = _ref23.value;
+        div.style("left", "".concat(d3__WEBPACK_IMPORTED_MODULE_3__["event"].pageX, "px")).style("top", "".concat(d3__WEBPACK_IMPORTED_MODULE_3__["event"].pageY, "px"));
+        div.transition().duration(100).style("opacity", 100);
+        div.html("<p>entity: ".concat(entity, "<br />Date: ").concat(date.getFullYear(), "<br/>Value: ").concat(value, "</p>"));
+      }).on("mouseout", function (d) {
+        div.transition().duration(4000).style("opacity", 0);
+      }); // We give access to svg object
 
       this.svg = svg;
     }
@@ -28889,8 +28840,20 @@ String.prototype.sanitize = function () {
   return s;
 };
 
+/***/ }),
+
+/***/ 0:
+/*!********************************!*\
+  !*** multi ./src/linechart.js ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(/*! ./src/linechart.js */"./src/linechart.js");
+
+
 /***/ })
 
 /******/ });
 });
-//# sourceMappingURL=charterflight.js.map
+//# sourceMappingURL=main.js.map

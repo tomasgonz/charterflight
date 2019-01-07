@@ -5,7 +5,7 @@ String.prototype.replaceAll = function (find, replace) {
 };
 
 String.prototype.sanitize = function () {
-  
+
   var s = this.replace(/\W+/g, "");
   return s;
 };
