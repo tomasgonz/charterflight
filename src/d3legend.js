@@ -1,46 +1,41 @@
 import * as d3 from 'd3';
+import * as utils from './utils';
 
 export default class D3Legend {
 
-    Legend(g)
+  constructor()
+  {
+    
+  }
+
+    Legend(gg)
     {
-      
-      g.each(function(g) {
+
+      gg.each(function(g) {
         var g = d3.select(this),
             items = {},
-            svg = d3.select(g.property("nearestViewportElement")),
-            legendPadding = g.attr("data-style-padding") || 5,
             lb = g.selectAll(".legend-box").data([true]),
             li = g.selectAll(".legend-items").data([true]);
-
+        
         lb.enter().append("rect").classed("legend-box",true);
         li.enter().append("g").classed("legend-items",true);
 
-        svg.selectAll("[data-legend]").each(function() {
-
-            var self = d3.select(this);
-
-            items[self.attr("data-legend")] = {
-              pos : self.attr("data-legend-pos") || this.getBBox().y,
-              color : self.attr("data-legend-color") != undefined ? self.attr("data-legend-color") : self.style("fill") != 'none' ? self.style("fill") : self.style("stroke")
-            }
-          })
-
-        items = d3.entries(items).sort(function(a,b) { return a.value.pos-b.value.pos});
-        li.selectAll("circle")
-            .data(items,function(d) { return d.key})
-            .call(function(d) { d.enter().append("circle")})
-            .call(function(d) { d.exit().remove()})
-            .attr("cy",function(d,i) { return i-0.25+"em"})
-            .attr("cx",0)
-            .attr("r","0.4em")
-            .style("fill",function(d) { return d.value.color});
-            
+        var _legendItem = lb.enter().append("div")
+        .attr("id", "legend-label-" + d3.select(this).attr("data-legend-label"))
+        .style("float", "left")
+        .style("position", "relative")
+        .style("margin", "0.3em")
+        .style("padding","0.2em")
+        .style("border", "1px solid")
+        .style("font",  d3.select(this).attr("font-legend-size") + " sans-serif")
+        .style("border-radius", "8px")
+        .style("color", d3.select(this).attr("data-legend-label-color"));
+        
+        _legendItem.append("text")
+        .text(d3.select(this).attr("data-legend-label"));
+        
       });
 
-    return g
-
-
-
+    return gg
   }
 }

@@ -28551,11 +28551,13 @@ function () {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return D3Legend; });
 /* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./utils */ "./src/utils.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 
 
 
@@ -28568,39 +28570,20 @@ function () {
 
   _createClass(D3Legend, [{
     key: "Legend",
-    value: function Legend(g) {
-      g.each(function (g) {
+    value: function Legend(gg) {
+      gg.each(function (g) {
         var g = d3__WEBPACK_IMPORTED_MODULE_0__["select"](this),
             items = {},
-            svg = d3__WEBPACK_IMPORTED_MODULE_0__["select"](g.property("nearestViewportElement")),
-            legendPadding = g.attr("data-style-padding") || 5,
             lb = g.selectAll(".legend-box").data([true]),
             li = g.selectAll(".legend-items").data([true]);
         lb.enter().append("rect").classed("legend-box", true);
         li.enter().append("g").classed("legend-items", true);
-        svg.selectAll("[data-legend]").each(function () {
-          var self = d3__WEBPACK_IMPORTED_MODULE_0__["select"](this);
-          items[self.attr("data-legend")] = {
-            pos: self.attr("data-legend-pos") || this.getBBox().y,
-            color: self.attr("data-legend-color") != undefined ? self.attr("data-legend-color") : self.style("fill") != 'none' ? self.style("fill") : self.style("stroke")
-          };
-        });
-        items = d3__WEBPACK_IMPORTED_MODULE_0__["entries"](items).sort(function (a, b) {
-          return a.value.pos - b.value.pos;
-        });
-        li.selectAll("circle").data(items, function (d) {
-          return d.key;
-        }).call(function (d) {
-          d.enter().append("circle");
-        }).call(function (d) {
-          d.exit().remove();
-        }).attr("cy", function (d, i) {
-          return i - 0.25 + "em";
-        }).attr("cx", 0).attr("r", "0.4em").style("fill", function (d) {
-          return d.value.color;
-        });
+
+        var _legendItem = lb.enter().append("div").attr("id", "legend-label-" + d3__WEBPACK_IMPORTED_MODULE_0__["select"](this).attr("data-legend-label")).style("float", "left").style("position", "relative").style("margin", "0.3em").style("padding", "0.2em").style("border", "1px solid").style("font", d3__WEBPACK_IMPORTED_MODULE_0__["select"](this).attr("font-legend-size") + " sans-serif").style("border-radius", "8px").style("color", d3__WEBPACK_IMPORTED_MODULE_0__["select"](this).attr("data-legend-label-color"));
+
+        _legendItem.append("text").text(d3__WEBPACK_IMPORTED_MODULE_0__["select"](this).attr("data-legend-label"));
       });
-      return g;
+      return gg;
     }
   }]);
 
@@ -28648,6 +28631,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _array__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_array__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
 /* harmony import */ var _d3legend__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./d3legend */ "./src/d3legend.js");
+/* harmony import */ var _linechart_styles__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./linechart.styles */ "./src/linechart.styles.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./utils */ "./src/utils.js");
 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -28661,34 +28646,41 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 
 
+
+
 var LineChart =
 /*#__PURE__*/
 function () {
   function LineChart() {
+    var height = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 400;
+    var width = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 400;
+
     _classCallCheck(this, LineChart);
 
     this.el = null;
-    this.Width = 400;
-    this.Height = 400;
-    this.svg = null;
+    this.Width = width;
+    this.Height = height;
+    this.svg = null; //Title of the chart
+
+    this.Title = ""; //Type of curve
+
+    this.curveType = d3__WEBPACK_IMPORTED_MODULE_2__["curveBasis"];
     this.Margin = {
-      top: 50,
+      top: 10,
       right: 50,
       bottom: 50,
       left: 50
-    }; //Title of the chart
+    };
+    this.Style = _linechart_styles__WEBPACK_IMPORTED_MODULE_4__["default"].Conventional; // Style for the chart
 
-    this.Title = ""; // Chart div stored here
-
+    var color = d3__WEBPACK_IMPORTED_MODULE_2__["scaleOrdinal"](d3__WEBPACK_IMPORTED_MODULE_2__["schemeAccent"]);
+    this.ShowDataPoint = true;
     this.DivChart = null; // Legend to be placed here
 
     this.DivLegend = null; // Data
 
-    this.Data = null; // DataPointFormat
-
-    this.showDataPoint = true;
-    this.shapeDataPoint = "circle";
-    this.sizeDataPoint = 4;
+    this.Data = null;
+    this.ShowLegend = true;
   }
 
   _createClass(LineChart, [{
@@ -28730,7 +28722,7 @@ function () {
       var color = d3__WEBPACK_IMPORTED_MODULE_2__["scaleOrdinal"](d3__WEBPACK_IMPORTED_MODULE_2__["schemeAccent"]);
       var xAxis = d3__WEBPACK_IMPORTED_MODULE_2__["axisBottom"](x);
       var yAxis = d3__WEBPACK_IMPORTED_MODULE_2__["axisLeft"](y);
-      var line = d3__WEBPACK_IMPORTED_MODULE_2__["line"]().curve(d3__WEBPACK_IMPORTED_MODULE_2__["curveBasis"]).x(function (_ref4) {
+      var line = d3__WEBPACK_IMPORTED_MODULE_2__["line"]().curve(this.curveType).x(function (_ref4) {
         var date = _ref4.date;
         return x(date);
       }).y(function (_ref5) {
@@ -28739,13 +28731,18 @@ function () {
       }).defined(function (_ref6) {
         var value = _ref6.value;
         return value;
-      }); // Select the elemnt base don the chartplaceholder property
+      }); // Select the elemnt based on the chartplaceholder property
 
-      _self.el = document.getElementById(_self.ChartPlaceHolder); // Check that the #Chart element exists and, on the contrary, create it
+      _self.el = document.getElementById(_self.ChartPlaceHolder); // Draw title of the chart
+
+      if (_self.Title != "") {
+        d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).append("div").attr("id", "Title").text(_self.Title).style("font", _utils__WEBPACK_IMPORTED_MODULE_5__["scale_font_size"](_self.Width + _self.Height) + " sans-serif").style("text-align", "center");
+      } // Check that the #Chart element exists and, on the contrary, create it
+
 
       if (d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select("#Chart").empty()) {
-        _self.DivChart = d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).append("div").attr("id", "Chart").style("margin", "50px");
-        _self.DivLegend = d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).append("div").attr("id", "Legend").style("margin", "50px");
+        _self.DivChart = d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).append("div").attr("id", "Chart").style("margin", "0.1em 0.1em 0 0.1em");
+        _self.DivLegend = d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).append("div").attr("id", "Legend").style("float", "left").style("width", _self.Width).style("margin", "0 0.1em 0.1em 3em");
       } // First we have to remove svg
       // in case we are redrawing
       // the chart.
@@ -28788,8 +28785,8 @@ function () {
       var y_padding = Math.round(maxValue - minValue) * 0.1;
       x.domain([minDate, maxDate]);
       y.domain([minValue, maxValue + y_padding]);
-      svg.append("g").attr("class", "x axis").style("font", "14px sans-serif").attr("transform", "translate(0,".concat(height, ")")).call(xAxis);
-      svg.append("g").attr("class", "y axis").style("font", "14px sans-serif").call(yAxis);
+      svg.append("g").attr("class", "x axis").style("font", _self.Style.Axis.x.font).attr("transform", "translate(0,".concat(height, ")")).call(xAxis);
+      svg.append("g").attr("class", " axis").style("font", _self.Style.Axis.y.font).call(yAxis);
       var entities = svg.selectAll(".entity").data(data, function (_ref15) {
         var key = _ref15.key;
         return key;
@@ -28808,55 +28805,64 @@ function () {
         return d.key;
       }).attr("class", "line").attr("id", function (d) {
         // This function writes the legend
-        //
         var l = new _d3legend__WEBPACK_IMPORTED_MODULE_3__["default"]();
-        var legend = svg.append("g").attr("class", "legend").attr("transform", "translate(50,30)").style("font", "14px sans-serif").call(l.Legend);
+        var legend = d3__WEBPACK_IMPORTED_MODULE_2__["select"]("#Legend").append("g").attr("class", "legend").attr("data-legend-label", d.key.sanitize()).attr("font-legend-size", _utils__WEBPACK_IMPORTED_MODULE_5__["scale_font_size"](_self.Width)).attr("data-legend-label-color", color(d.key)).attr("transform", function (d, i) {
+          return "translate(0," + i * 20 + ")";
+        }).style("font", _utils__WEBPACK_IMPORTED_MODULE_5__["scale_font_size"](_self.Width) + " sans-serif").call(l.Legend);
         return d.key.sanitize();
       }).attr("d", function (_ref16) {
         var values = _ref16.values;
         return line(values);
       }).on("mouseover", function (d) {
-        var currClass = d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select("#".concat(d.key.sanitize())).attr("class");
-        d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select("#".concat(d.key.sanitize())).attr("class", "".concat(currClass, " current"));
+        d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select("#" + d.key.sanitize()).style("stroke-width", _self.Style.StrokeWidth * 2);
+        d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select('#legend-label-' + d.key.sanitize()).style("color", "#fff").style("background-color", color(d.key));
+        d3__WEBPACK_IMPORTED_MODULE_2__["selectAll"]("#circle-" + d.key.sanitize()).attr("r", 6);
       }).on("mouseout", function (_ref17) {
         var key = _ref17.key;
-        var currClass = d3__WEBPACK_IMPORTED_MODULE_2__["select"]("#".concat(key.sanitize())).attr("class");
-        var prevClass = currClass.substring(0, currClass.length - 8);
-        d3__WEBPACK_IMPORTED_MODULE_2__["select"]("#".concat(key.sanitize())).attr("class", prevClass);
+        d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select("#" + key.sanitize()).style("stroke-width", _self.Style.StrokeWidth);
+        d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select('#legend-label-' + key.sanitize()).style("color", color(key)).style("border-color", color(key)).style("background-color", "#fff");
+        d3__WEBPACK_IMPORTED_MODULE_2__["selectAll"]("#circle-" + key.sanitize()).attr("r", 3);
       }).style("stroke", function (_ref18) {
         var key = _ref18.key;
         return color(key);
-      });
+      }).style("border-width", _self.Style.StrokeWidth); // Display the tooltip when we hover over data points
 
-      if (_self.showDataPoint == true) {
+      if (_self.Style.ShowDataPoint == true) {
         // Append dots to display data points
         entities.append("g").selectAll("circle").data(function (_ref19) {
           var values = _ref19.values;
           return values;
-        }).enter().append(_self.shapeDataPoint).attr("r", _self.sizeDataPoint).attr("cx", function (_ref20) {
+        }).enter().append(_self.Style.DataPoint.ShapeDataPoint).attr("r", _self.Style.DataPoint.SizeDataPoint).attr("cx", function (_ref20) {
           var date = _ref20.date;
           return x(date);
         }).attr("cy", function (_ref21) {
           var value = _ref21.value;
           return y(value);
-        }).style("fill", function (_ref22) {
+        }).attr("id", function (_ref22) {
           var entity = _ref22.entity;
+          return "circle-" + entity;
+        }).style("stroke", function (_ref23) {
+          var entity = _ref23.entity;
           return color(entity);
-        }).attr("stroke", "none").on("mouseover", function (_ref23) {
-          var entity = _ref23.entity,
-              date = _ref23.date,
-              value = _ref23.value;
-          div.style("left", "".concat(d3__WEBPACK_IMPORTED_MODULE_2__["event"].pageX, "px")).style("top", "".concat(d3__WEBPACK_IMPORTED_MODULE_2__["event"].pageY, "px")).style("border", "1px solid #DDDDDD").style("padding", "3px 5px 3px 5px").style("background-color", "#DDDDDD").style("position", "absolute");
-          div.transition().duration(100).style("opacity", 100);
+        }).style("stroke-width", _self.Style.DataPoint.StrokeWidth).style("fill", function (_ref24) {
+          var entity = _ref24.entity;
+          return _utils__WEBPACK_IMPORTED_MODULE_5__["shade_color"](color(entity), 0.4);
+        }).on("mouseover", function (_ref25) {
+          var entity = _ref25.entity,
+              date = _ref25.date,
+              value = _ref25.value;
+          div.style("left", "".concat(d3__WEBPACK_IMPORTED_MODULE_2__["event"].pageX, "px")).style("top", "".concat(d3__WEBPACK_IMPORTED_MODULE_2__["event"].pageY, "px")).style("border", _self.Style.ToolTip.border).style("font", _self.Style.ToolTip.font).style("border-radius", _self.Style.ToolTip.border_radius).style("box-shadow", _self.Style.ToolTip.box_shadow).style("padding", _self.Style.ToolTip.padding).style("background-color", _self.Style.ToolTip.background_color).style("position", _self.Style.ToolTip.position);
+          div.transition().duration(500).style("opacity", 500);
           div.html("<p>Entity: ".concat(entity, "<br />Date: ").concat(date.getFullYear(), "<br/>Value: ").concat(value, "</p>"));
-        }).on("mouseout", function (d) {
+          d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select("#" + entity.sanitize()).style("stroke-width", _self.Style.StrokeWidth * 2);
+          d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select('#legend-label-' + entity.sanitize()).style("color", "#fff").style("background-color", color(entity));
+          d3__WEBPACK_IMPORTED_MODULE_2__["selectAll"]("#circle-" + entity.sanitize()).attr("r", 6);
+        }).on("mouseout", function (entity) {
           div.transition().duration(2000).style("opacity", 0);
+          d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select("#" + entity.entity.sanitize()).style("stroke-width", _self.Style.StrokeWidth);
+          d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select('#legend-label-' + entity.entity.sanitize()).style("border-color", color(entity.entity)).style("color", color(entity.entity)).style("background-color", "#fff");
+          d3__WEBPACK_IMPORTED_MODULE_2__["selectAll"]("#circle-" + entity.entity.sanitize()).attr("r", 3);
         });
-      } // Draw title of the chart
-
-
-      if (_self.Title !== "") {
-        svg.append("text").attr("x", _self.Width / 2).attr("y", 0 - _self.Margin.top / 2).attr("text-anchor", "middle").style("font-size", "16px").style("text-decoration", "underline").text(_self.Title);
       } // We give access to svg object
 
 
@@ -28868,6 +28874,49 @@ function () {
 }();
 
 
+
+/***/ }),
+
+/***/ "./src/linechart.styles.js":
+/*!*********************************!*\
+  !*** ./src/linechart.styles.js ***!
+  \*********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+
+
+var LineChartStyles = {
+  Conventional: {
+    ShowDataPoint: true,
+    DataPoint: {
+      ShapeDataPoint: "circle",
+      SizeDataPoint: 3,
+      StrokeWidth: "1px"
+    },
+    Axis: {
+      y: {
+        font: "14px sans-serif"
+      },
+      x: {
+        font: "14px sans-serif"
+      }
+    },
+    StrokeWidth: 1,
+    ToolTip: {
+      border: "1px solid #ddd",
+      font: "1em sans-serif",
+      border_radius: "8px",
+      box_shadow: "0 1px 2px rgba(0,0,0,0.5)",
+      padding: "3px 10px 3px 10px",
+      background_color: "#fff",
+      position: "absolute"
+    }
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = (LineChartStyles);
 
 /***/ }),
 
@@ -28888,6 +28937,47 @@ String.prototype.sanitize = function () {
   var s = this.replace(/\W+/g, "");
   return s;
 };
+
+/***/ }),
+
+/***/ "./src/utils.js":
+/*!**********************!*\
+  !*** ./src/utils.js ***!
+  \**********************/
+/*! exports provided: scale_font_size, shade_color, blend_colors */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "scale_font_size", function() { return scale_font_size; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "shade_color", function() { return shade_color; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "blend_colors", function() { return blend_colors; });
+function scale_font_size(size) {
+  var scaled = size / 900;
+  scaled = scaled + "em";
+  return scaled;
+}
+;
+function shade_color(color, percent) {
+  var f = parseInt(color.slice(1), 16),
+      t = percent < 0 ? 0 : 255,
+      p = percent < 0 ? percent * -1 : percent,
+      R = f >> 16,
+      G = f >> 8 & 0x00FF,
+      B = f & 0x0000FF;
+  return "#" + (0x1000000 + (Math.round((t - R) * p) + R) * 0x10000 + (Math.round((t - G) * p) + G) * 0x100 + (Math.round((t - B) * p) + B)).toString(16).slice(1);
+}
+function blend_colors(c0, c1, p) {
+  var f = parseInt(c0.slice(1), 16),
+      t = parseInt(c1.slice(1), 16),
+      R1 = f >> 16,
+      G1 = f >> 8 & 0x00FF,
+      B1 = f & 0x0000FF,
+      R2 = t >> 16,
+      G2 = t >> 8 & 0x00FF,
+      B2 = t & 0x0000FF;
+  return "#" + (0x1000000 + (Math.round((R2 - R1) * p) + R1) * 0x10000 + (Math.round((G2 - G1) * p) + G1) * 0x100 + (Math.round((B2 - B1) * p) + B1)).toString(16).slice(1);
+}
 
 /***/ })
 

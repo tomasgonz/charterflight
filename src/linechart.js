@@ -2,30 +2,42 @@
 
 import "./sanitize";
 import "./array";
-
 import * as d3 from 'd3';
 import D3Legend from  "./d3legend";
 
+import LineChartStyles from "./linechart.styles"
+
+import * as utils from "./utils";
+
 export default class LineChart
 {
-  constructor()
+  constructor(height=400, width=400)
   {
     this.el = null;
-    this.Width = 400;
-    this.Height = 400;
+    this.Width = width;
+    this.Height = height;
     this.svg = null;
 
+    //Title of the chart
+    this.Title = ""
+
+    //Type of curve
+    this.curveType = d3.curveBasis;
+
     this.Margin = {
-      top: 50,
+      top: 10,
       right: 50,
       bottom: 50,
       left: 50
     };
 
-    //Title of the chart
-    this.Title = "";
+    this.Style = LineChartStyles.Conventional;
 
-    // Chart div stored here
+    // Style for the chart
+    const color = d3.scaleOrdinal(d3.schemeAccent);
+
+    this.ShowDataPoint = true;
+
     this.DivChart = null;
 
     // Legend to be placed here
@@ -34,18 +46,14 @@ export default class LineChart
     // Data
     this.Data = null;
 
-    // DataPointFormat
-    this.showDataPoint = true;
-    this.shapeDataPoint = "circle";
-    this.sizeDataPoint = 4;
-
+    this.ShowLegend = true;
   }
 
   Draw()
   {
     // Necessary to keep a reference within an event handler
     const _self = this;
-    
+
     const width = _self.Width - _self.Margin.left - _self.Margin.right;
     const height = _self.Height - _self.Margin.top - _self.Margin.bottom;
 
@@ -83,13 +91,24 @@ export default class LineChart
     const yAxis = d3.axisLeft(y);
 
     const line = d3.line()
-      .curve(d3.curveBasis)
+      .curve(this.curveType)
       .x(({date}) => x(date))
       .y(({value}) => y(value))
       .defined(({value}) => value);
 
-      // Select the elemnt base don the chartplaceholder property
+      // Select the elemnt based on the chartplaceholder property
       _self.el = document.getElementById(_self.ChartPlaceHolder);
+
+      // Draw title of the chart
+      if (_self.Title != "")
+      {
+        d3.select(_self.el)
+          .append("div")
+          .attr("id", "Title")
+          .text(_self.Title)
+          .style("font", utils.scale_font_size(_self.Width + _self.Height)  + " sans-serif")
+          .style("text-align", "center");
+      }
 
       // Check that the #Chart element exists and, on the contrary, create it
       if (d3.select(_self.el).select("#Chart").empty())
@@ -97,12 +116,14 @@ export default class LineChart
         _self.DivChart = d3.select(_self.el)
           .append("div")
           .attr("id", "Chart")
-          .style("margin", "50px");
-        
+          .style("margin", "0.1em 0.1em 0 0.1em");
+
         _self.DivLegend = d3.select(_self.el)
         .append("div")
         .attr("id", "Legend")
-        .style("margin", "50px");
+        .style("float", "left")
+        .style("width", _self.Width)
+        .style("margin", "0 0.1em 0.1em 3em");
       }
 
       // First we have to remove svg
@@ -121,13 +142,16 @@ export default class LineChart
 
     color.domain(varNames);
 
-    const maxDate = d3.max(data, 
+    const maxDate = d3.max(data,
       ({values}) => d3.max(values, ({date}) => date));
-    const minDate = d3.min(data, 
+
+    const minDate = d3.min(data,
       ({values}) => d3.min(values, ({date}) => date));
-    const maxValue = d3.max(data, 
+
+    const maxValue = d3.max(data,
       ({values}) => d3.max(values, ({value}) => value));
-    const minValue = d3.min(data, 
+
+    const minValue = d3.min(data,
       ({values}) => d3.min(values, ({value}) => value));
 
     var y_padding = Math.round(maxValue - minValue)*0.1;
@@ -138,13 +162,13 @@ export default class LineChart
 
     svg.append("g")
       .attr("class", "x axis")
-      .style("font", "14px sans-serif")
+      .style("font", _self.Style.Axis.x.font)
       .attr("transform", `translate(0,${height})`)
       .call(xAxis);
 
     svg.append("g")
-      .attr("class", "y axis")
-      .style("font", "14px sans-serif")
+      .attr("class", " axis")
+      .style("font", _self.Style.Axis.y.font)
       .call(yAxis);
 
     const entities = svg.selectAll(".entity")
@@ -170,82 +194,125 @@ export default class LineChart
   //
     entities.append("svg:path")
       .attr("data-legend",
-      function(d) { return d.key}
-      ).attr("class", "line").attr("id", d => {
+      function(d) {
+        return d.key
+      })
+      .attr("class", "line")
+      .attr("id", d => {
 
       // This function writes the legend
-      //
-        var l = new D3Legend();
-        
-        const legend = svg.append("g")
-          .attr("class","legend")
-          .attr("transform","translate(50,30)")
-          .style("font","14px sans-serif")
-          .call(l.Legend);
+      var l = new D3Legend();
 
-      return d.key.sanitize();
+      const legend = d3.select("#Legend").append("g")
+        .attr("class","legend")
+        .attr("data-legend-label", d.key.sanitize())
+        .attr("font-legend-size", utils.scale_font_size(_self.Width))
+        .attr("data-legend-label-color", color(d.key))
+        .attr("transform", function (d, i)
+          {
+              return "translate(0," + i * 20 + ")"
+          })
+        .style("font", utils.scale_font_size(_self.Width) + " sans-serif")
+        .call(l.Legend);
 
-    }).attr("d", ({values}) => line(values))
+        return (d.key.sanitize());
+
+      })
+      .attr("d", ({values}) => line(values))
       .on("mouseover", d => {
-        let currClass = d3.select(_self.el)
-        .select(`#${d.key.sanitize()}`)
-        .attr("class");
+        d3.select(_self.el)
+        .select("#" + d.key.sanitize())
+        .style("stroke-width", (_self.Style.StrokeWidth * 2));
 
         d3.select(_self.el)
-        .select(`#${d.key.sanitize()}`)
-        .attr("class", `${currClass} current`);
+        .select('#legend-label-' + d.key.sanitize())
+        .style("color", "#fff")
+        .style("background-color", color(d.key));
+
+        d3.selectAll("#circle-" + d.key.sanitize())
+        .attr("r", 6);
+
         }
       )
       .on("mouseout", ({key}) => {
-        let currClass = d3.select(`#${key.sanitize()}`).attr("class");
-        let prevClass = currClass.substring(0, currClass.length - 8);
-        d3.select(`#${key.sanitize()}`).attr("class", prevClass);
 
-    }).style("stroke", ({key}) => color(key));
+        d3.select(_self.el)
+        .select("#" + key.sanitize())
+        .style("stroke-width", (_self.Style.StrokeWidth));
 
-    if (_self.showDataPoint == true)
+        d3.select(_self.el)
+        .select('#legend-label-' + key.sanitize())
+        .style("color", color(key))
+        .style("border-color", color(key))
+        .style("background-color", "#fff");
+
+        d3.selectAll("#circle-" + key.sanitize())
+        .attr("r", 3);
+
+    })
+    .style("stroke", ({key}) => color(key))
+    .style("border-width", _self.Style.StrokeWidth);
+
+    // Display the tooltip when we hover over data points
+    if (_self.Style.ShowDataPoint == true)
     {
       // Append dots to display data points
       entities.append("g").selectAll("circle")
       .data(({values}) => values)
       .enter()
-      .append(_self.shapeDataPoint)
-      .attr("r", _self.sizeDataPoint)
+      .append(_self.Style.DataPoint.ShapeDataPoint)
+      .attr("r", _self.Style.DataPoint.SizeDataPoint)
       .attr("cx", ({date}) => x(date))
       .attr("cy", ({value}) => y(value))
-      .style("fill", ({entity}) => color(entity))
-      .attr("stroke", "none")
+      .attr("id", ({entity}) => "circle-" + entity)
+      .style("stroke", ({entity}) => color(entity))
+      .style("stroke-width", _self.Style.DataPoint.StrokeWidth)
+      .style("fill", ({entity}) => utils.shade_color(color(entity), 0.4))
       .on("mouseover", ({entity, date, value}) => {
-        
         div.style("left", `${d3.event.pageX}px`)
         .style("top", `${d3.event.pageY}px`)
-        .style("border", "1px solid #DDDDDD")
-        .style("padding", "3px 5px 3px 5px")
-        .style("background-color", "#DDDDDD")
-        .style("position", "absolute");
-        
-        div.transition().duration(100).style("opacity", 100);
-        
+        .style("border", _self.Style.ToolTip.border)
+        .style("font",  _self.Style.ToolTip.font)
+        .style("border-radius",  _self.Style.ToolTip.border_radius)
+        .style("box-shadow",  _self.Style.ToolTip.box_shadow)
+        .style("padding",  _self.Style.ToolTip.padding)
+        .style("background-color",  _self.Style.ToolTip.background_color)
+        .style("position",  _self.Style.ToolTip.position);
+
+        div.transition().duration(500).style("opacity", 500);
+
         div.html(`<p>Entity: ${entity}<br />Date: ${date.getFullYear()}<br/>Value: ${value}</p>`);
+
+        d3.select(_self.el)
+        .select("#" + entity.sanitize())
+        .style("stroke-width", (_self.Style.StrokeWidth * 2));
+
+        d3.select(_self.el)
+        .select('#legend-label-' + entity.sanitize())
+        .style("color", "#fff")
+        .style("background-color", color(entity));
+
+        d3.selectAll("#circle-" + entity.sanitize())
+        .attr("r", 6);
       })
-      .on("mouseout", d => {
-        div.transition().duration(2000).style("opacity", 0);
+      .on("mouseout", entity => {
+        div.transition().duration(2000).style("opacity", 0)
+        d3.select(_self.el)
+        .select("#" + entity.entity.sanitize())
+        .style("stroke-width", (_self.Style.StrokeWidth));
+
+        d3.select(_self.el)
+        .select('#legend-label-' + entity.entity.sanitize())
+        .style("border-color", color(entity.entity))
+        .style("color", color(entity.entity))
+        .style("background-color", "#fff");
+
+        d3.selectAll("#circle-" + entity.entity.sanitize())
+        .attr("r", 3);
       });
 
     }
-    
-    // Draw title of the chart
-    if (_self.Title !== "")
-    {
-      svg.append("text")
-        .attr("x", (_self.Width / 2))             
-        .attr("y", 0 - (_self.Margin.top / 2))
-        .attr("text-anchor", "middle")  
-        .style("font-size", "16px") 
-        .style("text-decoration", "underline")  
-        .text(_self.Title);
-    }
-  
+
     // We give access to svg object
     this.svg = svg;
 
