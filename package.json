@@ -1,6 +1,6 @@
 {
   "name": "charterflight",
-  "version": "1.0.0",
+  "version": "1.0.0.1",
   "devDependencies": {
     "@babel/cli": "^7",
     "@babel/core": "^7",

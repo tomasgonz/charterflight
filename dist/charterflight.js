@@ -28598,13 +28598,19 @@ function () {
 /*!**********************!*\
   !*** ./src/index.js ***!
   \**********************/
-/*! no exports provided */
+/*! exports provided: LineChart, BarChart */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _linechart__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./linechart */ "./src/linechart.js");
 /* harmony import */ var _barchart__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./barchart */ "./src/barchart.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "LineChart", function() { return _linechart__WEBPACK_IMPORTED_MODULE_0__["default"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "BarChart", function() { return _barchart__WEBPACK_IMPORTED_MODULE_1__["default"]; });
+
+
+
 
 
 
