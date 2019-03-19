@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -9,6 +10,10 @@
 		root["charterflight"] = factory();
 })(window, function() {
 return /******/ (function(modules) { // webpackBootstrap
+=======
+var CharterFlight =
+/******/ (function(modules) { // webpackBootstrap
+>>>>>>> 94e2477fc6aaa38339a3d71692286d1325735130
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -104,6 +109,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+<<<<<<< HEAD
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "slice", function() { return slice; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "map", function() { return map; });
@@ -127,8 +133,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = (function(a, b) {
   return a < b ? -1 : a > b ? 1 : a >= b ? 0 : NaN;
 });
+=======
 
 
+var _d = __webpack_require__(1);
+
+var d3 = _interopRequireWildcard(_d);
+
+var _linechart = __webpack_require__(2);
+
+var _linechart2 = _interopRequireDefault(_linechart);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+>>>>>>> 94e2477fc6aaa38339a3d71692286d1325735130
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+<<<<<<< HEAD
 /***/ }),
 
 /***/ "./node_modules/d3-array/src/bisect.js":
@@ -144,8 +165,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bisectLeft", function() { return bisectLeft; });
 /* harmony import */ var _ascending__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ascending */ "./node_modules/d3-array/src/ascending.js");
 /* harmony import */ var _bisector__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./bisector */ "./node_modules/d3-array/src/bisector.js");
+=======
+(function (global) {
+>>>>>>> 94e2477fc6aaa38339a3d71692286d1325735130
 
 
+<<<<<<< HEAD
 
 var ascendingBisect = Object(_bisector__WEBPACK_IMPORTED_MODULE_1__["default"])(_ascending__WEBPACK_IMPORTED_MODULE_0__["default"]);
 var bisectRight = ascendingBisect.right;
@@ -154,6 +179,18 @@ var bisectLeft = ascendingBisect.left;
 
 
 /***/ }),
+=======
+    if (global.charterflight) {
+        throw new Error('Charterflight has already been defined');
+    } else {
+        global.charterflight = charterflight;
+    }
+})(typeof window === 'undefined' ? undefined : window);
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+>>>>>>> 94e2477fc6aaa38339a3d71692286d1325735130
 
 /***/ "./node_modules/d3-array/src/bisector.js":
 /*!***********************************************!*\
@@ -28432,6 +28469,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+<<<<<<< HEAD
 
 /***/ }),
 
@@ -28611,8 +28649,406 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+=======
+exports.version = version;
+exports.bisect = bisectRight;
+exports.bisectRight = bisectRight;
+exports.bisectLeft = bisectLeft;
+exports.ascending = ascending;
+exports.bisector = bisector;
+exports.cross = cross;
+exports.descending = descending;
+exports.deviation = deviation;
+exports.extent = extent;
+exports.histogram = histogram;
+exports.thresholdFreedmanDiaconis = freedmanDiaconis;
+exports.thresholdScott = scott;
+exports.thresholdSturges = sturges;
+exports.max = max;
+exports.mean = mean;
+exports.median = median;
+exports.merge = merge;
+exports.min = min;
+exports.pairs = pairs;
+exports.permute = permute;
+exports.quantile = threshold;
+exports.range = sequence;
+exports.scan = scan;
+exports.shuffle = shuffle;
+exports.sum = sum;
+exports.ticks = ticks;
+exports.tickIncrement = tickIncrement;
+exports.tickStep = tickStep;
+exports.transpose = transpose;
+exports.variance = variance;
+exports.zip = zip;
+exports.axisTop = axisTop;
+exports.axisRight = axisRight;
+exports.axisBottom = axisBottom;
+exports.axisLeft = axisLeft;
+exports.brush = brush;
+exports.brushX = brushX;
+exports.brushY = brushY;
+exports.brushSelection = brushSelection;
+exports.chord = chord;
+exports.ribbon = ribbon;
+exports.nest = nest;
+exports.set = set$2;
+exports.map = map$1;
+exports.keys = keys;
+exports.values = values;
+exports.entries = entries;
+exports.color = color;
+exports.rgb = rgb;
+exports.hsl = hsl;
+exports.lab = lab;
+exports.hcl = hcl;
+exports.cubehelix = cubehelix;
+exports.dispatch = dispatch;
+exports.drag = drag;
+exports.dragDisable = dragDisable;
+exports.dragEnable = yesdrag;
+exports.dsvFormat = dsv;
+exports.csvParse = csvParse;
+exports.csvParseRows = csvParseRows;
+exports.csvFormat = csvFormat;
+exports.csvFormatRows = csvFormatRows;
+exports.tsvParse = tsvParse;
+exports.tsvParseRows = tsvParseRows;
+exports.tsvFormat = tsvFormat;
+exports.tsvFormatRows = tsvFormatRows;
+exports.easeLinear = linear$1;
+exports.easeQuad = quadInOut;
+exports.easeQuadIn = quadIn;
+exports.easeQuadOut = quadOut;
+exports.easeQuadInOut = quadInOut;
+exports.easeCubic = cubicInOut;
+exports.easeCubicIn = cubicIn;
+exports.easeCubicOut = cubicOut;
+exports.easeCubicInOut = cubicInOut;
+exports.easePoly = polyInOut;
+exports.easePolyIn = polyIn;
+exports.easePolyOut = polyOut;
+exports.easePolyInOut = polyInOut;
+exports.easeSin = sinInOut;
+exports.easeSinIn = sinIn;
+exports.easeSinOut = sinOut;
+exports.easeSinInOut = sinInOut;
+exports.easeExp = expInOut;
+exports.easeExpIn = expIn;
+exports.easeExpOut = expOut;
+exports.easeExpInOut = expInOut;
+exports.easeCircle = circleInOut;
+exports.easeCircleIn = circleIn;
+exports.easeCircleOut = circleOut;
+exports.easeCircleInOut = circleInOut;
+exports.easeBounce = bounceOut;
+exports.easeBounceIn = bounceIn;
+exports.easeBounceOut = bounceOut;
+exports.easeBounceInOut = bounceInOut;
+exports.easeBack = backInOut;
+exports.easeBackIn = backIn;
+exports.easeBackOut = backOut;
+exports.easeBackInOut = backInOut;
+exports.easeElastic = elasticOut;
+exports.easeElasticIn = elasticIn;
+exports.easeElasticOut = elasticOut;
+exports.easeElasticInOut = elasticInOut;
+exports.forceCenter = center$1;
+exports.forceCollide = collide;
+exports.forceLink = link;
+exports.forceManyBody = manyBody;
+exports.forceSimulation = simulation;
+exports.forceX = x$2;
+exports.forceY = y$2;
+exports.formatDefaultLocale = defaultLocale;
+exports.formatLocale = formatLocale;
+exports.formatSpecifier = formatSpecifier;
+exports.precisionFixed = precisionFixed;
+exports.precisionPrefix = precisionPrefix;
+exports.precisionRound = precisionRound;
+exports.geoArea = area;
+exports.geoBounds = bounds;
+exports.geoCentroid = centroid;
+exports.geoCircle = circle;
+exports.geoClipExtent = extent$1;
+exports.geoContains = contains;
+exports.geoDistance = distance;
+exports.geoGraticule = graticule;
+exports.geoGraticule10 = graticule10;
+exports.geoInterpolate = interpolate$1;
+exports.geoLength = length$1;
+exports.geoPath = index$1;
+exports.geoAlbers = albers;
+exports.geoAlbersUsa = albersUsa;
+exports.geoAzimuthalEqualArea = azimuthalEqualArea;
+exports.geoAzimuthalEqualAreaRaw = azimuthalEqualAreaRaw;
+exports.geoAzimuthalEquidistant = azimuthalEquidistant;
+exports.geoAzimuthalEquidistantRaw = azimuthalEquidistantRaw;
+exports.geoConicConformal = conicConformal;
+exports.geoConicConformalRaw = conicConformalRaw;
+exports.geoConicEqualArea = conicEqualArea;
+exports.geoConicEqualAreaRaw = conicEqualAreaRaw;
+exports.geoConicEquidistant = conicEquidistant;
+exports.geoConicEquidistantRaw = conicEquidistantRaw;
+exports.geoEquirectangular = equirectangular;
+exports.geoEquirectangularRaw = equirectangularRaw;
+exports.geoGnomonic = gnomonic;
+exports.geoGnomonicRaw = gnomonicRaw;
+exports.geoIdentity = identity$5;
+exports.geoProjection = projection;
+exports.geoProjectionMutator = projectionMutator;
+exports.geoMercator = mercator;
+exports.geoMercatorRaw = mercatorRaw;
+exports.geoOrthographic = orthographic;
+exports.geoOrthographicRaw = orthographicRaw;
+exports.geoStereographic = stereographic;
+exports.geoStereographicRaw = stereographicRaw;
+exports.geoTransverseMercator = transverseMercator;
+exports.geoTransverseMercatorRaw = transverseMercatorRaw;
+exports.geoRotation = rotation;
+exports.geoStream = geoStream;
+exports.geoTransform = transform;
+exports.cluster = cluster;
+exports.hierarchy = hierarchy;
+exports.pack = index$2;
+exports.packSiblings = siblings;
+exports.packEnclose = enclose;
+exports.partition = partition;
+exports.stratify = stratify;
+exports.tree = tree;
+exports.treemap = index$3;
+exports.treemapBinary = binary;
+exports.treemapDice = treemapDice;
+exports.treemapSlice = treemapSlice;
+exports.treemapSliceDice = sliceDice;
+exports.treemapSquarify = squarify;
+exports.treemapResquarify = resquarify;
+exports.interpolate = interpolateValue;
+exports.interpolateArray = array$1;
+exports.interpolateBasis = basis$1;
+exports.interpolateBasisClosed = basisClosed;
+exports.interpolateDate = date;
+exports.interpolateNumber = reinterpolate;
+exports.interpolateObject = object;
+exports.interpolateRound = interpolateRound;
+exports.interpolateString = interpolateString;
+exports.interpolateTransformCss = interpolateTransformCss;
+exports.interpolateTransformSvg = interpolateTransformSvg;
+exports.interpolateZoom = interpolateZoom;
+exports.interpolateRgb = interpolateRgb;
+exports.interpolateRgbBasis = rgbBasis;
+exports.interpolateRgbBasisClosed = rgbBasisClosed;
+exports.interpolateHsl = hsl$2;
+exports.interpolateHslLong = hslLong;
+exports.interpolateLab = lab$1;
+exports.interpolateHcl = hcl$2;
+exports.interpolateHclLong = hclLong;
+exports.interpolateCubehelix = cubehelix$2;
+exports.interpolateCubehelixLong = cubehelixLong;
+exports.quantize = quantize;
+exports.path = path;
+exports.polygonArea = area$1;
+exports.polygonCentroid = centroid$1;
+exports.polygonHull = hull;
+exports.polygonContains = contains$1;
+exports.polygonLength = length$2;
+exports.quadtree = quadtree;
+exports.queue = queue;
+exports.randomUniform = uniform;
+exports.randomNormal = normal;
+exports.randomLogNormal = logNormal;
+exports.randomBates = bates;
+exports.randomIrwinHall = irwinHall;
+exports.randomExponential = exponential$1;
+exports.request = request;
+exports.html = html;
+exports.json = json;
+exports.text = text;
+exports.xml = xml;
+exports.csv = csv$1;
+exports.tsv = tsv$1;
+exports.scaleBand = band;
+exports.scalePoint = point$1;
+exports.scaleIdentity = identity$6;
+exports.scaleLinear = linear$2;
+exports.scaleLog = log$1;
+exports.scaleOrdinal = ordinal;
+exports.scaleImplicit = implicit;
+exports.scalePow = pow$1;
+exports.scaleSqrt = sqrt$1;
+exports.scaleQuantile = quantile$$1;
+exports.scaleQuantize = quantize$1;
+exports.scaleThreshold = threshold$1;
+exports.scaleTime = time;
+exports.scaleUtc = utcTime;
+exports.schemeCategory10 = category10;
+exports.schemeCategory20b = category20b;
+exports.schemeCategory20c = category20c;
+exports.schemeCategory20 = category20;
+exports.interpolateCubehelixDefault = cubehelix$3;
+exports.interpolateRainbow = rainbow$1;
+exports.interpolateWarm = warm;
+exports.interpolateCool = cool;
+exports.interpolateViridis = viridis;
+exports.interpolateMagma = magma;
+exports.interpolateInferno = inferno;
+exports.interpolatePlasma = plasma;
+exports.scaleSequential = sequential;
+exports.creator = creator;
+exports.local = local$1;
+exports.matcher = matcher$1;
+exports.mouse = mouse;
+exports.namespace = namespace;
+exports.namespaces = namespaces;
+exports.select = select;
+exports.selectAll = selectAll;
+exports.selection = selection;
+exports.selector = selector;
+exports.selectorAll = selectorAll;
+exports.style = styleValue;
+exports.touch = touch;
+exports.touches = touches;
+exports.window = defaultView;
+exports.customEvent = customEvent;
+exports.arc = arc;
+exports.area = area$2;
+exports.line = line;
+exports.pie = pie;
+exports.radialArea = radialArea;
+exports.radialLine = radialLine$1;
+exports.linkHorizontal = linkHorizontal;
+exports.linkVertical = linkVertical;
+exports.linkRadial = linkRadial;
+exports.symbol = symbol;
+exports.symbols = symbols;
+exports.symbolCircle = circle$2;
+exports.symbolCross = cross$2;
+exports.symbolDiamond = diamond;
+exports.symbolSquare = square;
+exports.symbolStar = star;
+exports.symbolTriangle = triangle;
+exports.symbolWye = wye;
+exports.curveBasisClosed = basisClosed$1;
+exports.curveBasisOpen = basisOpen;
+exports.curveBasis = basis$2;
+exports.curveBundle = bundle;
+exports.curveCardinalClosed = cardinalClosed;
+exports.curveCardinalOpen = cardinalOpen;
+exports.curveCardinal = cardinal;
+exports.curveCatmullRomClosed = catmullRomClosed;
+exports.curveCatmullRomOpen = catmullRomOpen;
+exports.curveCatmullRom = catmullRom;
+exports.curveLinearClosed = linearClosed;
+exports.curveLinear = curveLinear;
+exports.curveMonotoneX = monotoneX;
+exports.curveMonotoneY = monotoneY;
+exports.curveNatural = natural;
+exports.curveStep = step;
+exports.curveStepAfter = stepAfter;
+exports.curveStepBefore = stepBefore;
+exports.stack = stack;
+exports.stackOffsetExpand = expand;
+exports.stackOffsetDiverging = diverging;
+exports.stackOffsetNone = none$1;
+exports.stackOffsetSilhouette = silhouette;
+exports.stackOffsetWiggle = wiggle;
+exports.stackOrderAscending = ascending$2;
+exports.stackOrderDescending = descending$2;
+exports.stackOrderInsideOut = insideOut;
+exports.stackOrderNone = none$2;
+exports.stackOrderReverse = reverse;
+exports.timeInterval = newInterval;
+exports.timeMillisecond = millisecond;
+exports.timeMilliseconds = milliseconds;
+exports.utcMillisecond = millisecond;
+exports.utcMilliseconds = milliseconds;
+exports.timeSecond = second;
+exports.timeSeconds = seconds;
+exports.utcSecond = second;
+exports.utcSeconds = seconds;
+exports.timeMinute = minute;
+exports.timeMinutes = minutes;
+exports.timeHour = hour;
+exports.timeHours = hours;
+exports.timeDay = day;
+exports.timeDays = days;
+exports.timeWeek = sunday;
+exports.timeWeeks = sundays;
+exports.timeSunday = sunday;
+exports.timeSundays = sundays;
+exports.timeMonday = monday;
+exports.timeMondays = mondays;
+exports.timeTuesday = tuesday;
+exports.timeTuesdays = tuesdays;
+exports.timeWednesday = wednesday;
+exports.timeWednesdays = wednesdays;
+exports.timeThursday = thursday;
+exports.timeThursdays = thursdays;
+exports.timeFriday = friday;
+exports.timeFridays = fridays;
+exports.timeSaturday = saturday;
+exports.timeSaturdays = saturdays;
+exports.timeMonth = month;
+exports.timeMonths = months;
+exports.timeYear = year;
+exports.timeYears = years;
+exports.utcMinute = utcMinute;
+exports.utcMinutes = utcMinutes;
+exports.utcHour = utcHour;
+exports.utcHours = utcHours;
+exports.utcDay = utcDay;
+exports.utcDays = utcDays;
+exports.utcWeek = utcSunday;
+exports.utcWeeks = utcSundays;
+exports.utcSunday = utcSunday;
+exports.utcSundays = utcSundays;
+exports.utcMonday = utcMonday;
+exports.utcMondays = utcMondays;
+exports.utcTuesday = utcTuesday;
+exports.utcTuesdays = utcTuesdays;
+exports.utcWednesday = utcWednesday;
+exports.utcWednesdays = utcWednesdays;
+exports.utcThursday = utcThursday;
+exports.utcThursdays = utcThursdays;
+exports.utcFriday = utcFriday;
+exports.utcFridays = utcFridays;
+exports.utcSaturday = utcSaturday;
+exports.utcSaturdays = utcSaturdays;
+exports.utcMonth = utcMonth;
+exports.utcMonths = utcMonths;
+exports.utcYear = utcYear;
+exports.utcYears = utcYears;
+exports.timeFormatDefaultLocale = defaultLocale$1;
+exports.timeFormatLocale = formatLocale$1;
+exports.isoFormat = formatIso;
+exports.isoParse = parseIso;
+exports.now = now;
+exports.timer = timer;
+exports.timerFlush = timerFlush;
+exports.timeout = timeout$1;
+exports.interval = interval$1;
+exports.transition = transition;
+exports.active = active;
+exports.interrupt = interrupt;
+exports.voronoi = voronoi;
+exports.zoom = zoom;
+exports.zoomTransform = transform$1;
+exports.zoomIdentity = identity$8;
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+})));
 
 
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+>>>>>>> 94e2477fc6aaa38339a3d71692286d1325735130
+
+"use strict";
+
+<<<<<<< HEAD
 
  // Expose the modules to the window object
 
@@ -28627,6 +29063,10 @@ window.barchart = _barchart__WEBPACK_IMPORTED_MODULE_1__["default"];
   \**************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
+=======
+
+var LineChart = function LineChart() {
+>>>>>>> 94e2477fc6aaa38339a3d71692286d1325735130
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -28641,17 +29081,47 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./utils */ "./src/utils.js");
 
 
+<<<<<<< HEAD
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+=======
+  this.LegendPlaceHolder = "";
+  this.BlurbPlaceHolder = "";
+  this.ChartPlaceHolder = "";
+  this.Data = null;
+};
+
+LineChart.prototype.Draw = function () {
+  // Necessary to keep a reference within an event handler
+  var _self = this;
+>>>>>>> 94e2477fc6aaa38339a3d71692286d1325735130
 
 
 
+<<<<<<< HEAD
+
+=======
+  // Coerce the data into the right formats
+  data = this.Data.map(function (d) {
+    return {
+      entity: d.entity,
+      date: parseDate(d.date),
+      value: +d.value
+    };
+  });
+
+  // then we need to nest the data on entity since we want to only draw one
+  // line per entity
+  data = d3.nest().key(function (d) {
+    return d.entity;
+  }).entries(data);
+>>>>>>> 94e2477fc6aaa38339a3d71692286d1325735130
 
 
-
+<<<<<<< HEAD
 
 
 var LineChart =
@@ -28660,9 +29130,19 @@ function () {
   function LineChart() {
     var height = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 400;
     var width = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 400;
+=======
+  data.forEach(function (d) {
+    varNames.push(d.key);
+  });
+
+  var x = d3.time.scale().range([0, width]);
+
+  var y = d3.scale.linear().range([height, 0]);
+>>>>>>> 94e2477fc6aaa38339a3d71692286d1325735130
 
     _classCallCheck(this, LineChart);
 
+<<<<<<< HEAD
     this.el = null;
     this.Width = width;
     this.Height = height;
@@ -28711,6 +29191,25 @@ function () {
       }, this); // then we need to nest the data on entity since we want to only draw one
       // line per entity
 
+=======
+  var xAxis = d3.svg.axis().scale(x).orient("bottom");
+
+  var yAxis = d3.svg.axis().scale(y).orient("left");
+
+  var line = d3.svg.line().interpolate("basis").x(function (d) {
+    return x(d.date);
+  }).y(function (d) {
+    return y(d.value);
+  }).defined(function (d) {
+    return d.value;
+  });
+
+  var svg = d3.select(this.ChartPlaceHolder).append("svg").attr("width", width + this.Margin.left + this.Margin.right).attr("height", height + this.Margin.top + this.Margin.bottom).append("g").attr("transform", "translate(" + this.Margin.left + "," + this.Margin.top + ")");
+
+  color.domain(d3.keys(data[0]).filter(function (key) {
+    return key == "entity";
+  }));
+>>>>>>> 94e2477fc6aaa38339a3d71692286d1325735130
 
       data = d3__WEBPACK_IMPORTED_MODULE_2__["nest"]().key(function (_ref2) {
         var entity = _ref2.entity;
@@ -28718,6 +29217,7 @@ function () {
       }).entries(data); // varNames and color.domain are important to link colors of lines
       // to the legend
 
+<<<<<<< HEAD
       var varNames = [];
       data.forEach(function (_ref3) {
         var key = _ref3.key;
@@ -28893,6 +29393,126 @@ function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 
+=======
+  x.domain([d3.min(data, function (d) {
+    return d3.min(d.values, function (d) {
+      return d.date;
+    });
+  }), d3.max(data, function (d) {
+    return d3.max(d.values, function (d) {
+      return d.date;
+    });
+  })]);
+
+  y.domain([d3.min(data, function (d) {
+    return d3.min(d.values, function (d) {
+      return d.value;
+    });
+  }), d3.max(data, function (d) {
+    return d3.max(d.values, function (d) {
+      return d.value;
+    });
+  })]);
+
+  svg.append("g").attr("class", "x axis").attr("transform", "translate(0," + height + ")").call(xAxis);
+
+  svg.append("g").attr("class", "y axis").call(yAxis);
+
+  var entities = svg.selectAll(".entity").data(data, function (d) {
+    return d.key;
+  }).enter().append("g").attr("class", "entity");
+
+  // DIV que funciona como tooltip
+  var div = d3.select("body").append("div").attr("class", "tooltip").style("opacity", 0);
+
+  // We need to replaceAll spaces with underscore
+  // to avoid issues during event handler
+  entities.append("svg:path").attr("class", "line").attr("id", function (d) {
+    if (_self.LegendPlaceHolder !== "") {
+      $(_self.LegendPlaceHolder).append('<div class="legend-item" id="legend-' + d.key.sanitize() + '" style="color:' + color(d.key) + '">' + d.key + "</div>");
+
+      // Highlight line when hovering over legend
+
+      d3.select("#legend-" + d.key.sanitize()).on("mouseover", function () {
+
+        var currClass = d3.select("#" + d.key.sanitize()).attr("class");
+        d3.select("#" + d.key.sanitize()).attr("class", currClass + " current");
+
+        currClass = d3.select("#legend-" + d.key.sanitize()).attr("class");
+        d3.select("#legend-" + d.key.sanitize()).style('background-color', color(d.key));
+        d3.select("#legend-" + d.key.sanitize()).style('color', "#fff");
+
+        // Print blurb if a placeholder has been specified
+        if (_self.BlurbPlaceHolder !== "") {
+          b = new charterflight.Blurb();
+          b.BlurbPlaceHolder = _self.BlurbPlaceHolder;
+          b.Data = d;
+          b.Draw();
+        }
+      });
+
+      d3.select("#legend-" + d.key.sanitize()).on("mouseout", function () {
+        var currClass = d3.select("#" + d.key.sanitize()).attr("class");
+        var prevClass = currClass.substring(0, currClass.length - 8);
+        d3.select("#" + d.key.sanitize()).attr("class", prevClass);
+
+        currClass = d3.select("#legend-" + d.key.sanitize()).attr("class");
+        prevClass = currClass.substring(0, currClass.length - 14);
+        d3.select("#legend-" + d.key.sanitize()).style('background-color', "#fff");
+        d3.select("#legend-" + d.key.sanitize()).style('color', color(d.key));
+      });
+    }
+    return d.key.sanitize();
+  }).attr("d", function (d) {
+    return line(d.values);
+  }).on("mouseover", function (d) {
+    var currClass = d3.select("#" + d.key.sanitize()).attr("class");
+    d3.select("#" + d.key.sanitize()).attr("class", currClass + " current");
+
+    if (_self.LegendPlaceHolder !== "") {
+      currClass = d3.select("#legend-" + d.key.sanitize()).attr("class");
+      d3.select("#legend-" + d.key.sanitize()).style('background-color', color(d.key));
+      d3.select("#legend-" + d.key.sanitize()).style('color', "#fff");
+    }
+
+    if (_self.BlurbPlaceHolder !== "") {
+      b = new charterflight.Blurb();
+      b.BlurbPlaceHolder = _self.BlurbPlaceHolder;
+      b.Data = d;
+      b.Draw();
+    }
+  }).on("mouseout", function (d) {
+    var currClass = d3.select("#" + d.key.sanitize()).attr("class");
+    var prevClass = currClass.substring(0, currClass.length - 8);
+    d3.select("#" + d.key.sanitize()).attr("class", prevClass);
+
+    if (_self.LegendPlaceHolder !== "") {
+      currClass = d3.select("#legend-" + d.key.sanitize()).attr("class");
+      prevClass = currClass.substring(0, currClass.length - 14);
+      d3.select("#legend-" + d.key.sanitize()).style('background-color', "#fff");
+      d3.select("#legend-" + d.key.sanitize()).style('color', color(d.key));
+    }
+  }).style("stroke", function (d) {
+    return color(d.key);
+  });
+
+  // Append dots to display data points
+  entities.append("g").selectAll("circle").data(function (d) {
+    return d.values;
+  }).enter().append("circle").attr("r", 3).attr("cx", function (dd) {
+    return x(dd.date);
+  }).attr("cy", function (dd) {
+    return y(dd.value);
+  }).style("fill", function (d) {
+    return color(d.entity);
+  }).attr("stroke", "none").on("mouseover", function (d) {
+    div.style("left", d3.event.pageX + "px").style("top", d3.event.pageY + "px");
+    div.transition().duration(100).style("opacity", 100);
+    div.html('<p>entity: ' + d.entity + '<br />Date: ' + d.date.getFullYear() + '<br/>Value: ' + d.value + '</p>');
+  }).on("mouseout", function (d) {
+    div.transition().duration(4000).style("opacity", 0);
+  });
+>>>>>>> 94e2477fc6aaa38339a3d71692286d1325735130
 
 var LineChartStyles = {
   Conventional: {
@@ -28922,6 +29542,7 @@ var LineChartStyles = {
     }
   }
 };
+<<<<<<< HEAD
 /* harmony default export */ __webpack_exports__["default"] = (LineChartStyles);
 
 /***/ }),
@@ -28984,6 +29605,8 @@ function blend_colors(c0, c1, p) {
       B2 = t & 0x0000FF;
   return "#" + (0x1000000 + (Math.round((R2 - R1) * p) + R1) * 0x10000 + (Math.round((G2 - G1) * p) + G1) * 0x100 + (Math.round((B2 - B1) * p) + B1)).toString(16).slice(1);
 }
+=======
+>>>>>>> 94e2477fc6aaa38339a3d71692286d1325735130
 
 /***/ })
 

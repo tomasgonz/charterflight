@@ -1,4 +1,10 @@
 "use strict";
+var LineChart = function LineChart()
+{
+
+  this.Width = 200;
+  this.Height = 200;
+  this.svg = null;
 
 import "./sanitize";
 import "./array";
@@ -9,7 +15,9 @@ import LineChartStyles from "./linechart.styles"
 
 import * as utils from "./utils";
 
-export default class LineChart
+export default class LineChart {
+
+LineChart.prototype.Draw = function()
 {
   constructor(height=400, width=400)
   {
