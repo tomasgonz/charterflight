@@ -28507,7 +28507,7 @@ function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _linechart__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./linechart */ "./src/linechart.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "LineChart", function() { return _linechart__WEBPACK_IMPORTED_MODULE_0__["default"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "LineChart", function() { return _linechart__WEBPACK_IMPORTED_MODULE_0__["LineChart"]; });
 
  //import LineChart from './linechart';
 //import BarChart from './barchart';
