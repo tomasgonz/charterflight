@@ -43,8 +43,7 @@ module.exports = {
 			  amd: 'lodash',
 			  root: '_'
 			}
-		  }
-=======
+		  },
   entry:
     './src/index.js',
   output: {
