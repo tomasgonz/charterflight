@@ -1,24 +1,19 @@
 "use strict";
-var LineChart = function LineChart()
-{
-
-  this.Width = 200;
-  this.Height = 200;
-  this.svg = null;
-
 import "./sanitize";
 import "./array";
 import * as d3 from 'd3';
 import D3Legend from  "./d3legend";
 
-import LineChartStyles from "./linechart.styles"
+import LineChartStyles from "./linechart.styles";
 
 import * as utils from "./utils";
 
 export default class LineChart {
 
-LineChart.prototype.Draw = function()
-{
+  Width = 200;
+  Height = 200;
+  svg = null;
+
   constructor(height=400, width=400)
   {
     this.el = null;
@@ -323,6 +318,5 @@ LineChart.prototype.Draw = function()
 
     // We give access to svg object
     this.svg = svg;
-
   }
 }
