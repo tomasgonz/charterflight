@@ -12,7 +12,7 @@
     "webpack-cli": "3.2.3"
   },
   "description": "An implementation of the wonderful d3 library to generate charts quickly.",
-  "main": "charterflight.js",
+  "main": "dist/charterflight.js",
   "module": "dist/charterflight.js",
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "^7.2.3",
