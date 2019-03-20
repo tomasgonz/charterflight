@@ -1,9 +1,9 @@
 'use strict';
 
-//import LineChart from './linechart';
+import LineChart from './linechart';
 //import BarChart from './barchart';
 
-export {LineChart} from './linechart';
+export {LineChart};
 //export {default as BarChart} from './barchart;';
 
 // Expose the modules to the window object
