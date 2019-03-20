@@ -13,7 +13,7 @@ module.exports = {
   	output: {
     	filename: outputFile,
 			path: path.resolve(__dirname, 'dist'),
-			library: 'charterflight',
+			library: libraryName,
 			libraryTarget: 'umd',
 			umdNamedDefine: true,
 			globalObject: `(typeof self !== 'undefined' ? self : this)`
@@ -43,7 +43,7 @@ module.exports = {
 			  commonjs: 'lodash',
 			  commonjs2: 'lodash',
 			  amd: 'lodash',
-			  root: '_'
+			  root: 'charterflight'
 			}
 		  },
   entry:
