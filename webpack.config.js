@@ -6,17 +6,15 @@ var outputFile = libraryName + '.js';
 
 
 module.exports = {
-	mode: "development", // "production" | "development" | "none",
+	mode: "production", // "production" | "development" | "none",
   	// Chosen mode tells webpack to use its built-in optimizations accordingly.
 		entry: './src/index.js',
 		devtool: 'source-map',
   	output: {
     	filename: outputFile,
-			path: path.resolve(__dirname, 'dist'),
-			library: libraryName,
-			libraryTarget: 'umd',
-			umdNamedDefine: true,
-			globalObject: `(typeof self !== 'undefined' ? self : this)`
+		path: path.resolve(__dirname, 'dist'),
+		library: libraryName,
+		libraryTarget: 'umd'
 	  },
 	  module: {
 		rules: [{
@@ -43,7 +41,7 @@ module.exports = {
 			  commonjs: 'lodash',
 			  commonjs2: 'lodash',
 			  amd: 'lodash',
-			  root: 'charterflight'
+			  root: '_'
 			}
 		  },
   entry:
