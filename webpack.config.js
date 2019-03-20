@@ -13,7 +13,7 @@ module.exports = {
   	output: {
     	filename: outputFile,
 			path: path.resolve(__dirname, 'dist'),
-			library: libraryName,
+			library: 'charterflight',
 			libraryTarget: 'umd',
 			umdNamedDefine: true,
 			globalObject: `(typeof self !== 'undefined' ? self : this)`
