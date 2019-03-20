@@ -4424,39 +4424,11 @@ function nopropagation() {
 
 /***/ }),
 
-/***/ "./node_modules/d3-dsv/src/autoType.js":
-/*!*********************************************!*\
-  !*** ./node_modules/d3-dsv/src/autoType.js ***!
-  \*********************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return autoType; });
-function autoType(object) {
-  for (var key in object) {
-    var value = object[key].trim(), number;
-    if (!value) value = null;
-    else if (value === "true") value = true;
-    else if (value === "false") value = false;
-    else if (value === "NaN") value = NaN;
-    else if (!isNaN(number = +value)) value = number;
-    else if (/^([-+]\d{2})?\d{4}(-\d{2}(-\d{2})?)?(T\d{2}:\d{2}(:\d{2}(\.\d{3})?)?(Z|[-+]\d{2}:\d{2})?)?$/.test(value)) value = new Date(value);
-    else continue;
-    object[key] = value;
-  }
-  return object;
-}
-
-
-/***/ }),
-
 /***/ "./node_modules/d3-dsv/src/csv.js":
 /*!****************************************!*\
   !*** ./node_modules/d3-dsv/src/csv.js ***!
   \****************************************/
-/*! exports provided: csvParse, csvParseRows, csvFormat, csvFormatBody, csvFormatRows */
+/*! exports provided: csvParse, csvParseRows, csvFormat, csvFormatRows */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4464,7 +4436,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "csvParse", function() { return csvParse; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "csvParseRows", function() { return csvParseRows; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "csvFormat", function() { return csvFormat; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "csvFormatBody", function() { return csvFormatBody; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "csvFormatRows", function() { return csvFormatRows; });
 /* harmony import */ var _dsv__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./dsv */ "./node_modules/d3-dsv/src/dsv.js");
 
@@ -4474,7 +4445,6 @@ var csv = Object(_dsv__WEBPACK_IMPORTED_MODULE_0__["default"])(",");
 var csvParse = csv.parse;
 var csvParseRows = csv.parseRows;
 var csvFormat = csv.format;
-var csvFormatBody = csv.formatBody;
 var csvFormatRows = csv.formatRows;
 
 
@@ -4522,30 +4492,6 @@ function inferColumns(rows) {
   });
 
   return columns;
-}
-
-function pad(value, width) {
-  var s = value + "", length = s.length;
-  return length < width ? new Array(width - length + 1).join(0) + s : s;
-}
-
-function formatYear(year) {
-  return year < 0 ? "-" + pad(-year, 6)
-    : year > 9999 ? "+" + pad(year, 6)
-    : pad(year, 4);
-}
-
-function formatDate(date) {
-  var hours = date.getUTCHours(),
-      minutes = date.getUTCMinutes(),
-      seconds = date.getUTCSeconds(),
-      milliseconds = date.getUTCMilliseconds();
-  return isNaN(date) ? "Invalid Date"
-      : formatYear(date.getUTCFullYear(), 4) + "-" + pad(date.getUTCMonth() + 1, 2) + "-" + pad(date.getUTCDate(), 2)
-      + (milliseconds ? "T" + pad(hours, 2) + ":" + pad(minutes, 2) + ":" + pad(seconds, 2) + "." + pad(milliseconds, 3) + "Z"
-      : seconds ? "T" + pad(hours, 2) + ":" + pad(minutes, 2) + ":" + pad(seconds, 2) + "Z"
-      : minutes || hours ? "T" + pad(hours, 2) + ":" + pad(minutes, 2) + "Z"
-      : "");
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (function(delimiter) {
@@ -4610,22 +4556,13 @@ function formatDate(date) {
     return rows;
   }
 
-  function preformatBody(rows, columns) {
-    return rows.map(function(row) {
+  function format(rows, columns) {
+    if (columns == null) columns = inferColumns(rows);
+    return [columns.map(formatValue).join(delimiter)].concat(rows.map(function(row) {
       return columns.map(function(column) {
         return formatValue(row[column]);
       }).join(delimiter);
-    });
-  }
-
-  function format(rows, columns) {
-    if (columns == null) columns = inferColumns(rows);
-    return [columns.map(formatValue).join(delimiter)].concat(preformatBody(rows, columns)).join("\n");
-  }
-
-  function formatBody(rows, columns) {
-    if (columns == null) columns = inferColumns(rows);
-    return preformatBody(rows, columns).join("\n");
+    })).join("\n");
   }
 
   function formatRows(rows) {
@@ -4636,18 +4573,16 @@ function formatDate(date) {
     return row.map(formatValue).join(delimiter);
   }
 
-  function formatValue(value) {
-    return value == null ? ""
-        : value instanceof Date ? formatDate(value)
-        : reFormat.test(value += "") ? "\"" + value.replace(/"/g, "\"\"") + "\""
-        : value;
+  function formatValue(text) {
+    return text == null ? ""
+        : reFormat.test(text += "") ? "\"" + text.replace(/"/g, "\"\"") + "\""
+        : text;
   }
 
   return {
     parse: parse,
     parseRows: parseRows,
     format: format,
-    formatBody: formatBody,
     formatRows: formatRows
   };
 });
@@ -4659,7 +4594,7 @@ function formatDate(date) {
 /*!******************************************!*\
   !*** ./node_modules/d3-dsv/src/index.js ***!
   \******************************************/
-/*! exports provided: dsvFormat, csvParse, csvParseRows, csvFormat, csvFormatBody, csvFormatRows, tsvParse, tsvParseRows, tsvFormat, tsvFormatBody, tsvFormatRows, autoType */
+/*! exports provided: dsvFormat, csvParse, csvParseRows, csvFormat, csvFormatRows, tsvParse, tsvParseRows, tsvFormat, tsvFormatRows */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4674,8 +4609,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "csvFormat", function() { return _csv__WEBPACK_IMPORTED_MODULE_1__["csvFormat"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "csvFormatBody", function() { return _csv__WEBPACK_IMPORTED_MODULE_1__["csvFormatBody"]; });
-
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "csvFormatRows", function() { return _csv__WEBPACK_IMPORTED_MODULE_1__["csvFormatRows"]; });
 
 /* harmony import */ var _tsv__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./tsv */ "./node_modules/d3-dsv/src/tsv.js");
@@ -4685,13 +4618,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "tsvFormat", function() { return _tsv__WEBPACK_IMPORTED_MODULE_2__["tsvFormat"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "tsvFormatBody", function() { return _tsv__WEBPACK_IMPORTED_MODULE_2__["tsvFormatBody"]; });
-
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "tsvFormatRows", function() { return _tsv__WEBPACK_IMPORTED_MODULE_2__["tsvFormatRows"]; });
-
-/* harmony import */ var _autoType__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./autoType */ "./node_modules/d3-dsv/src/autoType.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "autoType", function() { return _autoType__WEBPACK_IMPORTED_MODULE_3__["default"]; });
-
 
 
 
@@ -4704,7 +4631,7 @@ __webpack_require__.r(__webpack_exports__);
 /*!****************************************!*\
   !*** ./node_modules/d3-dsv/src/tsv.js ***!
   \****************************************/
-/*! exports provided: tsvParse, tsvParseRows, tsvFormat, tsvFormatBody, tsvFormatRows */
+/*! exports provided: tsvParse, tsvParseRows, tsvFormat, tsvFormatRows */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4712,7 +4639,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "tsvParse", function() { return tsvParse; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "tsvParseRows", function() { return tsvParseRows; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "tsvFormat", function() { return tsvFormat; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "tsvFormatBody", function() { return tsvFormatBody; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "tsvFormatRows", function() { return tsvFormatRows; });
 /* harmony import */ var _dsv__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./dsv */ "./node_modules/d3-dsv/src/dsv.js");
 
@@ -4722,7 +4648,6 @@ var tsv = Object(_dsv__WEBPACK_IMPORTED_MODULE_0__["default"])("\t");
 var tsvParse = tsv.parse;
 var tsvParseRows = tsv.parseRows;
 var tsvFormat = tsv.format;
-var tsvFormatBody = tsv.formatBody;
 var tsvFormatRows = tsv.formatRows;
 
 
@@ -6056,35 +5981,27 @@ var initialRadius = 10,
     }
   }
 
-  function tick(iterations) {
+  function tick() {
     var i, n = nodes.length, node;
 
-    if (iterations === undefined) iterations = 1;
+    alpha += (alphaTarget - alpha) * alphaDecay;
 
-    for (var k = 0; k < iterations; ++k) {
-      alpha += (alphaTarget - alpha) * alphaDecay;
+    forces.each(function(force) {
+      force(alpha);
+    });
 
-      forces.each(function (force) {
-        force(alpha);
-      });
-
-      for (i = 0; i < n; ++i) {
-        node = nodes[i];
-        if (node.fx == null) node.x += node.vx *= velocityDecay;
-        else node.x = node.fx, node.vx = 0;
-        if (node.fy == null) node.y += node.vy *= velocityDecay;
-        else node.y = node.fy, node.vy = 0;
-      }
+    for (i = 0; i < n; ++i) {
+      node = nodes[i];
+      if (node.fx == null) node.x += node.vx *= velocityDecay;
+      else node.x = node.fx, node.vx = 0;
+      if (node.fy == null) node.y += node.vy *= velocityDecay;
+      else node.y = node.fy, node.vy = 0;
     }
-
-    return simulation;
   }
 
   function initializeNodes() {
     for (var i = 0, n = nodes.length, node; i < n; ++i) {
       node = nodes[i], node.index = i;
-      if (node.fx != null) node.x = node.fx;
-      if (node.fy != null) node.y = node.fy;
       if (isNaN(node.x) || isNaN(node.y)) {
         var radius = initialRadius * Math.sqrt(i), angle = i * initialAngle;
         node.x = radius * Math.cos(angle);
@@ -14449,8 +14366,9 @@ function addAll(data) {
     if (y > y1) y1 = y;
   }
 
-  // If there were no (valid) points, abort.
-  if (x0 > x1 || y0 > y1) return this;
+  // If there were no (valid) points, inherit the existing extent.
+  if (x1 < x0) x0 = this._x0, x1 = this._x1;
+  if (y1 < y0) y0 = this._y0, y1 = this._y1;
 
   // Expand the tree to cover the new points.
   this.cover(x0, y0).cover(x1, y1);
@@ -14492,25 +14410,40 @@ __webpack_require__.r(__webpack_exports__);
   }
 
   // Otherwise, double repeatedly to cover.
-  else {
+  else if (x0 > x || x > x1 || y0 > y || y > y1) {
     var z = x1 - x0,
         node = this._root,
         parent,
         i;
 
-    while (x0 > x || x >= x1 || y0 > y || y >= y1) {
-      i = (y < y0) << 1 | (x < x0);
-      parent = new Array(4), parent[i] = node, node = parent, z *= 2;
-      switch (i) {
-        case 0: x1 = x0 + z, y1 = y0 + z; break;
-        case 1: x0 = x1 - z, y1 = y0 + z; break;
-        case 2: x1 = x0 + z, y0 = y1 - z; break;
-        case 3: x0 = x1 - z, y0 = y1 - z; break;
+    switch (i = (y < (y0 + y1) / 2) << 1 | (x < (x0 + x1) / 2)) {
+      case 0: {
+        do parent = new Array(4), parent[i] = node, node = parent;
+        while (z *= 2, x1 = x0 + z, y1 = y0 + z, x > x1 || y > y1);
+        break;
+      }
+      case 1: {
+        do parent = new Array(4), parent[i] = node, node = parent;
+        while (z *= 2, x0 = x1 - z, y1 = y0 + z, x0 > x || y > y1);
+        break;
+      }
+      case 2: {
+        do parent = new Array(4), parent[i] = node, node = parent;
+        while (z *= 2, x1 = x0 + z, y0 = y1 - z, x > x1 || y0 > y);
+        break;
+      }
+      case 3: {
+        do parent = new Array(4), parent[i] = node, node = parent;
+        while (z *= 2, x0 = x1 - z, y0 = y1 - z, x0 > x || y0 > y);
+        break;
       }
     }
 
     if (this._root && this._root.length) this._root = node;
   }
+
+  // If the quadtree covers the point already, just return.
+  else return this;
 
   this._x0 = x0;
   this._y0 = y0;
@@ -16640,14 +16573,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return band; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "point", function() { return point; });
 /* harmony import */ var d3_array__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3-array */ "./node_modules/d3-array/src/index.js");
-/* harmony import */ var _init__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./init */ "./node_modules/d3-scale/src/init.js");
-/* harmony import */ var _ordinal__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ordinal */ "./node_modules/d3-scale/src/ordinal.js");
-
+/* harmony import */ var _ordinal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ordinal */ "./node_modules/d3-scale/src/ordinal.js");
 
 
 
 function band() {
-  var scale = Object(_ordinal__WEBPACK_IMPORTED_MODULE_2__["default"])().unknown(undefined),
+  var scale = Object(_ordinal__WEBPACK_IMPORTED_MODULE_1__["default"])().unknown(undefined),
       domain = scale.domain,
       ordinalRange = scale.range,
       range = [0, 1],
@@ -16699,15 +16630,15 @@ function band() {
   };
 
   scale.padding = function(_) {
-    return arguments.length ? (paddingInner = Math.min(1, paddingOuter = +_), rescale()) : paddingInner;
+    return arguments.length ? (paddingInner = paddingOuter = Math.max(0, Math.min(1, _)), rescale()) : paddingInner;
   };
 
   scale.paddingInner = function(_) {
-    return arguments.length ? (paddingInner = Math.min(1, _), rescale()) : paddingInner;
+    return arguments.length ? (paddingInner = Math.max(0, Math.min(1, _)), rescale()) : paddingInner;
   };
 
   scale.paddingOuter = function(_) {
-    return arguments.length ? (paddingOuter = +_, rescale()) : paddingOuter;
+    return arguments.length ? (paddingOuter = Math.max(0, Math.min(1, _)), rescale()) : paddingOuter;
   };
 
   scale.align = function(_) {
@@ -16715,14 +16646,16 @@ function band() {
   };
 
   scale.copy = function() {
-    return band(domain(), range)
+    return band()
+        .domain(domain())
+        .range(range)
         .round(round)
         .paddingInner(paddingInner)
         .paddingOuter(paddingOuter)
         .align(align);
   };
 
-  return _init__WEBPACK_IMPORTED_MODULE_1__["initRange"].apply(rescale(), arguments);
+  return rescale();
 }
 
 function pointish(scale) {
@@ -16740,7 +16673,7 @@ function pointish(scale) {
 }
 
 function point() {
-  return pointish(band.apply(null, arguments).paddingInner(1));
+  return pointish(band().paddingInner(1));
 }
 
 
@@ -16768,14 +16701,13 @@ __webpack_require__.r(__webpack_exports__);
 /*!*************************************************!*\
   !*** ./node_modules/d3-scale/src/continuous.js ***!
   \*************************************************/
-/*! exports provided: identity, copy, transformer, default */
+/*! exports provided: deinterpolateLinear, copy, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "identity", function() { return identity; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "deinterpolateLinear", function() { return deinterpolateLinear; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "copy", function() { return copy; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "transformer", function() { return transformer; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return continuous; });
 /* harmony import */ var d3_array__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3-array */ "./node_modules/d3-array/src/index.js");
 /* harmony import */ var d3_interpolate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! d3-interpolate */ "./node_modules/d3-interpolate/src/index.js");
@@ -16790,32 +16722,34 @@ __webpack_require__.r(__webpack_exports__);
 
 var unit = [0, 1];
 
-function identity(x) {
-  return x;
-}
-
-function normalize(a, b) {
+function deinterpolateLinear(a, b) {
   return (b -= (a = +a))
       ? function(x) { return (x - a) / b; }
-      : Object(_constant__WEBPACK_IMPORTED_MODULE_3__["default"])(isNaN(b) ? NaN : 0.5);
+      : Object(_constant__WEBPACK_IMPORTED_MODULE_3__["default"])(b);
 }
 
-function clamper(domain) {
-  var a = domain[0], b = domain[domain.length - 1], t;
-  if (a > b) t = a, a = b, b = t;
-  return function(x) { return Math.max(a, Math.min(b, x)); };
+function deinterpolateClamp(deinterpolate) {
+  return function(a, b) {
+    var d = deinterpolate(a = +a, b = +b);
+    return function(x) { return x <= a ? 0 : x >= b ? 1 : d(x); };
+  };
 }
 
-// normalize(a, b)(x) takes a domain value x in [a,b] and returns the corresponding parameter t in [0,1].
-// interpolate(a, b)(t) takes a parameter t in [0,1] and returns the corresponding range value x in [a,b].
-function bimap(domain, range, interpolate) {
+function reinterpolateClamp(reinterpolate) {
+  return function(a, b) {
+    var r = reinterpolate(a = +a, b = +b);
+    return function(t) { return t <= 0 ? a : t >= 1 ? b : r(t); };
+  };
+}
+
+function bimap(domain, range, deinterpolate, reinterpolate) {
   var d0 = domain[0], d1 = domain[1], r0 = range[0], r1 = range[1];
-  if (d1 < d0) d0 = normalize(d1, d0), r0 = interpolate(r1, r0);
-  else d0 = normalize(d0, d1), r0 = interpolate(r0, r1);
+  if (d1 < d0) d0 = deinterpolate(d1, d0), r0 = reinterpolate(r1, r0);
+  else d0 = deinterpolate(d0, d1), r0 = reinterpolate(r0, r1);
   return function(x) { return r0(d0(x)); };
 }
 
-function polymap(domain, range, interpolate) {
+function polymap(domain, range, deinterpolate, reinterpolate) {
   var j = Math.min(domain.length, range.length) - 1,
       d = new Array(j),
       r = new Array(j),
@@ -16828,8 +16762,8 @@ function polymap(domain, range, interpolate) {
   }
 
   while (++i < j) {
-    d[i] = normalize(domain[i], domain[i + 1]);
-    r[i] = interpolate(range[i], range[i + 1]);
+    d[i] = deinterpolate(domain[i], domain[i + 1]);
+    r[i] = reinterpolate(range[i], range[i + 1]);
   }
 
   return function(x) {
@@ -16843,18 +16777,16 @@ function copy(source, target) {
       .domain(source.domain())
       .range(source.range())
       .interpolate(source.interpolate())
-      .clamp(source.clamp())
-      .unknown(source.unknown());
+      .clamp(source.clamp());
 }
 
-function transformer() {
+// deinterpolate(a, b)(x) takes a domain value x in [a,b] and returns the corresponding parameter t in [0,1].
+// reinterpolate(a, b)(t) takes a parameter t in [0,1] and returns the corresponding domain value x in [a,b].
+function continuous(deinterpolate, reinterpolate) {
   var domain = unit,
       range = unit,
       interpolate = d3_interpolate__WEBPACK_IMPORTED_MODULE_1__["interpolate"],
-      transform,
-      untransform,
-      unknown,
-      clamp = identity,
+      clamp = false,
       piecewise,
       output,
       input;
@@ -16866,15 +16798,15 @@ function transformer() {
   }
 
   function scale(x) {
-    return isNaN(x = +x) ? unknown : (output || (output = piecewise(domain.map(transform), range, interpolate)))(transform(clamp(x)));
+    return (output || (output = piecewise(domain, range, clamp ? deinterpolateClamp(deinterpolate) : deinterpolate, interpolate)))(+x);
   }
 
   scale.invert = function(y) {
-    return clamp(untransform((input || (input = piecewise(range, domain.map(transform), d3_interpolate__WEBPACK_IMPORTED_MODULE_1__["interpolateNumber"])))(y)));
+    return (input || (input = piecewise(range, domain, deinterpolateLinear, clamp ? reinterpolateClamp(reinterpolate) : reinterpolate)))(+y);
   };
 
   scale.domain = function(_) {
-    return arguments.length ? (domain = _array__WEBPACK_IMPORTED_MODULE_2__["map"].call(_, _number__WEBPACK_IMPORTED_MODULE_4__["default"]), clamp === identity || (clamp = clamper(domain)), rescale()) : domain.slice();
+    return arguments.length ? (domain = _array__WEBPACK_IMPORTED_MODULE_2__["map"].call(_, _number__WEBPACK_IMPORTED_MODULE_4__["default"]), rescale()) : domain.slice();
   };
 
   scale.range = function(_) {
@@ -16886,25 +16818,14 @@ function transformer() {
   };
 
   scale.clamp = function(_) {
-    return arguments.length ? (clamp = _ ? clamper(domain) : identity, scale) : clamp !== identity;
+    return arguments.length ? (clamp = !!_, rescale()) : clamp;
   };
 
   scale.interpolate = function(_) {
     return arguments.length ? (interpolate = _, rescale()) : interpolate;
   };
 
-  scale.unknown = function(_) {
-    return arguments.length ? (unknown = _, scale) : unknown;
-  };
-
-  return function(t, u) {
-    transform = t, untransform = u;
-    return rescale();
-  };
-}
-
-function continuous(transform, untransform) {
-  return transformer()(transform, untransform);
+  return rescale();
 }
 
 
@@ -16914,51 +16835,30 @@ function continuous(transform, untransform) {
 /*!************************************************!*\
   !*** ./node_modules/d3-scale/src/diverging.js ***!
   \************************************************/
-/*! exports provided: default, divergingLog, divergingSymlog, divergingPow, divergingSqrt */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return diverging; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "divergingLog", function() { return divergingLog; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "divergingSymlog", function() { return divergingSymlog; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "divergingPow", function() { return divergingPow; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "divergingSqrt", function() { return divergingSqrt; });
-/* harmony import */ var _continuous__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./continuous */ "./node_modules/d3-scale/src/continuous.js");
-/* harmony import */ var _init__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./init */ "./node_modules/d3-scale/src/init.js");
-/* harmony import */ var _linear__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./linear */ "./node_modules/d3-scale/src/linear.js");
-/* harmony import */ var _log__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./log */ "./node_modules/d3-scale/src/log.js");
-/* harmony import */ var _sequential__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./sequential */ "./node_modules/d3-scale/src/sequential.js");
-/* harmony import */ var _symlog__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./symlog */ "./node_modules/d3-scale/src/symlog.js");
-/* harmony import */ var _pow__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./pow */ "./node_modules/d3-scale/src/pow.js");
+/* harmony import */ var _linear__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./linear */ "./node_modules/d3-scale/src/linear.js");
 
 
-
-
-
-
-
-
-function transformer() {
+function diverging(interpolator) {
   var x0 = 0,
       x1 = 0.5,
       x2 = 1,
-      t0,
-      t1,
-      t2,
-      k10,
-      k21,
-      interpolator = _continuous__WEBPACK_IMPORTED_MODULE_0__["identity"],
-      transform,
-      clamp = false,
-      unknown;
+      k10 = 1,
+      k21 = 1,
+      clamp = false;
 
   function scale(x) {
-    return isNaN(x = +x) ? unknown : (x = 0.5 + ((x = +transform(x)) - t1) * (x < t1 ? k10 : k21), interpolator(clamp ? Math.max(0, Math.min(1, x)) : x));
+    var t = 0.5 + ((x = +x) - x1) * (x < x1 ? k10 : k21);
+    return interpolator(clamp ? Math.max(0, Math.min(1, t)) : t);
   }
 
   scale.domain = function(_) {
-    return arguments.length ? (t0 = transform(x0 = +_[0]), t1 = transform(x1 = +_[1]), t2 = transform(x2 = +_[2]), k10 = t0 === t1 ? 0 : 0.5 / (t1 - t0), k21 = t1 === t2 ? 0 : 0.5 / (t2 - t1), scale) : [x0, x1, x2];
+    return arguments.length ? (x0 = +_[0], x1 = +_[1], x2 = +_[2], k10 = x0 === x1 ? 0 : 0.5 / (x1 - x0), k21 = x1 === x2 ? 0 : 0.5 / (x2 - x1), scale) : [x0, x1, x2];
   };
 
   scale.clamp = function(_) {
@@ -16969,58 +16869,11 @@ function transformer() {
     return arguments.length ? (interpolator = _, scale) : interpolator;
   };
 
-  scale.unknown = function(_) {
-    return arguments.length ? (unknown = _, scale) : unknown;
-  };
-
-  return function(t) {
-    transform = t, t0 = t(x0), t1 = t(x1), t2 = t(x2), k10 = t0 === t1 ? 0 : 0.5 / (t1 - t0), k21 = t1 === t2 ? 0 : 0.5 / (t2 - t1);
-    return scale;
-  };
-}
-
-function diverging() {
-  var scale = Object(_linear__WEBPACK_IMPORTED_MODULE_2__["linearish"])(transformer()(_continuous__WEBPACK_IMPORTED_MODULE_0__["identity"]));
-
   scale.copy = function() {
-    return Object(_sequential__WEBPACK_IMPORTED_MODULE_4__["copy"])(scale, diverging());
+    return diverging(interpolator).domain([x0, x1, x2]).clamp(clamp);
   };
 
-  return _init__WEBPACK_IMPORTED_MODULE_1__["initInterpolator"].apply(scale, arguments);
-}
-
-function divergingLog() {
-  var scale = Object(_log__WEBPACK_IMPORTED_MODULE_3__["loggish"])(transformer()).domain([0.1, 1, 10]);
-
-  scale.copy = function() {
-    return Object(_sequential__WEBPACK_IMPORTED_MODULE_4__["copy"])(scale, divergingLog()).base(scale.base());
-  };
-
-  return _init__WEBPACK_IMPORTED_MODULE_1__["initInterpolator"].apply(scale, arguments);
-}
-
-function divergingSymlog() {
-  var scale = Object(_symlog__WEBPACK_IMPORTED_MODULE_5__["symlogish"])(transformer());
-
-  scale.copy = function() {
-    return Object(_sequential__WEBPACK_IMPORTED_MODULE_4__["copy"])(scale, divergingSymlog()).constant(scale.constant());
-  };
-
-  return _init__WEBPACK_IMPORTED_MODULE_1__["initInterpolator"].apply(scale, arguments);
-}
-
-function divergingPow() {
-  var scale = Object(_pow__WEBPACK_IMPORTED_MODULE_6__["powish"])(transformer());
-
-  scale.copy = function() {
-    return Object(_sequential__WEBPACK_IMPORTED_MODULE_4__["copy"])(scale, divergingPow()).exponent(scale.exponent());
-  };
-
-  return _init__WEBPACK_IMPORTED_MODULE_1__["initInterpolator"].apply(scale, arguments);
-}
-
-function divergingSqrt() {
-  return divergingPow.apply(null, arguments).exponent(0.5);
+  return Object(_linear__WEBPACK_IMPORTED_MODULE_0__["linearish"])(scale);
 }
 
 
@@ -17043,11 +16896,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function identity(domain) {
-  var unknown;
+function identity() {
+  var domain = [0, 1];
 
   function scale(x) {
-    return isNaN(x = +x) ? unknown : x;
+    return +x;
   }
 
   scale.invert = scale;
@@ -17056,15 +16909,9 @@ function identity(domain) {
     return arguments.length ? (domain = _array__WEBPACK_IMPORTED_MODULE_0__["map"].call(_, _number__WEBPACK_IMPORTED_MODULE_2__["default"]), scale) : domain.slice();
   };
 
-  scale.unknown = function(_) {
-    return arguments.length ? (unknown = _, scale) : unknown;
-  };
-
   scale.copy = function() {
-    return identity(domain).unknown(unknown);
+    return identity().domain(domain);
   };
-
-  domain = arguments.length ? _array__WEBPACK_IMPORTED_MODULE_0__["map"].call(domain, _number__WEBPACK_IMPORTED_MODULE_2__["default"]) : [0, 1];
 
   return Object(_linear__WEBPACK_IMPORTED_MODULE_1__["linearish"])(scale);
 }
@@ -17076,7 +16923,7 @@ function identity(domain) {
 /*!********************************************!*\
   !*** ./node_modules/d3-scale/src/index.js ***!
   \********************************************/
-/*! exports provided: scaleBand, scalePoint, scaleIdentity, scaleLinear, scaleLog, scaleSymlog, scaleOrdinal, scaleImplicit, scalePow, scaleSqrt, scaleQuantile, scaleQuantize, scaleThreshold, scaleTime, scaleUtc, scaleSequential, scaleSequentialLog, scaleSequentialPow, scaleSequentialSqrt, scaleSequentialSymlog, scaleSequentialQuantile, scaleDiverging, scaleDivergingLog, scaleDivergingPow, scaleDivergingSqrt, scaleDivergingSymlog, tickFormat */
+/*! exports provided: scaleBand, scalePoint, scaleIdentity, scaleLinear, scaleLog, scaleOrdinal, scaleImplicit, scalePow, scaleSqrt, scaleQuantile, scaleQuantize, scaleThreshold, scaleTime, scaleUtc, scaleSequential, scaleDiverging */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -17095,61 +16942,36 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _log__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./log */ "./node_modules/d3-scale/src/log.js");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleLog", function() { return _log__WEBPACK_IMPORTED_MODULE_3__["default"]; });
 
-/* harmony import */ var _symlog__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./symlog */ "./node_modules/d3-scale/src/symlog.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleSymlog", function() { return _symlog__WEBPACK_IMPORTED_MODULE_4__["default"]; });
+/* harmony import */ var _ordinal__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ordinal */ "./node_modules/d3-scale/src/ordinal.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleOrdinal", function() { return _ordinal__WEBPACK_IMPORTED_MODULE_4__["default"]; });
 
-/* harmony import */ var _ordinal__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./ordinal */ "./node_modules/d3-scale/src/ordinal.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleOrdinal", function() { return _ordinal__WEBPACK_IMPORTED_MODULE_5__["default"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleImplicit", function() { return _ordinal__WEBPACK_IMPORTED_MODULE_4__["implicit"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleImplicit", function() { return _ordinal__WEBPACK_IMPORTED_MODULE_5__["implicit"]; });
+/* harmony import */ var _pow__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./pow */ "./node_modules/d3-scale/src/pow.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scalePow", function() { return _pow__WEBPACK_IMPORTED_MODULE_5__["default"]; });
 
-/* harmony import */ var _pow__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./pow */ "./node_modules/d3-scale/src/pow.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scalePow", function() { return _pow__WEBPACK_IMPORTED_MODULE_6__["default"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleSqrt", function() { return _pow__WEBPACK_IMPORTED_MODULE_5__["sqrt"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleSqrt", function() { return _pow__WEBPACK_IMPORTED_MODULE_6__["sqrt"]; });
+/* harmony import */ var _quantile__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./quantile */ "./node_modules/d3-scale/src/quantile.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleQuantile", function() { return _quantile__WEBPACK_IMPORTED_MODULE_6__["default"]; });
 
-/* harmony import */ var _quantile__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./quantile */ "./node_modules/d3-scale/src/quantile.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleQuantile", function() { return _quantile__WEBPACK_IMPORTED_MODULE_7__["default"]; });
+/* harmony import */ var _quantize__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./quantize */ "./node_modules/d3-scale/src/quantize.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleQuantize", function() { return _quantize__WEBPACK_IMPORTED_MODULE_7__["default"]; });
 
-/* harmony import */ var _quantize__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./quantize */ "./node_modules/d3-scale/src/quantize.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleQuantize", function() { return _quantize__WEBPACK_IMPORTED_MODULE_8__["default"]; });
+/* harmony import */ var _threshold__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./threshold */ "./node_modules/d3-scale/src/threshold.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleThreshold", function() { return _threshold__WEBPACK_IMPORTED_MODULE_8__["default"]; });
 
-/* harmony import */ var _threshold__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./threshold */ "./node_modules/d3-scale/src/threshold.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleThreshold", function() { return _threshold__WEBPACK_IMPORTED_MODULE_9__["default"]; });
+/* harmony import */ var _time__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./time */ "./node_modules/d3-scale/src/time.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleTime", function() { return _time__WEBPACK_IMPORTED_MODULE_9__["default"]; });
 
-/* harmony import */ var _time__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./time */ "./node_modules/d3-scale/src/time.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleTime", function() { return _time__WEBPACK_IMPORTED_MODULE_10__["default"]; });
+/* harmony import */ var _utcTime__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./utcTime */ "./node_modules/d3-scale/src/utcTime.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleUtc", function() { return _utcTime__WEBPACK_IMPORTED_MODULE_10__["default"]; });
 
-/* harmony import */ var _utcTime__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./utcTime */ "./node_modules/d3-scale/src/utcTime.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleUtc", function() { return _utcTime__WEBPACK_IMPORTED_MODULE_11__["default"]; });
+/* harmony import */ var _sequential__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./sequential */ "./node_modules/d3-scale/src/sequential.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleSequential", function() { return _sequential__WEBPACK_IMPORTED_MODULE_11__["default"]; });
 
-/* harmony import */ var _sequential__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./sequential */ "./node_modules/d3-scale/src/sequential.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleSequential", function() { return _sequential__WEBPACK_IMPORTED_MODULE_12__["default"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleSequentialLog", function() { return _sequential__WEBPACK_IMPORTED_MODULE_12__["sequentialLog"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleSequentialPow", function() { return _sequential__WEBPACK_IMPORTED_MODULE_12__["sequentialPow"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleSequentialSqrt", function() { return _sequential__WEBPACK_IMPORTED_MODULE_12__["sequentialSqrt"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleSequentialSymlog", function() { return _sequential__WEBPACK_IMPORTED_MODULE_12__["sequentialSymlog"]; });
-
-/* harmony import */ var _sequentialQuantile__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./sequentialQuantile */ "./node_modules/d3-scale/src/sequentialQuantile.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleSequentialQuantile", function() { return _sequentialQuantile__WEBPACK_IMPORTED_MODULE_13__["default"]; });
-
-/* harmony import */ var _diverging__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./diverging */ "./node_modules/d3-scale/src/diverging.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleDiverging", function() { return _diverging__WEBPACK_IMPORTED_MODULE_14__["default"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleDivergingLog", function() { return _diverging__WEBPACK_IMPORTED_MODULE_14__["divergingLog"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleDivergingPow", function() { return _diverging__WEBPACK_IMPORTED_MODULE_14__["divergingPow"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleDivergingSqrt", function() { return _diverging__WEBPACK_IMPORTED_MODULE_14__["divergingSqrt"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleDivergingSymlog", function() { return _diverging__WEBPACK_IMPORTED_MODULE_14__["divergingSymlog"]; });
-
-/* harmony import */ var _tickFormat__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./tickFormat */ "./node_modules/d3-scale/src/tickFormat.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "tickFormat", function() { return _tickFormat__WEBPACK_IMPORTED_MODULE_15__["default"]; });
+/* harmony import */ var _diverging__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./diverging */ "./node_modules/d3-scale/src/diverging.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleDiverging", function() { return _diverging__WEBPACK_IMPORTED_MODULE_12__["default"]; });
 
 
 
@@ -17176,44 +16998,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
-
-
-
-
-
-
-/***/ }),
-
-/***/ "./node_modules/d3-scale/src/init.js":
-/*!*******************************************!*\
-  !*** ./node_modules/d3-scale/src/init.js ***!
-  \*******************************************/
-/*! exports provided: initRange, initInterpolator */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "initRange", function() { return initRange; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "initInterpolator", function() { return initInterpolator; });
-function initRange(domain, range) {
-  switch (arguments.length) {
-    case 0: break;
-    case 1: this.range(domain); break;
-    default: this.range(range).domain(domain); break;
-  }
-  return this;
-}
-
-function initInterpolator(domain, interpolator) {
-  switch (arguments.length) {
-    case 0: break;
-    case 1: this.interpolator(domain); break;
-    default: this.interpolator(interpolator).domain(domain); break;
-  }
-  return this;
-}
 
 
 /***/ }),
@@ -17230,8 +17014,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "linearish", function() { return linearish; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return linear; });
 /* harmony import */ var d3_array__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3-array */ "./node_modules/d3-array/src/index.js");
-/* harmony import */ var _continuous__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./continuous */ "./node_modules/d3-scale/src/continuous.js");
-/* harmony import */ var _init__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./init */ "./node_modules/d3-scale/src/init.js");
+/* harmony import */ var d3_interpolate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! d3-interpolate */ "./node_modules/d3-interpolate/src/index.js");
+/* harmony import */ var _continuous__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./continuous */ "./node_modules/d3-scale/src/continuous.js");
 /* harmony import */ var _tickFormat__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./tickFormat */ "./node_modules/d3-scale/src/tickFormat.js");
 
 
@@ -17247,8 +17031,7 @@ function linearish(scale) {
   };
 
   scale.tickFormat = function(count, specifier) {
-    var d = domain();
-    return Object(_tickFormat__WEBPACK_IMPORTED_MODULE_3__["default"])(d[0], d[d.length - 1], count == null ? 10 : count, specifier);
+    return Object(_tickFormat__WEBPACK_IMPORTED_MODULE_3__["default"])(domain(), count, specifier);
   };
 
   scale.nice = function(count) {
@@ -17295,13 +17078,11 @@ function linearish(scale) {
 }
 
 function linear() {
-  var scale = Object(_continuous__WEBPACK_IMPORTED_MODULE_1__["default"])(_continuous__WEBPACK_IMPORTED_MODULE_1__["identity"], _continuous__WEBPACK_IMPORTED_MODULE_1__["identity"]);
+  var scale = Object(_continuous__WEBPACK_IMPORTED_MODULE_2__["default"])(_continuous__WEBPACK_IMPORTED_MODULE_2__["deinterpolateLinear"], d3_interpolate__WEBPACK_IMPORTED_MODULE_1__["interpolateNumber"]);
 
   scale.copy = function() {
-    return Object(_continuous__WEBPACK_IMPORTED_MODULE_1__["copy"])(scale, linear());
+    return Object(_continuous__WEBPACK_IMPORTED_MODULE_2__["copy"])(scale, linear());
   };
-
-  _init__WEBPACK_IMPORTED_MODULE_2__["initRange"].apply(scale, arguments);
 
   return linearish(scale);
 }
@@ -17313,38 +17094,33 @@ function linear() {
 /*!******************************************!*\
   !*** ./node_modules/d3-scale/src/log.js ***!
   \******************************************/
-/*! exports provided: loggish, default */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loggish", function() { return loggish; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return log; });
 /* harmony import */ var d3_array__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3-array */ "./node_modules/d3-array/src/index.js");
 /* harmony import */ var d3_format__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! d3-format */ "./node_modules/d3-format/src/index.js");
-/* harmony import */ var _nice__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./nice */ "./node_modules/d3-scale/src/nice.js");
-/* harmony import */ var _continuous__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./continuous */ "./node_modules/d3-scale/src/continuous.js");
-/* harmony import */ var _init__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./init */ "./node_modules/d3-scale/src/init.js");
+/* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./constant */ "./node_modules/d3-scale/src/constant.js");
+/* harmony import */ var _nice__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./nice */ "./node_modules/d3-scale/src/nice.js");
+/* harmony import */ var _continuous__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./continuous */ "./node_modules/d3-scale/src/continuous.js");
 
 
 
 
 
 
-function transformLog(x) {
-  return Math.log(x);
+function deinterpolate(a, b) {
+  return (b = Math.log(b / a))
+      ? function(x) { return Math.log(x / a) / b; }
+      : Object(_constant__WEBPACK_IMPORTED_MODULE_2__["default"])(b);
 }
 
-function transformExp(x) {
-  return Math.exp(x);
-}
-
-function transformLogn(x) {
-  return -Math.log(-x);
-}
-
-function transformExpn(x) {
-  return -Math.exp(-x);
+function reinterpolate(a, b) {
+  return a < 0
+      ? function(t) { return -Math.pow(-b, t) * Math.pow(-a, 1 - t); }
+      : function(t) { return Math.pow(b, t) * Math.pow(a, 1 - t); };
 }
 
 function pow10(x) {
@@ -17370,21 +17146,16 @@ function reflect(f) {
   };
 }
 
-function loggish(transform) {
-  var scale = transform(transformLog, transformExp),
+function log() {
+  var scale = Object(_continuous__WEBPACK_IMPORTED_MODULE_4__["default"])(deinterpolate, reinterpolate).domain([1, 10]),
       domain = scale.domain,
       base = 10,
-      logs,
-      pows;
+      logs = logp(10),
+      pows = powp(10);
 
   function rescale() {
     logs = logp(base), pows = powp(base);
-    if (domain()[0] < 0) {
-      logs = reflect(logs), pows = reflect(pows);
-      transform(transformLogn, transformExpn);
-    } else {
-      transform(transformLog, transformExp);
-    }
+    if (domain()[0] < 0) logs = reflect(logs), pows = reflect(pows);
     return scale;
   }
 
@@ -17450,23 +17221,15 @@ function loggish(transform) {
   };
 
   scale.nice = function() {
-    return domain(Object(_nice__WEBPACK_IMPORTED_MODULE_2__["default"])(domain(), {
+    return domain(Object(_nice__WEBPACK_IMPORTED_MODULE_3__["default"])(domain(), {
       floor: function(x) { return pows(Math.floor(logs(x))); },
       ceil: function(x) { return pows(Math.ceil(logs(x))); }
     }));
   };
 
-  return scale;
-}
-
-function log() {
-  var scale = loggish(Object(_continuous__WEBPACK_IMPORTED_MODULE_3__["transformer"])()).domain([1, 10]);
-
   scale.copy = function() {
-    return Object(_continuous__WEBPACK_IMPORTED_MODULE_3__["copy"])(scale, log()).base(scale.base());
+    return Object(_continuous__WEBPACK_IMPORTED_MODULE_4__["copy"])(scale, log().base(base));
   };
-
-  _init__WEBPACK_IMPORTED_MODULE_4__["initRange"].apply(scale, arguments);
 
   return scale;
 }
@@ -17534,18 +17297,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ordinal; });
 /* harmony import */ var d3_collection__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3-collection */ "./node_modules/d3-collection/src/index.js");
 /* harmony import */ var _array__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./array */ "./node_modules/d3-scale/src/array.js");
-/* harmony import */ var _init__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./init */ "./node_modules/d3-scale/src/init.js");
-
 
 
 
 var implicit = {name: "implicit"};
 
-function ordinal() {
+function ordinal(range) {
   var index = Object(d3_collection__WEBPACK_IMPORTED_MODULE_0__["map"])(),
       domain = [],
-      range = [],
       unknown = implicit;
+
+  range = range == null ? [] : _array__WEBPACK_IMPORTED_MODULE_1__["slice"].call(range);
 
   function scale(d) {
     var key = d + "", i = index.get(key);
@@ -17573,10 +17335,11 @@ function ordinal() {
   };
 
   scale.copy = function() {
-    return ordinal(domain, range).unknown(unknown);
+    return ordinal()
+        .domain(domain)
+        .range(range)
+        .unknown(unknown);
   };
-
-  _init__WEBPACK_IMPORTED_MODULE_2__["initRange"].apply(scale, arguments);
 
   return scale;
 }
@@ -17588,66 +17351,53 @@ function ordinal() {
 /*!******************************************!*\
   !*** ./node_modules/d3-scale/src/pow.js ***!
   \******************************************/
-/*! exports provided: powish, default, sqrt */
+/*! exports provided: default, sqrt */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "powish", function() { return powish; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return pow; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sqrt", function() { return sqrt; });
-/* harmony import */ var _linear__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./linear */ "./node_modules/d3-scale/src/linear.js");
-/* harmony import */ var _continuous__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./continuous */ "./node_modules/d3-scale/src/continuous.js");
-/* harmony import */ var _init__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./init */ "./node_modules/d3-scale/src/init.js");
+/* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./constant */ "./node_modules/d3-scale/src/constant.js");
+/* harmony import */ var _linear__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./linear */ "./node_modules/d3-scale/src/linear.js");
+/* harmony import */ var _continuous__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./continuous */ "./node_modules/d3-scale/src/continuous.js");
 
 
 
 
-function transformPow(exponent) {
-  return function(x) {
-    return x < 0 ? -Math.pow(-x, exponent) : Math.pow(x, exponent);
-  };
-}
-
-function transformSqrt(x) {
-  return x < 0 ? -Math.sqrt(-x) : Math.sqrt(x);
-}
-
-function transformSquare(x) {
-  return x < 0 ? -x * x : x * x;
-}
-
-function powish(transform) {
-  var scale = transform(_continuous__WEBPACK_IMPORTED_MODULE_1__["identity"], _continuous__WEBPACK_IMPORTED_MODULE_1__["identity"]),
-      exponent = 1;
-
-  function rescale() {
-    return exponent === 1 ? transform(_continuous__WEBPACK_IMPORTED_MODULE_1__["identity"], _continuous__WEBPACK_IMPORTED_MODULE_1__["identity"])
-        : exponent === 0.5 ? transform(transformSqrt, transformSquare)
-        : transform(transformPow(exponent), transformPow(1 / exponent));
-  }
-
-  scale.exponent = function(_) {
-    return arguments.length ? (exponent = +_, rescale()) : exponent;
-  };
-
-  return Object(_linear__WEBPACK_IMPORTED_MODULE_0__["linearish"])(scale);
+function raise(x, exponent) {
+  return x < 0 ? -Math.pow(-x, exponent) : Math.pow(x, exponent);
 }
 
 function pow() {
-  var scale = powish(Object(_continuous__WEBPACK_IMPORTED_MODULE_1__["transformer"])());
+  var exponent = 1,
+      scale = Object(_continuous__WEBPACK_IMPORTED_MODULE_2__["default"])(deinterpolate, reinterpolate),
+      domain = scale.domain;
 
-  scale.copy = function() {
-    return Object(_continuous__WEBPACK_IMPORTED_MODULE_1__["copy"])(scale, pow()).exponent(scale.exponent());
+  function deinterpolate(a, b) {
+    return (b = raise(b, exponent) - (a = raise(a, exponent)))
+        ? function(x) { return (raise(x, exponent) - a) / b; }
+        : Object(_constant__WEBPACK_IMPORTED_MODULE_0__["default"])(b);
+  }
+
+  function reinterpolate(a, b) {
+    b = raise(b, exponent) - (a = raise(a, exponent));
+    return function(t) { return raise(a + b * t, 1 / exponent); };
+  }
+
+  scale.exponent = function(_) {
+    return arguments.length ? (exponent = +_, domain(domain())) : exponent;
   };
 
-  _init__WEBPACK_IMPORTED_MODULE_2__["initRange"].apply(scale, arguments);
+  scale.copy = function() {
+    return Object(_continuous__WEBPACK_IMPORTED_MODULE_2__["copy"])(scale, pow().exponent(exponent));
+  };
 
-  return scale;
+  return Object(_linear__WEBPACK_IMPORTED_MODULE_1__["linearish"])(scale);
 }
 
 function sqrt() {
-  return pow.apply(null, arguments).exponent(0.5);
+  return pow().exponent(0.5);
 }
 
 
@@ -17665,16 +17415,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return quantile; });
 /* harmony import */ var d3_array__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3-array */ "./node_modules/d3-array/src/index.js");
 /* harmony import */ var _array__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./array */ "./node_modules/d3-scale/src/array.js");
-/* harmony import */ var _init__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./init */ "./node_modules/d3-scale/src/init.js");
-
 
 
 
 function quantile() {
   var domain = [],
       range = [],
-      thresholds = [],
-      unknown;
+      thresholds = [];
 
   function rescale() {
     var i = 0, n = Math.max(1, range.length);
@@ -17684,7 +17431,7 @@ function quantile() {
   }
 
   function scale(x) {
-    return isNaN(x = +x) ? unknown : range[Object(d3_array__WEBPACK_IMPORTED_MODULE_0__["bisect"])(thresholds, x)];
+    if (!isNaN(x = +x)) return range[Object(d3_array__WEBPACK_IMPORTED_MODULE_0__["bisect"])(thresholds, x)];
   }
 
   scale.invertExtent = function(y) {
@@ -17707,10 +17454,6 @@ function quantile() {
     return arguments.length ? (range = _array__WEBPACK_IMPORTED_MODULE_1__["slice"].call(_), rescale()) : range.slice();
   };
 
-  scale.unknown = function(_) {
-    return arguments.length ? (unknown = _, scale) : unknown;
-  };
-
   scale.quantiles = function() {
     return thresholds.slice();
   };
@@ -17718,11 +17461,10 @@ function quantile() {
   scale.copy = function() {
     return quantile()
         .domain(domain)
-        .range(range)
-        .unknown(unknown);
+        .range(range);
   };
 
-  return _init__WEBPACK_IMPORTED_MODULE_2__["initRange"].apply(scale, arguments);
+  return scale;
 }
 
 
@@ -17741,8 +17483,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var d3_array__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3-array */ "./node_modules/d3-array/src/index.js");
 /* harmony import */ var _array__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./array */ "./node_modules/d3-scale/src/array.js");
 /* harmony import */ var _linear__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./linear */ "./node_modules/d3-scale/src/linear.js");
-/* harmony import */ var _init__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./init */ "./node_modules/d3-scale/src/init.js");
-
 
 
 
@@ -17752,11 +17492,10 @@ function quantize() {
       x1 = 1,
       n = 1,
       domain = [0.5],
-      range = [0, 1],
-      unknown;
+      range = [0, 1];
 
   function scale(x) {
-    return x <= x ? range[Object(d3_array__WEBPACK_IMPORTED_MODULE_0__["bisect"])(domain, x, 0, n)] : unknown;
+    if (x <= x) return range[Object(d3_array__WEBPACK_IMPORTED_MODULE_0__["bisect"])(domain, x, 0, n)];
   }
 
   function rescale() {
@@ -17782,22 +17521,13 @@ function quantize() {
         : [domain[i - 1], domain[i]];
   };
 
-  scale.unknown = function(_) {
-    return arguments.length ? (unknown = _, scale) : scale;
-  };
-
-  scale.thresholds = function() {
-    return domain.slice();
-  };
-
   scale.copy = function() {
     return quantize()
         .domain([x0, x1])
-        .range(range)
-        .unknown(unknown);
+        .range(range);
   };
 
-  return _init__WEBPACK_IMPORTED_MODULE_3__["initRange"].apply(Object(_linear__WEBPACK_IMPORTED_MODULE_2__["linearish"])(scale), arguments);
+  return Object(_linear__WEBPACK_IMPORTED_MODULE_2__["linearish"])(scale);
 }
 
 
@@ -17807,47 +17537,28 @@ function quantize() {
 /*!*************************************************!*\
   !*** ./node_modules/d3-scale/src/sequential.js ***!
   \*************************************************/
-/*! exports provided: copy, default, sequentialLog, sequentialSymlog, sequentialPow, sequentialSqrt */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "copy", function() { return copy; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return sequential; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sequentialLog", function() { return sequentialLog; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sequentialSymlog", function() { return sequentialSymlog; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sequentialPow", function() { return sequentialPow; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sequentialSqrt", function() { return sequentialSqrt; });
-/* harmony import */ var _continuous__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./continuous */ "./node_modules/d3-scale/src/continuous.js");
-/* harmony import */ var _init__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./init */ "./node_modules/d3-scale/src/init.js");
-/* harmony import */ var _linear__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./linear */ "./node_modules/d3-scale/src/linear.js");
-/* harmony import */ var _log__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./log */ "./node_modules/d3-scale/src/log.js");
-/* harmony import */ var _symlog__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./symlog */ "./node_modules/d3-scale/src/symlog.js");
-/* harmony import */ var _pow__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./pow */ "./node_modules/d3-scale/src/pow.js");
+/* harmony import */ var _linear__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./linear */ "./node_modules/d3-scale/src/linear.js");
 
 
-
-
-
-
-
-function transformer() {
+function sequential(interpolator) {
   var x0 = 0,
       x1 = 1,
-      t0,
-      t1,
-      k10,
-      transform,
-      interpolator = _continuous__WEBPACK_IMPORTED_MODULE_0__["identity"],
-      clamp = false,
-      unknown;
+      k10 = 1,
+      clamp = false;
 
   function scale(x) {
-    return isNaN(x = +x) ? unknown : interpolator(k10 === 0 ? 0.5 : (x = (transform(x) - t0) * k10, clamp ? Math.max(0, Math.min(1, x)) : x));
+    var t = (x - x0) * k10;
+    return interpolator(clamp ? Math.max(0, Math.min(1, t)) : t);
   }
 
   scale.domain = function(_) {
-    return arguments.length ? (t0 = transform(x0 = +_[0]), t1 = transform(x1 = +_[1]), k10 = t0 === t1 ? 0 : 1 / (t1 - t0), scale) : [x0, x1];
+    return arguments.length ? (x0 = +_[0], x1 = +_[1], k10 = x0 === x1 ? 0 : 1 / (x1 - x0), scale) : [x0, x1];
   };
 
   scale.clamp = function(_) {
@@ -17858,166 +17569,11 @@ function transformer() {
     return arguments.length ? (interpolator = _, scale) : interpolator;
   };
 
-  scale.unknown = function(_) {
-    return arguments.length ? (unknown = _, scale) : unknown;
-  };
-
-  return function(t) {
-    transform = t, t0 = t(x0), t1 = t(x1), k10 = t0 === t1 ? 0 : 1 / (t1 - t0);
-    return scale;
-  };
-}
-
-function copy(source, target) {
-  return target
-      .domain(source.domain())
-      .interpolator(source.interpolator())
-      .clamp(source.clamp())
-      .unknown(source.unknown());
-}
-
-function sequential() {
-  var scale = Object(_linear__WEBPACK_IMPORTED_MODULE_2__["linearish"])(transformer()(_continuous__WEBPACK_IMPORTED_MODULE_0__["identity"]));
-
   scale.copy = function() {
-    return copy(scale, sequential());
-  };
-
-  return _init__WEBPACK_IMPORTED_MODULE_1__["initInterpolator"].apply(scale, arguments);
-}
-
-function sequentialLog() {
-  var scale = Object(_log__WEBPACK_IMPORTED_MODULE_3__["loggish"])(transformer()).domain([1, 10]);
-
-  scale.copy = function() {
-    return copy(scale, sequentialLog()).base(scale.base());
-  };
-
-  return _init__WEBPACK_IMPORTED_MODULE_1__["initInterpolator"].apply(scale, arguments);
-}
-
-function sequentialSymlog() {
-  var scale = Object(_symlog__WEBPACK_IMPORTED_MODULE_4__["symlogish"])(transformer());
-
-  scale.copy = function() {
-    return copy(scale, sequentialSymlog()).constant(scale.constant());
-  };
-
-  return _init__WEBPACK_IMPORTED_MODULE_1__["initInterpolator"].apply(scale, arguments);
-}
-
-function sequentialPow() {
-  var scale = Object(_pow__WEBPACK_IMPORTED_MODULE_5__["powish"])(transformer());
-
-  scale.copy = function() {
-    return copy(scale, sequentialPow()).exponent(scale.exponent());
-  };
-
-  return _init__WEBPACK_IMPORTED_MODULE_1__["initInterpolator"].apply(scale, arguments);
-}
-
-function sequentialSqrt() {
-  return sequentialPow.apply(null, arguments).exponent(0.5);
-}
-
-
-/***/ }),
-
-/***/ "./node_modules/d3-scale/src/sequentialQuantile.js":
-/*!*********************************************************!*\
-  !*** ./node_modules/d3-scale/src/sequentialQuantile.js ***!
-  \*********************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return sequentialQuantile; });
-/* harmony import */ var d3_array__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3-array */ "./node_modules/d3-array/src/index.js");
-/* harmony import */ var _continuous__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./continuous */ "./node_modules/d3-scale/src/continuous.js");
-/* harmony import */ var _init__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./init */ "./node_modules/d3-scale/src/init.js");
-
-
-
-
-function sequentialQuantile() {
-  var domain = [],
-      interpolator = _continuous__WEBPACK_IMPORTED_MODULE_1__["identity"];
-
-  function scale(x) {
-    if (!isNaN(x = +x)) return interpolator((Object(d3_array__WEBPACK_IMPORTED_MODULE_0__["bisect"])(domain, x) - 1) / (domain.length - 1));
-  }
-
-  scale.domain = function(_) {
-    if (!arguments.length) return domain.slice();
-    domain = [];
-    for (var i = 0, n = _.length, d; i < n; ++i) if (d = _[i], d != null && !isNaN(d = +d)) domain.push(d);
-    domain.sort(d3_array__WEBPACK_IMPORTED_MODULE_0__["ascending"]);
-    return scale;
-  };
-
-  scale.interpolator = function(_) {
-    return arguments.length ? (interpolator = _, scale) : interpolator;
-  };
-
-  scale.copy = function() {
-    return sequentialQuantile(interpolator).domain(domain);
-  };
-
-  return _init__WEBPACK_IMPORTED_MODULE_2__["initInterpolator"].apply(scale, arguments);
-}
-
-
-/***/ }),
-
-/***/ "./node_modules/d3-scale/src/symlog.js":
-/*!*********************************************!*\
-  !*** ./node_modules/d3-scale/src/symlog.js ***!
-  \*********************************************/
-/*! exports provided: symlogish, default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "symlogish", function() { return symlogish; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return symlog; });
-/* harmony import */ var _linear__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./linear */ "./node_modules/d3-scale/src/linear.js");
-/* harmony import */ var _continuous__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./continuous */ "./node_modules/d3-scale/src/continuous.js");
-/* harmony import */ var _init__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./init */ "./node_modules/d3-scale/src/init.js");
-
-
-
-
-function transformSymlog(c) {
-  return function(x) {
-    return Math.sign(x) * Math.log1p(Math.abs(x / c));
-  };
-}
-
-function transformSymexp(c) {
-  return function(x) {
-    return Math.sign(x) * Math.expm1(Math.abs(x)) * c;
-  };
-}
-
-function symlogish(transform) {
-  var c = 1, scale = transform(transformSymlog(c), transformSymexp(c));
-
-  scale.constant = function(_) {
-    return arguments.length ? transform(transformSymlog(c = +_), transformSymexp(c)) : c;
+    return sequential(interpolator).domain([x0, x1]).clamp(clamp);
   };
 
   return Object(_linear__WEBPACK_IMPORTED_MODULE_0__["linearish"])(scale);
-}
-
-function symlog() {
-  var scale = symlogish(Object(_continuous__WEBPACK_IMPORTED_MODULE_1__["transformer"])());
-
-  scale.copy = function() {
-    return Object(_continuous__WEBPACK_IMPORTED_MODULE_1__["copy"])(scale, symlog()).constant(scale.constant());
-  };
-
-  return _init__WEBPACK_IMPORTED_MODULE_2__["initRange"].apply(scale, arguments);
 }
 
 
@@ -18035,19 +17591,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return threshold; });
 /* harmony import */ var d3_array__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3-array */ "./node_modules/d3-array/src/index.js");
 /* harmony import */ var _array__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./array */ "./node_modules/d3-scale/src/array.js");
-/* harmony import */ var _init__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./init */ "./node_modules/d3-scale/src/init.js");
-
 
 
 
 function threshold() {
   var domain = [0.5],
       range = [0, 1],
-      unknown,
       n = 1;
 
   function scale(x) {
-    return x <= x ? range[Object(d3_array__WEBPACK_IMPORTED_MODULE_0__["bisect"])(domain, x, 0, n)] : unknown;
+    if (x <= x) return range[Object(d3_array__WEBPACK_IMPORTED_MODULE_0__["bisect"])(domain, x, 0, n)];
   }
 
   scale.domain = function(_) {
@@ -18063,18 +17616,13 @@ function threshold() {
     return [domain[i - 1], domain[i]];
   };
 
-  scale.unknown = function(_) {
-    return arguments.length ? (unknown = _, scale) : unknown;
-  };
-
   scale.copy = function() {
     return threshold()
         .domain(domain)
-        .range(range)
-        .unknown(unknown);
+        .range(range);
   };
 
-  return _init__WEBPACK_IMPORTED_MODULE_2__["initRange"].apply(scale, arguments);
+  return scale;
 }
 
 
@@ -18094,8 +17642,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-/* harmony default export */ __webpack_exports__["default"] = (function(start, stop, count, specifier) {
-  var step = Object(d3_array__WEBPACK_IMPORTED_MODULE_0__["tickStep"])(start, stop, count),
+/* harmony default export */ __webpack_exports__["default"] = (function(domain, count, specifier) {
+  var start = domain[0],
+      stop = domain[domain.length - 1],
+      step = Object(d3_array__WEBPACK_IMPORTED_MODULE_0__["tickStep"])(start, stop, count == null ? 10 : count),
       precision;
   specifier = Object(d3_format__WEBPACK_IMPORTED_MODULE_1__["formatSpecifier"])(specifier == null ? ",f" : specifier);
   switch (specifier.type) {
@@ -18135,11 +17685,11 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "calendar", function() { return calendar; });
 /* harmony import */ var d3_array__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3-array */ "./node_modules/d3-array/src/index.js");
-/* harmony import */ var d3_time__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! d3-time */ "./node_modules/d3-time/src/index.js");
-/* harmony import */ var d3_time_format__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! d3-time-format */ "./node_modules/d3-time-format/src/index.js");
-/* harmony import */ var _array__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./array */ "./node_modules/d3-scale/src/array.js");
-/* harmony import */ var _continuous__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./continuous */ "./node_modules/d3-scale/src/continuous.js");
-/* harmony import */ var _init__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./init */ "./node_modules/d3-scale/src/init.js");
+/* harmony import */ var d3_interpolate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! d3-interpolate */ "./node_modules/d3-interpolate/src/index.js");
+/* harmony import */ var d3_time__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! d3-time */ "./node_modules/d3-time/src/index.js");
+/* harmony import */ var d3_time_format__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! d3-time-format */ "./node_modules/d3-time-format/src/index.js");
+/* harmony import */ var _array__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./array */ "./node_modules/d3-scale/src/array.js");
+/* harmony import */ var _continuous__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./continuous */ "./node_modules/d3-scale/src/continuous.js");
 /* harmony import */ var _nice__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./nice */ "./node_modules/d3-scale/src/nice.js");
 
 
@@ -18166,7 +17716,7 @@ function number(t) {
 }
 
 function calendar(year, month, week, day, hour, minute, second, millisecond, format) {
-  var scale = Object(_continuous__WEBPACK_IMPORTED_MODULE_4__["default"])(_continuous__WEBPACK_IMPORTED_MODULE_4__["identity"], _continuous__WEBPACK_IMPORTED_MODULE_4__["identity"]),
+  var scale = Object(_continuous__WEBPACK_IMPORTED_MODULE_5__["default"])(_continuous__WEBPACK_IMPORTED_MODULE_5__["deinterpolateLinear"], d3_interpolate__WEBPACK_IMPORTED_MODULE_1__["interpolateNumber"]),
       invert = scale.invert,
       domain = scale.domain;
 
@@ -18240,7 +17790,7 @@ function calendar(year, month, week, day, hour, minute, second, millisecond, for
   };
 
   scale.domain = function(_) {
-    return arguments.length ? domain(_array__WEBPACK_IMPORTED_MODULE_3__["map"].call(_, number)) : domain().map(date);
+    return arguments.length ? domain(_array__WEBPACK_IMPORTED_MODULE_4__["map"].call(_, number)) : domain().map(date);
   };
 
   scale.ticks = function(interval, step) {
@@ -18267,14 +17817,14 @@ function calendar(year, month, week, day, hour, minute, second, millisecond, for
   };
 
   scale.copy = function() {
-    return Object(_continuous__WEBPACK_IMPORTED_MODULE_4__["copy"])(scale, calendar(year, month, week, day, hour, minute, second, millisecond, format));
+    return Object(_continuous__WEBPACK_IMPORTED_MODULE_5__["copy"])(scale, calendar(year, month, week, day, hour, minute, second, millisecond, format));
   };
 
   return scale;
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (function() {
-  return _init__WEBPACK_IMPORTED_MODULE_5__["initRange"].apply(calendar(d3_time__WEBPACK_IMPORTED_MODULE_1__["timeYear"], d3_time__WEBPACK_IMPORTED_MODULE_1__["timeMonth"], d3_time__WEBPACK_IMPORTED_MODULE_1__["timeWeek"], d3_time__WEBPACK_IMPORTED_MODULE_1__["timeDay"], d3_time__WEBPACK_IMPORTED_MODULE_1__["timeHour"], d3_time__WEBPACK_IMPORTED_MODULE_1__["timeMinute"], d3_time__WEBPACK_IMPORTED_MODULE_1__["timeSecond"], d3_time__WEBPACK_IMPORTED_MODULE_1__["timeMillisecond"], d3_time_format__WEBPACK_IMPORTED_MODULE_2__["timeFormat"]).domain([new Date(2000, 0, 1), new Date(2000, 0, 2)]), arguments);
+  return calendar(d3_time__WEBPACK_IMPORTED_MODULE_2__["timeYear"], d3_time__WEBPACK_IMPORTED_MODULE_2__["timeMonth"], d3_time__WEBPACK_IMPORTED_MODULE_2__["timeWeek"], d3_time__WEBPACK_IMPORTED_MODULE_2__["timeDay"], d3_time__WEBPACK_IMPORTED_MODULE_2__["timeHour"], d3_time__WEBPACK_IMPORTED_MODULE_2__["timeMinute"], d3_time__WEBPACK_IMPORTED_MODULE_2__["timeSecond"], d3_time__WEBPACK_IMPORTED_MODULE_2__["timeMillisecond"], d3_time_format__WEBPACK_IMPORTED_MODULE_3__["timeFormat"]).domain([new Date(2000, 0, 1), new Date(2000, 0, 2)]);
 });
 
 
@@ -18292,14 +17842,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _time__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./time */ "./node_modules/d3-scale/src/time.js");
 /* harmony import */ var d3_time_format__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! d3-time-format */ "./node_modules/d3-time-format/src/index.js");
 /* harmony import */ var d3_time__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! d3-time */ "./node_modules/d3-time/src/index.js");
-/* harmony import */ var _init__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./init */ "./node_modules/d3-scale/src/init.js");
-
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = (function() {
-  return _init__WEBPACK_IMPORTED_MODULE_3__["initRange"].apply(Object(_time__WEBPACK_IMPORTED_MODULE_0__["calendar"])(d3_time__WEBPACK_IMPORTED_MODULE_2__["utcYear"], d3_time__WEBPACK_IMPORTED_MODULE_2__["utcMonth"], d3_time__WEBPACK_IMPORTED_MODULE_2__["utcWeek"], d3_time__WEBPACK_IMPORTED_MODULE_2__["utcDay"], d3_time__WEBPACK_IMPORTED_MODULE_2__["utcHour"], d3_time__WEBPACK_IMPORTED_MODULE_2__["utcMinute"], d3_time__WEBPACK_IMPORTED_MODULE_2__["utcSecond"], d3_time__WEBPACK_IMPORTED_MODULE_2__["utcMillisecond"], d3_time_format__WEBPACK_IMPORTED_MODULE_1__["utcFormat"]).domain([Date.UTC(2000, 0, 1), Date.UTC(2000, 0, 2)]), arguments);
+  return Object(_time__WEBPACK_IMPORTED_MODULE_0__["calendar"])(d3_time__WEBPACK_IMPORTED_MODULE_2__["utcYear"], d3_time__WEBPACK_IMPORTED_MODULE_2__["utcMonth"], d3_time__WEBPACK_IMPORTED_MODULE_2__["utcWeek"], d3_time__WEBPACK_IMPORTED_MODULE_2__["utcDay"], d3_time__WEBPACK_IMPORTED_MODULE_2__["utcHour"], d3_time__WEBPACK_IMPORTED_MODULE_2__["utcMinute"], d3_time__WEBPACK_IMPORTED_MODULE_2__["utcSecond"], d3_time__WEBPACK_IMPORTED_MODULE_2__["utcMillisecond"], d3_time_format__WEBPACK_IMPORTED_MODULE_1__["utcFormat"]).domain([Date.UTC(2000, 0, 1), Date.UTC(2000, 0, 2)]);
 });
 
 
@@ -18521,11 +18069,28 @@ Local.prototype = local.prototype = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (function(selector) {
+var matcher = function(selector) {
   return function() {
     return this.matches(selector);
   };
-});
+};
+
+if (typeof document !== "undefined") {
+  var element = document.documentElement;
+  if (!element.matches) {
+    var vendorMatches = element.webkitMatchesSelector
+        || element.msMatchesSelector
+        || element.mozMatchesSelector
+        || element.oMatchesSelector;
+    matcher = function(selector) {
+      return function() {
+        return vendorMatches.call(this, selector);
+      };
+    };
+  }
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (matcher);
 
 
 /***/ }),
@@ -19273,32 +18838,30 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _data__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./data */ "./node_modules/d3-selection/src/selection/data.js");
 /* harmony import */ var _enter__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./enter */ "./node_modules/d3-selection/src/selection/enter.js");
 /* harmony import */ var _exit__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./exit */ "./node_modules/d3-selection/src/selection/exit.js");
-/* harmony import */ var _join__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./join */ "./node_modules/d3-selection/src/selection/join.js");
-/* harmony import */ var _merge__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./merge */ "./node_modules/d3-selection/src/selection/merge.js");
-/* harmony import */ var _order__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./order */ "./node_modules/d3-selection/src/selection/order.js");
-/* harmony import */ var _sort__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./sort */ "./node_modules/d3-selection/src/selection/sort.js");
-/* harmony import */ var _call__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./call */ "./node_modules/d3-selection/src/selection/call.js");
-/* harmony import */ var _nodes__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./nodes */ "./node_modules/d3-selection/src/selection/nodes.js");
-/* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./node */ "./node_modules/d3-selection/src/selection/node.js");
-/* harmony import */ var _size__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./size */ "./node_modules/d3-selection/src/selection/size.js");
-/* harmony import */ var _empty__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./empty */ "./node_modules/d3-selection/src/selection/empty.js");
-/* harmony import */ var _each__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./each */ "./node_modules/d3-selection/src/selection/each.js");
-/* harmony import */ var _attr__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./attr */ "./node_modules/d3-selection/src/selection/attr.js");
-/* harmony import */ var _style__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./style */ "./node_modules/d3-selection/src/selection/style.js");
-/* harmony import */ var _property__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./property */ "./node_modules/d3-selection/src/selection/property.js");
-/* harmony import */ var _classed__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./classed */ "./node_modules/d3-selection/src/selection/classed.js");
-/* harmony import */ var _text__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./text */ "./node_modules/d3-selection/src/selection/text.js");
-/* harmony import */ var _html__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./html */ "./node_modules/d3-selection/src/selection/html.js");
-/* harmony import */ var _raise__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./raise */ "./node_modules/d3-selection/src/selection/raise.js");
-/* harmony import */ var _lower__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./lower */ "./node_modules/d3-selection/src/selection/lower.js");
-/* harmony import */ var _append__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./append */ "./node_modules/d3-selection/src/selection/append.js");
-/* harmony import */ var _insert__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./insert */ "./node_modules/d3-selection/src/selection/insert.js");
-/* harmony import */ var _remove__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./remove */ "./node_modules/d3-selection/src/selection/remove.js");
-/* harmony import */ var _clone__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./clone */ "./node_modules/d3-selection/src/selection/clone.js");
-/* harmony import */ var _datum__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./datum */ "./node_modules/d3-selection/src/selection/datum.js");
-/* harmony import */ var _on__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./on */ "./node_modules/d3-selection/src/selection/on.js");
-/* harmony import */ var _dispatch__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ./dispatch */ "./node_modules/d3-selection/src/selection/dispatch.js");
-
+/* harmony import */ var _merge__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./merge */ "./node_modules/d3-selection/src/selection/merge.js");
+/* harmony import */ var _order__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./order */ "./node_modules/d3-selection/src/selection/order.js");
+/* harmony import */ var _sort__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./sort */ "./node_modules/d3-selection/src/selection/sort.js");
+/* harmony import */ var _call__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./call */ "./node_modules/d3-selection/src/selection/call.js");
+/* harmony import */ var _nodes__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./nodes */ "./node_modules/d3-selection/src/selection/nodes.js");
+/* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./node */ "./node_modules/d3-selection/src/selection/node.js");
+/* harmony import */ var _size__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./size */ "./node_modules/d3-selection/src/selection/size.js");
+/* harmony import */ var _empty__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./empty */ "./node_modules/d3-selection/src/selection/empty.js");
+/* harmony import */ var _each__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./each */ "./node_modules/d3-selection/src/selection/each.js");
+/* harmony import */ var _attr__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./attr */ "./node_modules/d3-selection/src/selection/attr.js");
+/* harmony import */ var _style__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./style */ "./node_modules/d3-selection/src/selection/style.js");
+/* harmony import */ var _property__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./property */ "./node_modules/d3-selection/src/selection/property.js");
+/* harmony import */ var _classed__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./classed */ "./node_modules/d3-selection/src/selection/classed.js");
+/* harmony import */ var _text__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./text */ "./node_modules/d3-selection/src/selection/text.js");
+/* harmony import */ var _html__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./html */ "./node_modules/d3-selection/src/selection/html.js");
+/* harmony import */ var _raise__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./raise */ "./node_modules/d3-selection/src/selection/raise.js");
+/* harmony import */ var _lower__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./lower */ "./node_modules/d3-selection/src/selection/lower.js");
+/* harmony import */ var _append__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./append */ "./node_modules/d3-selection/src/selection/append.js");
+/* harmony import */ var _insert__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./insert */ "./node_modules/d3-selection/src/selection/insert.js");
+/* harmony import */ var _remove__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./remove */ "./node_modules/d3-selection/src/selection/remove.js");
+/* harmony import */ var _clone__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./clone */ "./node_modules/d3-selection/src/selection/clone.js");
+/* harmony import */ var _datum__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./datum */ "./node_modules/d3-selection/src/selection/datum.js");
+/* harmony import */ var _on__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./on */ "./node_modules/d3-selection/src/selection/on.js");
+/* harmony import */ var _dispatch__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./dispatch */ "./node_modules/d3-selection/src/selection/dispatch.js");
 
 
 
@@ -19349,31 +18912,30 @@ Selection.prototype = selection.prototype = {
   data: _data__WEBPACK_IMPORTED_MODULE_3__["default"],
   enter: _enter__WEBPACK_IMPORTED_MODULE_4__["default"],
   exit: _exit__WEBPACK_IMPORTED_MODULE_5__["default"],
-  join: _join__WEBPACK_IMPORTED_MODULE_6__["default"],
-  merge: _merge__WEBPACK_IMPORTED_MODULE_7__["default"],
-  order: _order__WEBPACK_IMPORTED_MODULE_8__["default"],
-  sort: _sort__WEBPACK_IMPORTED_MODULE_9__["default"],
-  call: _call__WEBPACK_IMPORTED_MODULE_10__["default"],
-  nodes: _nodes__WEBPACK_IMPORTED_MODULE_11__["default"],
-  node: _node__WEBPACK_IMPORTED_MODULE_12__["default"],
-  size: _size__WEBPACK_IMPORTED_MODULE_13__["default"],
-  empty: _empty__WEBPACK_IMPORTED_MODULE_14__["default"],
-  each: _each__WEBPACK_IMPORTED_MODULE_15__["default"],
-  attr: _attr__WEBPACK_IMPORTED_MODULE_16__["default"],
-  style: _style__WEBPACK_IMPORTED_MODULE_17__["default"],
-  property: _property__WEBPACK_IMPORTED_MODULE_18__["default"],
-  classed: _classed__WEBPACK_IMPORTED_MODULE_19__["default"],
-  text: _text__WEBPACK_IMPORTED_MODULE_20__["default"],
-  html: _html__WEBPACK_IMPORTED_MODULE_21__["default"],
-  raise: _raise__WEBPACK_IMPORTED_MODULE_22__["default"],
-  lower: _lower__WEBPACK_IMPORTED_MODULE_23__["default"],
-  append: _append__WEBPACK_IMPORTED_MODULE_24__["default"],
-  insert: _insert__WEBPACK_IMPORTED_MODULE_25__["default"],
-  remove: _remove__WEBPACK_IMPORTED_MODULE_26__["default"],
-  clone: _clone__WEBPACK_IMPORTED_MODULE_27__["default"],
-  datum: _datum__WEBPACK_IMPORTED_MODULE_28__["default"],
-  on: _on__WEBPACK_IMPORTED_MODULE_29__["default"],
-  dispatch: _dispatch__WEBPACK_IMPORTED_MODULE_30__["default"]
+  merge: _merge__WEBPACK_IMPORTED_MODULE_6__["default"],
+  order: _order__WEBPACK_IMPORTED_MODULE_7__["default"],
+  sort: _sort__WEBPACK_IMPORTED_MODULE_8__["default"],
+  call: _call__WEBPACK_IMPORTED_MODULE_9__["default"],
+  nodes: _nodes__WEBPACK_IMPORTED_MODULE_10__["default"],
+  node: _node__WEBPACK_IMPORTED_MODULE_11__["default"],
+  size: _size__WEBPACK_IMPORTED_MODULE_12__["default"],
+  empty: _empty__WEBPACK_IMPORTED_MODULE_13__["default"],
+  each: _each__WEBPACK_IMPORTED_MODULE_14__["default"],
+  attr: _attr__WEBPACK_IMPORTED_MODULE_15__["default"],
+  style: _style__WEBPACK_IMPORTED_MODULE_16__["default"],
+  property: _property__WEBPACK_IMPORTED_MODULE_17__["default"],
+  classed: _classed__WEBPACK_IMPORTED_MODULE_18__["default"],
+  text: _text__WEBPACK_IMPORTED_MODULE_19__["default"],
+  html: _html__WEBPACK_IMPORTED_MODULE_20__["default"],
+  raise: _raise__WEBPACK_IMPORTED_MODULE_21__["default"],
+  lower: _lower__WEBPACK_IMPORTED_MODULE_22__["default"],
+  append: _append__WEBPACK_IMPORTED_MODULE_23__["default"],
+  insert: _insert__WEBPACK_IMPORTED_MODULE_24__["default"],
+  remove: _remove__WEBPACK_IMPORTED_MODULE_25__["default"],
+  clone: _clone__WEBPACK_IMPORTED_MODULE_26__["default"],
+  datum: _datum__WEBPACK_IMPORTED_MODULE_27__["default"],
+  on: _on__WEBPACK_IMPORTED_MODULE_28__["default"],
+  dispatch: _dispatch__WEBPACK_IMPORTED_MODULE_29__["default"]
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (selection);
@@ -19405,26 +18967,6 @@ function constantNull() {
   return this.select(function() {
     return this.insertBefore(create.apply(this, arguments), select.apply(this, arguments) || null);
   });
-});
-
-
-/***/ }),
-
-/***/ "./node_modules/d3-selection/src/selection/join.js":
-/*!*********************************************************!*\
-  !*** ./node_modules/d3-selection/src/selection/join.js ***!
-  \*********************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (function(onenter, onupdate, onexit) {
-  var enter = this.enter(), update = this, exit = this.exit();
-  enter = typeof onenter === "function" ? onenter(enter) : enter.append(onenter + "");
-  if (onupdate != null) update = onupdate(update);
-  if (onexit == null) exit.remove(); else onexit(exit);
-  return enter && update ? enter.merge(update).order() : update;
 });
 
 
@@ -19660,7 +19202,7 @@ __webpack_require__.r(__webpack_exports__);
   for (var groups = this._groups, j = -1, m = groups.length; ++j < m;) {
     for (var group = groups[j], i = group.length - 1, next = group[i], node; --i >= 0;) {
       if (node = group[i]) {
-        if (next && node.compareDocumentPosition(next) ^ 4) next.parentNode.insertBefore(node, next);
+        if (next && next !== node.nextSibling) next.parentNode.insertBefore(node, next);
         next = node;
       }
     }
@@ -20154,9 +19696,7 @@ function arcPadAngle(d) {
 function intersect(x0, y0, x1, y1, x2, y2, x3, y3) {
   var x10 = x1 - x0, y10 = y1 - y0,
       x32 = x3 - x2, y32 = y3 - y2,
-      t = y32 * x10 - x32 * y10;
-  if (t * t < _math__WEBPACK_IMPORTED_MODULE_2__["epsilon"]) return;
-  t = (x32 * (y0 - y2) - y32 * (x0 - x2)) / t;
+      t = (x32 * (y0 - y2) - y32 * (x0 - x2)) / (y32 * x10 - x32 * y10);
   return [x0 + t * x10, y0 + t * y10];
 }
 
@@ -20277,12 +19817,12 @@ function cornerTangents(x0, y0, x1, y1, r1, rc, cw) {
         var x11 = r1 * Object(_math__WEBPACK_IMPORTED_MODULE_2__["cos"])(a11),
             y11 = r1 * Object(_math__WEBPACK_IMPORTED_MODULE_2__["sin"])(a11),
             x00 = r0 * Object(_math__WEBPACK_IMPORTED_MODULE_2__["cos"])(a00),
-            y00 = r0 * Object(_math__WEBPACK_IMPORTED_MODULE_2__["sin"])(a00),
-            oc;
+            y00 = r0 * Object(_math__WEBPACK_IMPORTED_MODULE_2__["sin"])(a00);
 
         // Restrict the corner radius according to the sector angle.
-        if (da < _math__WEBPACK_IMPORTED_MODULE_2__["pi"] && (oc = intersect(x01, y01, x00, y00, x11, y11, x10, y10))) {
-          var ax = x01 - oc[0],
+        if (da < _math__WEBPACK_IMPORTED_MODULE_2__["pi"]) {
+          var oc = da0 > _math__WEBPACK_IMPORTED_MODULE_2__["epsilon"] ? intersect(x01, y01, x00, y00, x11, y11, x10, y10) : [x10, y10],
+              ax = x01 - oc[0],
               ay = y01 - oc[1],
               bx = x11 - oc[0],
               by = y11 - oc[1],
@@ -21777,7 +21317,7 @@ __webpack_require__.r(__webpack_exports__);
 /*!********************************************!*\
   !*** ./node_modules/d3-shape/src/index.js ***!
   \********************************************/
-/*! exports provided: arc, area, line, pie, areaRadial, radialArea, lineRadial, radialLine, pointRadial, linkHorizontal, linkVertical, linkRadial, symbol, symbols, symbolCircle, symbolCross, symbolDiamond, symbolSquare, symbolStar, symbolTriangle, symbolWye, curveBasisClosed, curveBasisOpen, curveBasis, curveBundle, curveCardinalClosed, curveCardinalOpen, curveCardinal, curveCatmullRomClosed, curveCatmullRomOpen, curveCatmullRom, curveLinearClosed, curveLinear, curveMonotoneX, curveMonotoneY, curveNatural, curveStep, curveStepAfter, curveStepBefore, stack, stackOffsetExpand, stackOffsetDiverging, stackOffsetNone, stackOffsetSilhouette, stackOffsetWiggle, stackOrderAppearance, stackOrderAscending, stackOrderDescending, stackOrderInsideOut, stackOrderNone, stackOrderReverse */
+/*! exports provided: arc, area, line, pie, areaRadial, radialArea, lineRadial, radialLine, pointRadial, linkHorizontal, linkVertical, linkRadial, symbol, symbols, symbolCircle, symbolCross, symbolDiamond, symbolSquare, symbolStar, symbolTriangle, symbolWye, curveBasisClosed, curveBasisOpen, curveBasis, curveBundle, curveCardinalClosed, curveCardinalOpen, curveCardinal, curveCatmullRomClosed, curveCatmullRomOpen, curveCatmullRom, curveLinearClosed, curveLinear, curveMonotoneX, curveMonotoneY, curveNatural, curveStep, curveStepAfter, curveStepBefore, stack, stackOffsetExpand, stackOffsetDiverging, stackOffsetNone, stackOffsetSilhouette, stackOffsetWiggle, stackOrderAscending, stackOrderDescending, stackOrderInsideOut, stackOrderNone, stackOrderReverse */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21909,23 +21449,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _offset_wiggle__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! ./offset/wiggle */ "./node_modules/d3-shape/src/offset/wiggle.js");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "stackOffsetWiggle", function() { return _offset_wiggle__WEBPACK_IMPORTED_MODULE_36__["default"]; });
 
-/* harmony import */ var _order_appearance__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ./order/appearance */ "./node_modules/d3-shape/src/order/appearance.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "stackOrderAppearance", function() { return _order_appearance__WEBPACK_IMPORTED_MODULE_37__["default"]; });
+/* harmony import */ var _order_ascending__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ./order/ascending */ "./node_modules/d3-shape/src/order/ascending.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "stackOrderAscending", function() { return _order_ascending__WEBPACK_IMPORTED_MODULE_37__["default"]; });
 
-/* harmony import */ var _order_ascending__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ./order/ascending */ "./node_modules/d3-shape/src/order/ascending.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "stackOrderAscending", function() { return _order_ascending__WEBPACK_IMPORTED_MODULE_38__["default"]; });
+/* harmony import */ var _order_descending__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ./order/descending */ "./node_modules/d3-shape/src/order/descending.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "stackOrderDescending", function() { return _order_descending__WEBPACK_IMPORTED_MODULE_38__["default"]; });
 
-/* harmony import */ var _order_descending__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ./order/descending */ "./node_modules/d3-shape/src/order/descending.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "stackOrderDescending", function() { return _order_descending__WEBPACK_IMPORTED_MODULE_39__["default"]; });
+/* harmony import */ var _order_insideOut__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ./order/insideOut */ "./node_modules/d3-shape/src/order/insideOut.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "stackOrderInsideOut", function() { return _order_insideOut__WEBPACK_IMPORTED_MODULE_39__["default"]; });
 
-/* harmony import */ var _order_insideOut__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ./order/insideOut */ "./node_modules/d3-shape/src/order/insideOut.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "stackOrderInsideOut", function() { return _order_insideOut__WEBPACK_IMPORTED_MODULE_40__["default"]; });
+/* harmony import */ var _order_none__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ./order/none */ "./node_modules/d3-shape/src/order/none.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "stackOrderNone", function() { return _order_none__WEBPACK_IMPORTED_MODULE_40__["default"]; });
 
-/* harmony import */ var _order_none__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ./order/none */ "./node_modules/d3-shape/src/order/none.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "stackOrderNone", function() { return _order_none__WEBPACK_IMPORTED_MODULE_41__["default"]; });
-
-/* harmony import */ var _order_reverse__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! ./order/reverse */ "./node_modules/d3-shape/src/order/reverse.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "stackOrderReverse", function() { return _order_reverse__WEBPACK_IMPORTED_MODULE_42__["default"]; });
+/* harmony import */ var _order_reverse__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ./order/reverse */ "./node_modules/d3-shape/src/order/reverse.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "stackOrderReverse", function() { return _order_reverse__WEBPACK_IMPORTED_MODULE_41__["default"]; });
 
 
 
@@ -21933,7 +21470,6 @@ __webpack_require__.r(__webpack_exports__);
 
  // Note: radialArea is deprecated!
  // Note: radialLine is deprecated!
-
 
 
 
@@ -22259,7 +21795,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = (function(series, order) {
-  if (!((n = series.length) > 0)) return;
+  if (!((n = series.length) > 1)) return;
   for (var i, j = 0, d, dy, yp, yn, n, m = series[order[0]].length; j < m; ++j) {
     for (yp = yn = 0, i = 0; i < n; ++i) {
       if ((dy = (d = series[order[i]][j])[1] - d[0]) >= 0) {
@@ -22384,32 +21920,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/d3-shape/src/order/appearance.js":
-/*!*******************************************************!*\
-  !*** ./node_modules/d3-shape/src/order/appearance.js ***!
-  \*******************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _none__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./none */ "./node_modules/d3-shape/src/order/none.js");
-
-
-/* harmony default export */ __webpack_exports__["default"] = (function(series) {
-  var peaks = series.map(peak);
-  return Object(_none__WEBPACK_IMPORTED_MODULE_0__["default"])(series).sort(function(a, b) { return peaks[a] - peaks[b]; });
-});
-
-function peak(series) {
-  var i = -1, j = 0, n = series.length, vi, vj = -Infinity;
-  while (++i < n) if ((vi = +series[i][1]) > vj) vj = vi, j = i;
-  return j;
-}
-
-
-/***/ }),
-
 /***/ "./node_modules/d3-shape/src/order/ascending.js":
 /*!******************************************************!*\
   !*** ./node_modules/d3-shape/src/order/ascending.js ***!
@@ -22465,7 +21975,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _appearance__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./appearance */ "./node_modules/d3-shape/src/order/appearance.js");
+/* harmony import */ var _none__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./none */ "./node_modules/d3-shape/src/order/none.js");
 /* harmony import */ var _ascending__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ascending */ "./node_modules/d3-shape/src/order/ascending.js");
 
 
@@ -22475,7 +21985,7 @@ __webpack_require__.r(__webpack_exports__);
       i,
       j,
       sums = series.map(_ascending__WEBPACK_IMPORTED_MODULE_1__["sum"]),
-      order = Object(_appearance__WEBPACK_IMPORTED_MODULE_0__["default"])(series),
+      order = Object(_none__WEBPACK_IMPORTED_MODULE_0__["default"])(series).sort(function(a, b) { return sums[b] - sums[a]; }),
       top = 0,
       bottom = 0,
       tops = [],
@@ -23867,7 +23377,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var hour = Object(_interval__WEBPACK_IMPORTED_MODULE_0__["default"])(function(date) {
-  date.setTime(date - date.getMilliseconds() - date.getSeconds() * _duration__WEBPACK_IMPORTED_MODULE_1__["durationSecond"] - date.getMinutes() * _duration__WEBPACK_IMPORTED_MODULE_1__["durationMinute"]);
+  var offset = date.getTimezoneOffset() * _duration__WEBPACK_IMPORTED_MODULE_1__["durationMinute"] % _duration__WEBPACK_IMPORTED_MODULE_1__["durationHour"];
+  if (offset < 0) offset += _duration__WEBPACK_IMPORTED_MODULE_1__["durationHour"];
+  date.setTime(Math.floor((+date - offset) / _duration__WEBPACK_IMPORTED_MODULE_1__["durationHour"]) * _duration__WEBPACK_IMPORTED_MODULE_1__["durationHour"] + offset);
 }, function(date, step) {
   date.setTime(+date + step * _duration__WEBPACK_IMPORTED_MODULE_1__["durationHour"]);
 }, function(start, end) {
@@ -24200,7 +23712,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var minute = Object(_interval__WEBPACK_IMPORTED_MODULE_0__["default"])(function(date) {
-  date.setTime(date - date.getMilliseconds() - date.getSeconds() * _duration__WEBPACK_IMPORTED_MODULE_1__["durationSecond"]);
+  date.setTime(Math.floor(date / _duration__WEBPACK_IMPORTED_MODULE_1__["durationMinute"]) * _duration__WEBPACK_IMPORTED_MODULE_1__["durationMinute"]);
 }, function(date, step) {
   date.setTime(+date + step * _duration__WEBPACK_IMPORTED_MODULE_1__["durationMinute"]);
 }, function(start, end) {
@@ -24261,7 +23773,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var second = Object(_interval__WEBPACK_IMPORTED_MODULE_0__["default"])(function(date) {
-  date.setTime(date - date.getMilliseconds());
+  date.setTime(Math.floor(date / _duration__WEBPACK_IMPORTED_MODULE_1__["durationSecond"]) * _duration__WEBPACK_IMPORTED_MODULE_1__["durationSecond"]);
 }, function(date, step) {
   date.setTime(+date + step * _duration__WEBPACK_IMPORTED_MODULE_1__["durationSecond"]);
 }, function(start, end) {
@@ -24898,7 +24410,7 @@ __webpack_require__.r(__webpack_exports__);
     active = schedule.state > _transition_schedule__WEBPACK_IMPORTED_MODULE_0__["STARTING"] && schedule.state < _transition_schedule__WEBPACK_IMPORTED_MODULE_0__["ENDING"];
     schedule.state = _transition_schedule__WEBPACK_IMPORTED_MODULE_0__["ENDED"];
     schedule.timer.stop();
-    schedule.on.call(active ? "interrupt" : "cancel", node, node.__data__, schedule.index, schedule.group);
+    if (active) schedule.on.call("interrupt", node, node.__data__, schedule.index, schedule.group);
     delete schedules[i];
   }
 
@@ -25041,56 +24553,52 @@ function attrRemoveNS(fullname) {
 }
 
 function attrConstant(name, interpolate, value1) {
-  var string00,
-      string1 = value1 + "",
+  var value00,
       interpolate0;
   return function() {
-    var string0 = this.getAttribute(name);
-    return string0 === string1 ? null
-        : string0 === string00 ? interpolate0
-        : interpolate0 = interpolate(string00 = string0, value1);
+    var value0 = this.getAttribute(name);
+    return value0 === value1 ? null
+        : value0 === value00 ? interpolate0
+        : interpolate0 = interpolate(value00 = value0, value1);
   };
 }
 
 function attrConstantNS(fullname, interpolate, value1) {
-  var string00,
-      string1 = value1 + "",
+  var value00,
       interpolate0;
   return function() {
-    var string0 = this.getAttributeNS(fullname.space, fullname.local);
-    return string0 === string1 ? null
-        : string0 === string00 ? interpolate0
-        : interpolate0 = interpolate(string00 = string0, value1);
+    var value0 = this.getAttributeNS(fullname.space, fullname.local);
+    return value0 === value1 ? null
+        : value0 === value00 ? interpolate0
+        : interpolate0 = interpolate(value00 = value0, value1);
   };
 }
 
 function attrFunction(name, interpolate, value) {
-  var string00,
-      string10,
+  var value00,
+      value10,
       interpolate0;
   return function() {
-    var string0, value1 = value(this), string1;
+    var value0, value1 = value(this);
     if (value1 == null) return void this.removeAttribute(name);
-    string0 = this.getAttribute(name);
-    string1 = value1 + "";
-    return string0 === string1 ? null
-        : string0 === string00 && string1 === string10 ? interpolate0
-        : (string10 = string1, interpolate0 = interpolate(string00 = string0, value1));
+    value0 = this.getAttribute(name);
+    return value0 === value1 ? null
+        : value0 === value00 && value1 === value10 ? interpolate0
+        : interpolate0 = interpolate(value00 = value0, value10 = value1);
   };
 }
 
 function attrFunctionNS(fullname, interpolate, value) {
-  var string00,
-      string10,
+  var value00,
+      value10,
       interpolate0;
   return function() {
-    var string0, value1 = value(this), string1;
+    var value0, value1 = value(this);
     if (value1 == null) return void this.removeAttributeNS(fullname.space, fullname.local);
-    string0 = this.getAttributeNS(fullname.space, fullname.local);
-    string1 = value1 + "";
-    return string0 === string1 ? null
-        : string0 === string00 && string1 === string10 ? interpolate0
-        : (string10 = string1, interpolate0 = interpolate(string00 = string0, value1));
+    value0 = this.getAttributeNS(fullname.space, fullname.local);
+    return value0 === value1 ? null
+        : value0 === value00 && value1 === value10 ? interpolate0
+        : interpolate0 = interpolate(value00 = value0, value10 = value1);
   };
 }
 
@@ -25099,7 +24607,7 @@ function attrFunctionNS(fullname, interpolate, value) {
   return this.attrTween(name, typeof value === "function"
       ? (fullname.local ? attrFunctionNS : attrFunction)(fullname, i, Object(_tween__WEBPACK_IMPORTED_MODULE_2__["tweenValue"])(this, "attr." + name, value))
       : value == null ? (fullname.local ? attrRemoveNS : attrRemove)(fullname)
-      : (fullname.local ? attrConstantNS : attrConstant)(fullname, i, value));
+      : (fullname.local ? attrConstantNS : attrConstant)(fullname, i, value + ""));
 });
 
 
@@ -25117,35 +24625,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var d3_selection__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3-selection */ "./node_modules/d3-selection/src/index.js");
 
 
-function attrInterpolate(name, i) {
-  return function(t) {
-    this.setAttribute(name, i(t));
-  };
-}
-
-function attrInterpolateNS(fullname, i) {
-  return function(t) {
-    this.setAttributeNS(fullname.space, fullname.local, i(t));
-  };
-}
-
 function attrTweenNS(fullname, value) {
-  var t0, i0;
   function tween() {
-    var i = value.apply(this, arguments);
-    if (i !== i0) t0 = (i0 = i) && attrInterpolateNS(fullname, i);
-    return t0;
+    var node = this, i = value.apply(node, arguments);
+    return i && function(t) {
+      node.setAttributeNS(fullname.space, fullname.local, i(t));
+    };
   }
   tween._value = value;
   return tween;
 }
 
 function attrTween(name, value) {
-  var t0, i0;
   function tween() {
-    var i = value.apply(this, arguments);
-    if (i !== i0) t0 = (i0 = i) && attrInterpolate(name, i);
-    return t0;
+    var node = this, i = value.apply(node, arguments);
+    return i && function(t) {
+      node.setAttribute(name, i(t));
+    };
   }
   tween._value = value;
   return tween;
@@ -25267,46 +24763,6 @@ function easeConstant(id, value) {
 
 /***/ }),
 
-/***/ "./node_modules/d3-transition/src/transition/end.js":
-/*!**********************************************************!*\
-  !*** ./node_modules/d3-transition/src/transition/end.js ***!
-  \**********************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _schedule__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./schedule */ "./node_modules/d3-transition/src/transition/schedule.js");
-
-
-/* harmony default export */ __webpack_exports__["default"] = (function() {
-  var on0, on1, that = this, id = that._id, size = that.size();
-  return new Promise(function(resolve, reject) {
-    var cancel = {value: reject},
-        end = {value: function() { if (--size === 0) resolve(); }};
-
-    that.each(function() {
-      var schedule = Object(_schedule__WEBPACK_IMPORTED_MODULE_0__["set"])(this, id),
-          on = schedule.on;
-
-      // If this node shared a dispatch with the previous node,
-      // just assign the updated shared dispatch and we’re done!
-      // Otherwise, copy-on-write.
-      if (on !== on0) {
-        on1 = (on0 = on).copy();
-        on1._.cancel.push(cancel);
-        on1._.interrupt.push(cancel);
-        on1._.end.push(end);
-      }
-
-      schedule.on = on1;
-    });
-  });
-});
-
-
-/***/ }),
-
 /***/ "./node_modules/d3-transition/src/transition/filter.js":
 /*!*************************************************************!*\
   !*** ./node_modules/d3-transition/src/transition/filter.js ***!
@@ -25368,8 +24824,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _text__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./text */ "./node_modules/d3-transition/src/transition/text.js");
 /* harmony import */ var _transition__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./transition */ "./node_modules/d3-transition/src/transition/transition.js");
 /* harmony import */ var _tween__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./tween */ "./node_modules/d3-transition/src/transition/tween.js");
-/* harmony import */ var _end__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./end */ "./node_modules/d3-transition/src/transition/end.js");
-
 
 
 
@@ -25432,8 +24886,7 @@ Transition.prototype = transition.prototype = {
   tween: _tween__WEBPACK_IMPORTED_MODULE_17__["default"],
   delay: _delay__WEBPACK_IMPORTED_MODULE_3__["default"],
   duration: _duration__WEBPACK_IMPORTED_MODULE_4__["default"],
-  ease: _ease__WEBPACK_IMPORTED_MODULE_5__["default"],
-  end: _end__WEBPACK_IMPORTED_MODULE_18__["default"]
+  ease: _ease__WEBPACK_IMPORTED_MODULE_5__["default"]
 };
 
 
@@ -25591,7 +25044,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var emptyOn = Object(d3_dispatch__WEBPACK_IMPORTED_MODULE_0__["dispatch"])("start", "end", "cancel", "interrupt");
+var emptyOn = Object(d3_dispatch__WEBPACK_IMPORTED_MODULE_0__["dispatch"])("start", "end", "interrupt");
 var emptyTween = [];
 
 var CREATED = 0;
@@ -25629,7 +25082,7 @@ function init(node, id) {
 
 function set(node, id) {
   var schedule = get(node, id);
-  if (schedule.state > STARTED) throw new Error("too late; already running");
+  if (schedule.state > STARTING) throw new Error("too late; already started");
   return schedule;
 }
 
@@ -25672,6 +25125,7 @@ function create(node, id, self) {
       if (o.state === STARTED) return Object(d3_timer__WEBPACK_IMPORTED_MODULE_1__["timeout"])(start);
 
       // Interrupt the active transition, if any.
+      // Dispatch the interrupt event.
       if (o.state === RUNNING) {
         o.state = ENDED;
         o.timer.stop();
@@ -25679,11 +25133,12 @@ function create(node, id, self) {
         delete schedules[i];
       }
 
-      // Cancel any pre-empted transitions.
+      // Cancel any pre-empted transitions. No interrupt event is dispatched
+      // because the cancelled transitions never started. Note that this also
+      // removes this transition from the pending list!
       else if (+i < id) {
         o.state = ENDED;
         o.timer.stop();
-        o.on.call("cancel", node, node.__data__, o.index, o.group);
         delete schedules[i];
       }
     }
@@ -25723,7 +25178,7 @@ function create(node, id, self) {
         n = tween.length;
 
     while (++i < n) {
-      tween[i].call(node, t);
+      tween[i].call(null, t);
     }
 
     // Dispatch the end event.
@@ -25857,88 +25312,65 @@ var Selection = d3_selection__WEBPACK_IMPORTED_MODULE_0__["selection"].prototype
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var d3_interpolate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3-interpolate */ "./node_modules/d3-interpolate/src/index.js");
 /* harmony import */ var d3_selection__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! d3-selection */ "./node_modules/d3-selection/src/index.js");
-/* harmony import */ var _schedule__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./schedule */ "./node_modules/d3-transition/src/transition/schedule.js");
-/* harmony import */ var _tween__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./tween */ "./node_modules/d3-transition/src/transition/tween.js");
-/* harmony import */ var _interpolate__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./interpolate */ "./node_modules/d3-transition/src/transition/interpolate.js");
+/* harmony import */ var _tween__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./tween */ "./node_modules/d3-transition/src/transition/tween.js");
+/* harmony import */ var _interpolate__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./interpolate */ "./node_modules/d3-transition/src/transition/interpolate.js");
 
 
 
 
 
-
-function styleNull(name, interpolate) {
-  var string00,
-      string10,
+function styleRemove(name, interpolate) {
+  var value00,
+      value10,
       interpolate0;
   return function() {
-    var string0 = Object(d3_selection__WEBPACK_IMPORTED_MODULE_1__["style"])(this, name),
-        string1 = (this.style.removeProperty(name), Object(d3_selection__WEBPACK_IMPORTED_MODULE_1__["style"])(this, name));
-    return string0 === string1 ? null
-        : string0 === string00 && string1 === string10 ? interpolate0
-        : interpolate0 = interpolate(string00 = string0, string10 = string1);
+    var value0 = Object(d3_selection__WEBPACK_IMPORTED_MODULE_1__["style"])(this, name),
+        value1 = (this.style.removeProperty(name), Object(d3_selection__WEBPACK_IMPORTED_MODULE_1__["style"])(this, name));
+    return value0 === value1 ? null
+        : value0 === value00 && value1 === value10 ? interpolate0
+        : interpolate0 = interpolate(value00 = value0, value10 = value1);
   };
 }
 
-function styleRemove(name) {
+function styleRemoveEnd(name) {
   return function() {
     this.style.removeProperty(name);
   };
 }
 
 function styleConstant(name, interpolate, value1) {
-  var string00,
-      string1 = value1 + "",
+  var value00,
       interpolate0;
   return function() {
-    var string0 = Object(d3_selection__WEBPACK_IMPORTED_MODULE_1__["style"])(this, name);
-    return string0 === string1 ? null
-        : string0 === string00 ? interpolate0
-        : interpolate0 = interpolate(string00 = string0, value1);
+    var value0 = Object(d3_selection__WEBPACK_IMPORTED_MODULE_1__["style"])(this, name);
+    return value0 === value1 ? null
+        : value0 === value00 ? interpolate0
+        : interpolate0 = interpolate(value00 = value0, value1);
   };
 }
 
 function styleFunction(name, interpolate, value) {
-  var string00,
-      string10,
+  var value00,
+      value10,
       interpolate0;
   return function() {
-    var string0 = Object(d3_selection__WEBPACK_IMPORTED_MODULE_1__["style"])(this, name),
-        value1 = value(this),
-        string1 = value1 + "";
-    if (value1 == null) string1 = value1 = (this.style.removeProperty(name), Object(d3_selection__WEBPACK_IMPORTED_MODULE_1__["style"])(this, name));
-    return string0 === string1 ? null
-        : string0 === string00 && string1 === string10 ? interpolate0
-        : (string10 = string1, interpolate0 = interpolate(string00 = string0, value1));
-  };
-}
-
-function styleMaybeRemove(id, name) {
-  var on0, on1, listener0, key = "style." + name, event = "end." + key, remove;
-  return function() {
-    var schedule = Object(_schedule__WEBPACK_IMPORTED_MODULE_2__["set"])(this, id),
-        on = schedule.on,
-        listener = schedule.value[key] == null ? remove || (remove = styleRemove(name)) : undefined;
-
-    // If this node shared a dispatch with the previous node,
-    // just assign the updated shared dispatch and we’re done!
-    // Otherwise, copy-on-write.
-    if (on !== on0 || listener0 !== listener) (on1 = (on0 = on).copy()).on(event, listener0 = listener);
-
-    schedule.on = on1;
+    var value0 = Object(d3_selection__WEBPACK_IMPORTED_MODULE_1__["style"])(this, name),
+        value1 = value(this);
+    if (value1 == null) value1 = (this.style.removeProperty(name), Object(d3_selection__WEBPACK_IMPORTED_MODULE_1__["style"])(this, name));
+    return value0 === value1 ? null
+        : value0 === value00 && value1 === value10 ? interpolate0
+        : interpolate0 = interpolate(value00 = value0, value10 = value1);
   };
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (function(name, value, priority) {
-  var i = (name += "") === "transform" ? d3_interpolate__WEBPACK_IMPORTED_MODULE_0__["interpolateTransformCss"] : _interpolate__WEBPACK_IMPORTED_MODULE_4__["default"];
+  var i = (name += "") === "transform" ? d3_interpolate__WEBPACK_IMPORTED_MODULE_0__["interpolateTransformCss"] : _interpolate__WEBPACK_IMPORTED_MODULE_3__["default"];
   return value == null ? this
-      .styleTween(name, styleNull(name, i))
-      .on("end.style." + name, styleRemove(name))
-    : typeof value === "function" ? this
-      .styleTween(name, styleFunction(name, i, Object(_tween__WEBPACK_IMPORTED_MODULE_3__["tweenValue"])(this, "style." + name, value)))
-      .each(styleMaybeRemove(this._id, name))
-    : this
-      .styleTween(name, styleConstant(name, i, value), priority)
-      .on("end.style." + name, null);
+          .styleTween(name, styleRemove(name, i))
+          .on("end.style." + name, styleRemoveEnd(name))
+      : this.styleTween(name, typeof value === "function"
+          ? styleFunction(name, i, Object(_tween__WEBPACK_IMPORTED_MODULE_2__["tweenValue"])(this, "style." + name, value))
+          : styleConstant(name, i, value + ""), priority);
 });
 
 
@@ -25953,18 +25385,12 @@ function styleMaybeRemove(id, name) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-function styleInterpolate(name, i, priority) {
-  return function(t) {
-    this.style.setProperty(name, i(t), priority);
-  };
-}
-
 function styleTween(name, value, priority) {
-  var t, i0;
   function tween() {
-    var i = value.apply(this, arguments);
-    if (i !== i0) t = (i0 = i) && styleInterpolate(name, i, priority);
-    return t;
+    var node = this, i = value.apply(node, arguments);
+    return i && function(t) {
+      node.style.setProperty(name, i(t), priority);
+    };
   }
   tween._value = value;
   return tween;
@@ -27953,7 +27379,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "devDependencies", function() { return devDependencies; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "dependencies", function() { return dependencies; });
 var name = "d3";
-var version = "5.9.2";
+var version = "5.7.0";
 var description = "Data-Driven Documents";
 var keywords = ["dom","visualization","svg","animation","canvas"];
 var homepage = "https://d3js.org";
@@ -27975,7 +27401,7 @@ var dependencies = {"d3-array":"1","d3-axis":"1","d3-brush":"1","d3-chord":"1","
 /*!**********************************!*\
   !*** ./node_modules/d3/index.js ***!
   \**********************************/
-/*! exports provided: version, bisect, bisectRight, bisectLeft, ascending, bisector, cross, descending, deviation, extent, histogram, thresholdFreedmanDiaconis, thresholdScott, thresholdSturges, max, mean, median, merge, min, pairs, permute, quantile, range, scan, shuffle, sum, ticks, tickIncrement, tickStep, transpose, variance, zip, axisTop, axisRight, axisBottom, axisLeft, brush, brushX, brushY, brushSelection, chord, ribbon, nest, set, map, keys, values, entries, color, rgb, hsl, lab, hcl, lch, gray, cubehelix, contours, contourDensity, dispatch, drag, dragDisable, dragEnable, dsvFormat, csvParse, csvParseRows, csvFormat, csvFormatBody, csvFormatRows, tsvParse, tsvParseRows, tsvFormat, tsvFormatBody, tsvFormatRows, autoType, easeLinear, easeQuad, easeQuadIn, easeQuadOut, easeQuadInOut, easeCubic, easeCubicIn, easeCubicOut, easeCubicInOut, easePoly, easePolyIn, easePolyOut, easePolyInOut, easeSin, easeSinIn, easeSinOut, easeSinInOut, easeExp, easeExpIn, easeExpOut, easeExpInOut, easeCircle, easeCircleIn, easeCircleOut, easeCircleInOut, easeBounce, easeBounceIn, easeBounceOut, easeBounceInOut, easeBack, easeBackIn, easeBackOut, easeBackInOut, easeElastic, easeElasticIn, easeElasticOut, easeElasticInOut, blob, buffer, dsv, csv, tsv, image, json, text, xml, html, svg, forceCenter, forceCollide, forceLink, forceManyBody, forceRadial, forceSimulation, forceX, forceY, formatDefaultLocale, format, formatPrefix, formatLocale, formatSpecifier, precisionFixed, precisionPrefix, precisionRound, geoArea, geoBounds, geoCentroid, geoCircle, geoClipAntimeridian, geoClipCircle, geoClipExtent, geoClipRectangle, geoContains, geoDistance, geoGraticule, geoGraticule10, geoInterpolate, geoLength, geoPath, geoAlbers, geoAlbersUsa, geoAzimuthalEqualArea, geoAzimuthalEqualAreaRaw, geoAzimuthalEquidistant, geoAzimuthalEquidistantRaw, geoConicConformal, geoConicConformalRaw, geoConicEqualArea, geoConicEqualAreaRaw, geoConicEquidistant, geoConicEquidistantRaw, geoEqualEarth, geoEqualEarthRaw, geoEquirectangular, geoEquirectangularRaw, geoGnomonic, geoGnomonicRaw, geoIdentity, geoProjection, geoProjectionMutator, geoMercator, geoMercatorRaw, geoNaturalEarth1, geoNaturalEarth1Raw, geoOrthographic, geoOrthographicRaw, geoStereographic, geoStereographicRaw, geoTransverseMercator, geoTransverseMercatorRaw, geoRotation, geoStream, geoTransform, cluster, hierarchy, pack, packSiblings, packEnclose, partition, stratify, tree, treemap, treemapBinary, treemapDice, treemapSlice, treemapSliceDice, treemapSquarify, treemapResquarify, interpolate, interpolateArray, interpolateBasis, interpolateBasisClosed, interpolateDate, interpolateDiscrete, interpolateHue, interpolateNumber, interpolateObject, interpolateRound, interpolateString, interpolateTransformCss, interpolateTransformSvg, interpolateZoom, interpolateRgb, interpolateRgbBasis, interpolateRgbBasisClosed, interpolateHsl, interpolateHslLong, interpolateLab, interpolateHcl, interpolateHclLong, interpolateCubehelix, interpolateCubehelixLong, piecewise, quantize, path, polygonArea, polygonCentroid, polygonHull, polygonContains, polygonLength, quadtree, randomUniform, randomNormal, randomLogNormal, randomBates, randomIrwinHall, randomExponential, scaleBand, scalePoint, scaleIdentity, scaleLinear, scaleLog, scaleSymlog, scaleOrdinal, scaleImplicit, scalePow, scaleSqrt, scaleQuantile, scaleQuantize, scaleThreshold, scaleTime, scaleUtc, scaleSequential, scaleSequentialLog, scaleSequentialPow, scaleSequentialSqrt, scaleSequentialSymlog, scaleSequentialQuantile, scaleDiverging, scaleDivergingLog, scaleDivergingPow, scaleDivergingSqrt, scaleDivergingSymlog, tickFormat, schemeCategory10, schemeAccent, schemeDark2, schemePaired, schemePastel1, schemePastel2, schemeSet1, schemeSet2, schemeSet3, interpolateBrBG, schemeBrBG, interpolatePRGn, schemePRGn, interpolatePiYG, schemePiYG, interpolatePuOr, schemePuOr, interpolateRdBu, schemeRdBu, interpolateRdGy, schemeRdGy, interpolateRdYlBu, schemeRdYlBu, interpolateRdYlGn, schemeRdYlGn, interpolateSpectral, schemeSpectral, interpolateBuGn, schemeBuGn, interpolateBuPu, schemeBuPu, interpolateGnBu, schemeGnBu, interpolateOrRd, schemeOrRd, interpolatePuBuGn, schemePuBuGn, interpolatePuBu, schemePuBu, interpolatePuRd, schemePuRd, interpolateRdPu, schemeRdPu, interpolateYlGnBu, schemeYlGnBu, interpolateYlGn, schemeYlGn, interpolateYlOrBr, schemeYlOrBr, interpolateYlOrRd, schemeYlOrRd, interpolateBlues, schemeBlues, interpolateGreens, schemeGreens, interpolateGreys, schemeGreys, interpolatePurples, schemePurples, interpolateReds, schemeReds, interpolateOranges, schemeOranges, interpolateCubehelixDefault, interpolateRainbow, interpolateWarm, interpolateCool, interpolateSinebow, interpolateViridis, interpolateMagma, interpolateInferno, interpolatePlasma, create, creator, local, matcher, mouse, namespace, namespaces, clientPoint, select, selectAll, selection, selector, selectorAll, style, touch, touches, window, event, customEvent, arc, area, line, pie, areaRadial, radialArea, lineRadial, radialLine, pointRadial, linkHorizontal, linkVertical, linkRadial, symbol, symbols, symbolCircle, symbolCross, symbolDiamond, symbolSquare, symbolStar, symbolTriangle, symbolWye, curveBasisClosed, curveBasisOpen, curveBasis, curveBundle, curveCardinalClosed, curveCardinalOpen, curveCardinal, curveCatmullRomClosed, curveCatmullRomOpen, curveCatmullRom, curveLinearClosed, curveLinear, curveMonotoneX, curveMonotoneY, curveNatural, curveStep, curveStepAfter, curveStepBefore, stack, stackOffsetExpand, stackOffsetDiverging, stackOffsetNone, stackOffsetSilhouette, stackOffsetWiggle, stackOrderAppearance, stackOrderAscending, stackOrderDescending, stackOrderInsideOut, stackOrderNone, stackOrderReverse, timeInterval, timeMillisecond, timeMilliseconds, utcMillisecond, utcMilliseconds, timeSecond, timeSeconds, utcSecond, utcSeconds, timeMinute, timeMinutes, timeHour, timeHours, timeDay, timeDays, timeWeek, timeWeeks, timeSunday, timeSundays, timeMonday, timeMondays, timeTuesday, timeTuesdays, timeWednesday, timeWednesdays, timeThursday, timeThursdays, timeFriday, timeFridays, timeSaturday, timeSaturdays, timeMonth, timeMonths, timeYear, timeYears, utcMinute, utcMinutes, utcHour, utcHours, utcDay, utcDays, utcWeek, utcWeeks, utcSunday, utcSundays, utcMonday, utcMondays, utcTuesday, utcTuesdays, utcWednesday, utcWednesdays, utcThursday, utcThursdays, utcFriday, utcFridays, utcSaturday, utcSaturdays, utcMonth, utcMonths, utcYear, utcYears, timeFormatDefaultLocale, timeFormat, timeParse, utcFormat, utcParse, timeFormatLocale, isoFormat, isoParse, now, timer, timerFlush, timeout, interval, transition, active, interrupt, voronoi, zoom, zoomTransform, zoomIdentity */
+/*! exports provided: version, bisect, bisectRight, bisectLeft, ascending, bisector, cross, descending, deviation, extent, histogram, thresholdFreedmanDiaconis, thresholdScott, thresholdSturges, max, mean, median, merge, min, pairs, permute, quantile, range, scan, shuffle, sum, ticks, tickIncrement, tickStep, transpose, variance, zip, axisTop, axisRight, axisBottom, axisLeft, brush, brushX, brushY, brushSelection, chord, ribbon, nest, set, map, keys, values, entries, color, rgb, hsl, lab, hcl, lch, gray, cubehelix, contours, contourDensity, dispatch, drag, dragDisable, dragEnable, dsvFormat, csvParse, csvParseRows, csvFormat, csvFormatRows, tsvParse, tsvParseRows, tsvFormat, tsvFormatRows, easeLinear, easeQuad, easeQuadIn, easeQuadOut, easeQuadInOut, easeCubic, easeCubicIn, easeCubicOut, easeCubicInOut, easePoly, easePolyIn, easePolyOut, easePolyInOut, easeSin, easeSinIn, easeSinOut, easeSinInOut, easeExp, easeExpIn, easeExpOut, easeExpInOut, easeCircle, easeCircleIn, easeCircleOut, easeCircleInOut, easeBounce, easeBounceIn, easeBounceOut, easeBounceInOut, easeBack, easeBackIn, easeBackOut, easeBackInOut, easeElastic, easeElasticIn, easeElasticOut, easeElasticInOut, blob, buffer, dsv, csv, tsv, image, json, text, xml, html, svg, forceCenter, forceCollide, forceLink, forceManyBody, forceRadial, forceSimulation, forceX, forceY, formatDefaultLocale, format, formatPrefix, formatLocale, formatSpecifier, precisionFixed, precisionPrefix, precisionRound, geoArea, geoBounds, geoCentroid, geoCircle, geoClipAntimeridian, geoClipCircle, geoClipExtent, geoClipRectangle, geoContains, geoDistance, geoGraticule, geoGraticule10, geoInterpolate, geoLength, geoPath, geoAlbers, geoAlbersUsa, geoAzimuthalEqualArea, geoAzimuthalEqualAreaRaw, geoAzimuthalEquidistant, geoAzimuthalEquidistantRaw, geoConicConformal, geoConicConformalRaw, geoConicEqualArea, geoConicEqualAreaRaw, geoConicEquidistant, geoConicEquidistantRaw, geoEqualEarth, geoEqualEarthRaw, geoEquirectangular, geoEquirectangularRaw, geoGnomonic, geoGnomonicRaw, geoIdentity, geoProjection, geoProjectionMutator, geoMercator, geoMercatorRaw, geoNaturalEarth1, geoNaturalEarth1Raw, geoOrthographic, geoOrthographicRaw, geoStereographic, geoStereographicRaw, geoTransverseMercator, geoTransverseMercatorRaw, geoRotation, geoStream, geoTransform, cluster, hierarchy, pack, packSiblings, packEnclose, partition, stratify, tree, treemap, treemapBinary, treemapDice, treemapSlice, treemapSliceDice, treemapSquarify, treemapResquarify, interpolate, interpolateArray, interpolateBasis, interpolateBasisClosed, interpolateDate, interpolateDiscrete, interpolateHue, interpolateNumber, interpolateObject, interpolateRound, interpolateString, interpolateTransformCss, interpolateTransformSvg, interpolateZoom, interpolateRgb, interpolateRgbBasis, interpolateRgbBasisClosed, interpolateHsl, interpolateHslLong, interpolateLab, interpolateHcl, interpolateHclLong, interpolateCubehelix, interpolateCubehelixLong, piecewise, quantize, path, polygonArea, polygonCentroid, polygonHull, polygonContains, polygonLength, quadtree, randomUniform, randomNormal, randomLogNormal, randomBates, randomIrwinHall, randomExponential, scaleBand, scalePoint, scaleIdentity, scaleLinear, scaleLog, scaleOrdinal, scaleImplicit, scalePow, scaleSqrt, scaleQuantile, scaleQuantize, scaleThreshold, scaleTime, scaleUtc, scaleSequential, scaleDiverging, schemeCategory10, schemeAccent, schemeDark2, schemePaired, schemePastel1, schemePastel2, schemeSet1, schemeSet2, schemeSet3, interpolateBrBG, schemeBrBG, interpolatePRGn, schemePRGn, interpolatePiYG, schemePiYG, interpolatePuOr, schemePuOr, interpolateRdBu, schemeRdBu, interpolateRdGy, schemeRdGy, interpolateRdYlBu, schemeRdYlBu, interpolateRdYlGn, schemeRdYlGn, interpolateSpectral, schemeSpectral, interpolateBuGn, schemeBuGn, interpolateBuPu, schemeBuPu, interpolateGnBu, schemeGnBu, interpolateOrRd, schemeOrRd, interpolatePuBuGn, schemePuBuGn, interpolatePuBu, schemePuBu, interpolatePuRd, schemePuRd, interpolateRdPu, schemeRdPu, interpolateYlGnBu, schemeYlGnBu, interpolateYlGn, schemeYlGn, interpolateYlOrBr, schemeYlOrBr, interpolateYlOrRd, schemeYlOrRd, interpolateBlues, schemeBlues, interpolateGreens, schemeGreens, interpolateGreys, schemeGreys, interpolatePurples, schemePurples, interpolateReds, schemeReds, interpolateOranges, schemeOranges, interpolateCubehelixDefault, interpolateRainbow, interpolateWarm, interpolateCool, interpolateSinebow, interpolateViridis, interpolateMagma, interpolateInferno, interpolatePlasma, create, creator, local, matcher, mouse, namespace, namespaces, clientPoint, select, selectAll, selection, selector, selectorAll, style, touch, touches, window, event, customEvent, arc, area, line, pie, areaRadial, radialArea, lineRadial, radialLine, pointRadial, linkHorizontal, linkVertical, linkRadial, symbol, symbols, symbolCircle, symbolCross, symbolDiamond, symbolSquare, symbolStar, symbolTriangle, symbolWye, curveBasisClosed, curveBasisOpen, curveBasis, curveBundle, curveCardinalClosed, curveCardinalOpen, curveCardinal, curveCatmullRomClosed, curveCatmullRomOpen, curveCatmullRom, curveLinearClosed, curveLinear, curveMonotoneX, curveMonotoneY, curveNatural, curveStep, curveStepAfter, curveStepBefore, stack, stackOffsetExpand, stackOffsetDiverging, stackOffsetNone, stackOffsetSilhouette, stackOffsetWiggle, stackOrderAscending, stackOrderDescending, stackOrderInsideOut, stackOrderNone, stackOrderReverse, timeInterval, timeMillisecond, timeMilliseconds, utcMillisecond, utcMilliseconds, timeSecond, timeSeconds, utcSecond, utcSeconds, timeMinute, timeMinutes, timeHour, timeHours, timeDay, timeDays, timeWeek, timeWeeks, timeSunday, timeSundays, timeMonday, timeMondays, timeTuesday, timeTuesdays, timeWednesday, timeWednesdays, timeThursday, timeThursdays, timeFriday, timeFridays, timeSaturday, timeSaturdays, timeMonth, timeMonths, timeYear, timeYears, utcMinute, utcMinutes, utcHour, utcHours, utcDay, utcDays, utcWeek, utcWeeks, utcSunday, utcSundays, utcMonday, utcMondays, utcTuesday, utcTuesdays, utcWednesday, utcWednesdays, utcThursday, utcThursdays, utcFriday, utcFridays, utcSaturday, utcSaturdays, utcMonth, utcMonths, utcYear, utcYears, timeFormatDefaultLocale, timeFormat, timeParse, utcFormat, utcParse, timeFormatLocale, isoFormat, isoParse, now, timer, timerFlush, timeout, interval, transition, active, interrupt, voronoi, zoom, zoomTransform, zoomIdentity */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -28123,8 +27549,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "csvFormat", function() { return d3_dsv__WEBPACK_IMPORTED_MODULE_10__["csvFormat"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "csvFormatBody", function() { return d3_dsv__WEBPACK_IMPORTED_MODULE_10__["csvFormatBody"]; });
-
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "csvFormatRows", function() { return d3_dsv__WEBPACK_IMPORTED_MODULE_10__["csvFormatRows"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "tsvParse", function() { return d3_dsv__WEBPACK_IMPORTED_MODULE_10__["tsvParse"]; });
@@ -28133,11 +27557,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "tsvFormat", function() { return d3_dsv__WEBPACK_IMPORTED_MODULE_10__["tsvFormat"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "tsvFormatBody", function() { return d3_dsv__WEBPACK_IMPORTED_MODULE_10__["tsvFormatBody"]; });
-
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "tsvFormatRows", function() { return d3_dsv__WEBPACK_IMPORTED_MODULE_10__["tsvFormatRows"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "autoType", function() { return d3_dsv__WEBPACK_IMPORTED_MODULE_10__["autoType"]; });
 
 /* harmony import */ var d3_ease__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! d3-ease */ "./node_modules/d3-ease/src/index.js");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "easeLinear", function() { return d3_ease__WEBPACK_IMPORTED_MODULE_11__["easeLinear"]; });
@@ -28495,8 +27915,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleLog", function() { return d3_scale__WEBPACK_IMPORTED_MODULE_22__["scaleLog"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleSymlog", function() { return d3_scale__WEBPACK_IMPORTED_MODULE_22__["scaleSymlog"]; });
-
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleOrdinal", function() { return d3_scale__WEBPACK_IMPORTED_MODULE_22__["scaleOrdinal"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleImplicit", function() { return d3_scale__WEBPACK_IMPORTED_MODULE_22__["scaleImplicit"]; });
@@ -28517,27 +27935,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleSequential", function() { return d3_scale__WEBPACK_IMPORTED_MODULE_22__["scaleSequential"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleSequentialLog", function() { return d3_scale__WEBPACK_IMPORTED_MODULE_22__["scaleSequentialLog"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleSequentialPow", function() { return d3_scale__WEBPACK_IMPORTED_MODULE_22__["scaleSequentialPow"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleSequentialSqrt", function() { return d3_scale__WEBPACK_IMPORTED_MODULE_22__["scaleSequentialSqrt"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleSequentialSymlog", function() { return d3_scale__WEBPACK_IMPORTED_MODULE_22__["scaleSequentialSymlog"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleSequentialQuantile", function() { return d3_scale__WEBPACK_IMPORTED_MODULE_22__["scaleSequentialQuantile"]; });
-
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleDiverging", function() { return d3_scale__WEBPACK_IMPORTED_MODULE_22__["scaleDiverging"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleDivergingLog", function() { return d3_scale__WEBPACK_IMPORTED_MODULE_22__["scaleDivergingLog"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleDivergingPow", function() { return d3_scale__WEBPACK_IMPORTED_MODULE_22__["scaleDivergingPow"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleDivergingSqrt", function() { return d3_scale__WEBPACK_IMPORTED_MODULE_22__["scaleDivergingSqrt"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "scaleDivergingSymlog", function() { return d3_scale__WEBPACK_IMPORTED_MODULE_22__["scaleDivergingSymlog"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "tickFormat", function() { return d3_scale__WEBPACK_IMPORTED_MODULE_22__["tickFormat"]; });
 
 /* harmony import */ var d3_scale_chromatic__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! d3-scale-chromatic */ "./node_modules/d3-scale-chromatic/src/index.js");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "schemeCategory10", function() { return d3_scale_chromatic__WEBPACK_IMPORTED_MODULE_23__["schemeCategory10"]; });
@@ -28814,8 +28212,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "stackOffsetWiggle", function() { return d3_shape__WEBPACK_IMPORTED_MODULE_25__["stackOffsetWiggle"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "stackOrderAppearance", function() { return d3_shape__WEBPACK_IMPORTED_MODULE_25__["stackOrderAppearance"]; });
-
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "stackOrderAscending", function() { return d3_shape__WEBPACK_IMPORTED_MODULE_25__["stackOrderAscending"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "stackOrderDescending", function() { return d3_shape__WEBPACK_IMPORTED_MODULE_25__["stackOrderDescending"]; });
@@ -29047,94 +28443,6 @@ function getMaxOfArray(numArray) {
 
 /***/ }),
 
-/***/ "./src/barchart.js":
-/*!*************************!*\
-  !*** ./src/barchart.js ***!
-  \*************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return BarChart; });
-
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-var BarChart =
-/*#__PURE__*/
-function () {
-  function BarChart() {
-    _classCallCheck(this, BarChart);
-
-    this.ShowLegend = false;
-    this.Width = 200;
-    this.Height = 200;
-    this.svg = null;
-    this.Margin = {
-      top: 20,
-      right: 20,
-      bottom: 20,
-      left: 20
-    };
-    this.BlurbPlaceHolder = "";
-    this.ChartPlaceHolder = "";
-    this.Data = null;
-  }
-
-  _createClass(BarChart, [{
-    key: "Draw",
-    value: function Draw() {
-      this.svg = null;
-      width = this.Width - this.Margin.left - this.Margin.right;
-      height = this.Height - this.Margin.top - this.Margin.bottom; // Coerce the data into the right formats
-
-      data = data.map(function (d) {
-        return {
-          entity: d.entity,
-          value: +d.value
-        };
-      });
-      var y = d3.scale.linear().range([height, 0]);
-      var x = d3.scale.ordinal().rangeRoundBands([0, width], 0.1).domain(d3.entries(data).map(function (d) {
-        return d.value.entity;
-      }));
-      y.domain([d3.min(data, function (d) {
-        return d.value;
-      }), d3.max(data, function (d) {
-        return d.value;
-      })]);
-      var xAxis = d3.svg.axis().scale(x).orient("bottom");
-      var yAxis = d3.svg.axis().scale(y).orient("left");
-      var svg = d3.select(this.ChartPlaceHolder).append("svg").attr("width", this.Width + this.Margin.left + this.Margin.right).attr("height", this.Height + this.Margin.top + this.Margin.bottom).append("g").attr("transform", "translate(" + this.Margin.left + "," + this.Margin.top + ")");
-      svg.append("g").attr("class", "x axis").attr("transform", "translate(0," + height + ")").call(xAxis);
-      svg.append("g").attr("class", "y axis").call(yAxis).append("text").attr("transform", "rotate(-90)").attr("y", 6).attr("dy", ".71em").style("text-anchor", "end"); //.text("Percent");
-
-      svg.selectAll(".bar").data(data).enter().append("rect").attr("class", "bar").attr("x", function (d) {
-        return x(d.entity);
-      }).attr("width", x.rangeBand()).attr("y", function (d) {
-        return y(d.value);
-      }).attr("height", function (d) {
-        return height - y(d.value);
-      }).style("fill", "#1684ca");
-      svg.selectAll(".x.axis text").style("text-anchor", "end").attr("dx", "-.8em").attr("dy", ".15em").attr("transform", function (d) {
-        return "rotate(-90)";
-      });
-      return svg;
-    }
-  }]);
-
-  return BarChart;
-}();
-
-
-
-/***/ }),
-
 /***/ "./src/d3legend.js":
 /*!*************************!*\
   !*** ./src/d3legend.js ***!
@@ -29193,22 +28501,21 @@ function () {
 /*!**********************!*\
   !*** ./src/index.js ***!
   \**********************/
-/*! no exports provided */
+/*! exports provided: LineChart */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _linechart__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./linechart */ "./src/linechart.js");
-/* harmony import */ var _barchart__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./barchart */ "./src/barchart.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "LineChart", function() { return _linechart__WEBPACK_IMPORTED_MODULE_0__["default"]; });
 
+ //import LineChart from './linechart';
+//import BarChart from './barchart';
 
-
- //export {default as LineChart} from './linechart';
-//export {default as BarChart} from './barchart;
+ //export {default as BarChart} from './barchart;';
 // Expose the modules to the window object
-
-window.LineChart = _linechart__WEBPACK_IMPORTED_MODULE_0__["default"];
-window.barchart = _barchart__WEBPACK_IMPORTED_MODULE_1__["default"];
+//window.LineChart = LineChart;
+//window.barchart = BarChart;
 
 /***/ }),
 

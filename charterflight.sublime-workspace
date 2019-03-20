@@ -1,0 +1,733 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"subsection",
+				"\\subsection{}"
+			],
+			[
+				"prot",
+				"\\propto"
+			],
+			[
+				"MO",
+				"mom_age"
+			],
+			[
+				"indicator",
+				"indicatorlist"
+			],
+			[
+				"in",
+				"\\input"
+			],
+			[
+				"bigtria",
+				"\\bigtriangleup"
+			],
+			[
+				"bigtri",
+				"\\bigtriangleup"
+			],
+			[
+				"triangl",
+				"\\bigtriangleup"
+			],
+			[
+				"tria",
+				"\\bigtriangledown"
+			],
+			[
+				"math",
+				"\\mathscr"
+			],
+			[
+				"right",
+				"\\rightarrow"
+			],
+			[
+				"te",
+				"\\textit{}"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "/Users/tomas/OneDrive - United Nations/charterflight/src/index.js",
+			"settings":
+			{
+				"buffer_size": 291,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/tomas/OneDrive - United Nations/charterflight/package.json",
+			"settings":
+			{
+				"buffer_size": 754,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/tomas/OneDrive - United Nations/charterflight/.babelrc",
+			"settings":
+			{
+				"buffer_size": 38,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/tomas/OneDrive - United Nations/charterflight/webpack.config.js",
+			"settings":
+			{
+				"buffer_size": 1525,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/tomas/OneDrive - United Nations/charterflight/src/linechart.js",
+			"settings":
+			{
+				"buffer_size": 9234,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": ".babelrc",
+			"settings":
+			{
+				"buffer_size": 104,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+		[
+			[
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					""
+				],
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					"Traditional"
+				],
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					"PdfLaTeX"
+				],
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					"XeLaTeX"
+				],
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					"LuaLaTeX"
+				],
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					"Basic Builder"
+				],
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					"Basic Builder - PdfLaTeX"
+				],
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					"Basic Builder - XeLaTeX"
+				],
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					"Basic Builder - LuaLaTeX"
+				],
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					"Script Builder"
+				]
+			],
+			[
+				"Packages/LaTeXTools/LaTeX.sublime-build",
+				""
+			]
+		]
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 345.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"json",
+				"Set Syntax: JSON"
+			],
+			[
+				"",
+				"A File Icon: Changelog"
+			],
+			[
+				"pdf",
+				"Build With: LaTeX - PdfLaTeX"
+			],
+			[
+				"rename",
+				"Rename File"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"buld",
+				"Build With: LaTeX - PdfLaTeX"
+			],
+			[
+				"build",
+				"Build With: LaTeX - Basic Builder"
+			],
+			[
+				"buil",
+				"Build With: LaTeX - Basic Builder"
+			],
+			[
+				"convert to",
+				"Indentation: Convert to Tabs"
+			],
+			[
+				"autofo",
+				"User: Python PEP8 Autoformat"
+			],
+			[
+				"in",
+				"Package Control: Install Package"
+			],
+			[
+				"remove pa",
+				"Package Control: Remove Package"
+			],
+			[
+				"remove",
+				"Package Control: Remove Channel"
+			],
+			[
+				"pep",
+				"Preferences: AutoPep8 Settings – Default"
+			],
+			[
+				"upgrade",
+				"Package Control: Upgrade/Overwrite All Packages"
+			],
+			[
+				"build ",
+				"Build With: LaTeX - Basic Builder"
+			],
+			[
+				"check",
+				"LaTeXing: Check System"
+			],
+			[
+				"ayu",
+				"ayu: Activate theme"
+			],
+			[
+				"build ba",
+				"Build With: LaTeX - Basic Builder"
+			],
+			[
+				"build basi",
+				"Build With: LaTeX - Basic Builder"
+			],
+			[
+				"build latex basi",
+				"Build With: LaTeX - Basic Builder"
+			],
+			[
+				"build latex",
+				"Build With: LaTeX"
+			],
+			[
+				"build la",
+				"Build With: LaTeX - Traditional"
+			],
+			[
+				"activa",
+				"ayu: Activate theme"
+			]
+		],
+		"width": 504.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/Users/tomas/Dropbox/Coding/charterflight"
+	],
+	"file_history":
+	[
+		"/Users/tomas/OneDrive - United Nations/charterflight/package.json",
+		"/Users/tomas/OneDrive - United Nations/charterflight/webpack.config.js",
+		"/Users/tomas/OneDrive - United Nations/charterflight/src/blurb.js",
+		"/Users/tomas/Dropbox/Coding/ldc_stats/src/row.js",
+		"/Users/tomas/Dropbox/Coding/ldc_stats/src/App.js",
+		"/Users/tomas/OneDrive - United Nations/charterflight/dist/charterflight.js",
+		"/Users/tomas/OneDrive - United Nations/charterflight/src/index.js",
+		"/Users/tomas/Dropbox/Coding/ldc_stats/src/index.css",
+		"/Users/tomas/Dropbox/Coding/ldc_stats/src/cell.js",
+		"/Users/tomas/Dropbox/Coding/ldc_stats/src/grid.js",
+		"/Users/tomas/Dropbox/Coding/ldc_stats/src/data.js",
+		"/Users/tomas/Dropbox/Coding/ldc_stats/package.json",
+		"/Users/tomas/Dropbox/new school/Econometrics/Study Guide/ldcs_stats",
+		"/Users/tomas/Dropbox/new school/Econometrics/Study Guide/Index.tex",
+		"/Users/tomas/Dropbox/new school/Econometrics/Study Guide/A1_distributions.tex",
+		"/Users/tomas/Dropbox/new school/Econometrics/Study Guide/A3_Statistical_Concepts.tex",
+		"/Users/tomas/Dropbox/new school/Econometrics/Study Guide/1_bayesian_inference.tex",
+		"/Users/tomas/Dropbox/new school/Econometrics/Study Guide/A2_algorithms.tex",
+		"/Users/tomas/Dropbox/new school/AMI/Study guide/1_lr_competing_visions_of_the_long_run.tex",
+		"/Users/tomas/Dropbox/new school/Econometrics/Study Guide/2_Inference_With_Poisson_Distribution.tex",
+		"/Users/tomas/Dropbox/new school/AMI/Study guide/am1 study guide.sublime-workspace",
+		"/Users/tomas/Dropbox/new school/AMI/Study guide/am1 study guide.sublime-project",
+		"/Users/tomas/Dropbox/new school/Econometrics/Study Guide/econ_sg.sublime-project",
+		"/Users/tomas/Dropbox/new school/Econometrics/Assignment 5/2b.stan",
+		"/Users/tomas/Dropbox/new school/Econometrics/Assignment 5/2a.stan",
+		"/Users/tomas/Dropbox/new school/Econometrics/Assignment 5/Gonzalez_Assignment_5_Tomas.tex",
+		"/Users/tomas/Dropbox/new school/Econometrics/Assignment 5/1b.stan",
+		"/Users/tomas/Dropbox/new school/Econometrics/Assignment 4/1b2.stan",
+		"/Users/tomas/Dropbox/Coding/fivethirtyeight/nutrition-studies/p_hacking.R",
+		"/Users/tomas/Dropbox/Coding/fivethirtyeight/nutrition-studies/README.md",
+		"/Users/tomas/Dropbox/Coding/datahub/app.rb",
+		"/Users/tomas/Dropbox/Coding/datahub/config.ru",
+		"/Users/tomas/Dropbox/Coding/datahub/Dockerfile",
+		"/Users/tomas/Dropbox/new school/Econometrics/Assignment 4/1b3.stan",
+		"/Users/tomas/Dropbox/new school/Econometrics/Assignment 4/1b1.stan",
+		"/Users/tomas/Downloads/LearnBayes/R/mycontour.R",
+		"/Users/tomas/Dropbox/new school/Methodology/TEX/The idea of the Person.tex",
+		"/Users/tomas/Dropbox/new school/AMICROI/Study guide/amicro1_study_guide.sublime-project",
+		"/Users/tomas/Dropbox/new school/AMICROI/PS4/Problem Set 4/12.c.9.tex",
+		"/Users/tomas/Dropbox/Coding/datascrapper2/countrylist.py",
+		"/Users/tomas/Dropbox/Coding/datascrapper2/countries_data.py",
+		"/Users/tomas/Dropbox/new school/AMICROI/PS4/Problem Set 4/10.c.1.tex",
+		"/Users/tomas/Dropbox/Coding/charterflight/node_modules/babel-cli/node_modules/babel-register/node_modules/core-js/client/core.js",
+		"/Users/tomas/Dropbox/Coding/charterflight/package.json",
+		"/Users/tomas/Dropbox/Coding/charterflight/webpack.config.js",
+		"/Users/tomas/Dropbox/Coding/charterflight/rollup.config.js",
+		"/Users/tomas/Dropbox/new school/AMICROI/PS4/Problem Set 4/untitled",
+		"/Users/tomas/Dropbox/new school/AMICROI/PS4/Problem Set 4/22.c.1.tex",
+		"/Users/tomas/Dropbox/new school/AMICROI/PS4/Problem Set 4/22.e.1.tex",
+		"/Users/tomas/Dropbox/new school/AMICROI/PS4/Problem Set 4/problem_set4.sublime-project",
+		"/Users/tomas/Dropbox/new school/AMICROI/PS4/Problem Set 4/22.e.2.tex",
+		"/Users/tomas/Dropbox/new school/AMICROI/PS4/Problem Set 4/intro.tex",
+		"/Users/tomas/Dropbox/Coding/stats/Gemfile",
+		"/Users/tomas/Dropbox/Coding/stats/Gemfile.lock",
+		"/Users/tomas/Dropbox/Coding/stats/Capfile",
+		"/Users/tomas/Dropbox/new school/AMICROI/PS3/Problem Set 3/ps3.sublime-project",
+		"/Users/tomas/Dropbox/new school/AMICROI/PS3/Problem Set 3/9.b.4.tex",
+		"/Users/tomas/Dropbox/new school/AMICROI/PS3/Problem Set 3/9.b.1.tex",
+		"/Users/tomas/Dropbox/new school/AMICROI/PS3/Problem Set 3/7.e.1.tex",
+		"/Users/tomas/Dropbox/new school/AMICROI/PS3/Problem Set 3/Index.tex",
+		"/Users/tomas/Dropbox/new school/AMICROI/PS3/Problem Set 3/7.d.1.tex",
+		"/Users/tomas/Dropbox/new school/AMICROI/PS3/Problem Set 3/8.d.4.tex",
+		"/Users/tomas/Dropbox/new school/AMICROI/PS3/Problem Set 3/8.b.3.tex",
+		"/Users/tomas/Dropbox/new school/AMICROI/PS3/Problem Set 3/8.b.1.tex",
+		"/Users/tomas/Desktop/ssh",
+		"/Volumes/boot/ssh",
+		"/Volumes/boot/wpa_suplicant.conf",
+		"/Volumes/boot/cmdline.txt",
+		"/Volumes/boot/config.txt",
+		"/Users/tomas/Desktop/wpa_suplicant.conf",
+		"/Users/tomas/Dropbox/new school/AMICROI/Study guide/the_samuelsonian_programme.tex",
+		"/Users/tomas/Dropbox/new school/AMICROI/Study guide/chapter_3_classical_demand_theory.tex",
+		"/Users/tomas/Dropbox/new school/AMICROI/Study guide/chapter_5_production.tex",
+		"/Users/tomas/Dropbox/new school/AMICROI/Study guide/chapter_6_choice_under_uncertainty.tex",
+		"/Users/tomas/Dropbox/new school/AMICROI/Study guide/chapter_7_basic_elements_of_non_cooperative_games.tex",
+		"/Users/tomas/Dropbox/new school/AMICROI/Study guide/chapter_8_simultaneous_move_games.tex",
+		"/C/Users/Tomas.Gonzalez/Dropbox/new school/AMICROI/Study guide/Index.tex",
+		"/Users/tomas/Dropbox/new school/AMICROI/Study guide/Index.tex",
+		"/Users/tomas/Library/Mobile Documents/iCloud~com~omz-software~Pythonista3/Documents/datascrapper/data/__init__.py",
+		"/Users/tomas/Library/Mobile Documents/iCloud~com~omz-software~Pythonista3/Documents/datascrapper/data/Stats.py",
+		"/Users/tomas/Library/Mobile Documents/iCloud~com~omz-software~Pythonista3/Documents/datascrapper/countries.py",
+		"/Users/tomas/Library/Application Support/Sublime Text 3/Packages/User/AutoPep8.sublime-settings",
+		"/Users/tomas/Library/Application Support/Sublime Text 3/Packages/AutoPep8/AutoPep8.sublime-settings",
+		"/Users/tomas/Dropbox/new school/Methodology/TEX/library.bib",
+		"/Users/tomas/Dropbox/new school/AMI/Final/final.tex",
+		"/Users/tomas/Dropbox/new school/AMI/Fourth problem set/fourth_problem_set.tex",
+		"/Users/tomas/Dropbox/new school/AMI/Study guide/Index.tex",
+		"/Users/tomas/Dropbox/new school/AMI/Study guide/5_lr_kalecki_robinson_tradition.tex",
+		"/Users/tomas/Dropbox/new school/AMI/Study guide/8_lr_reconciling_demand_and_supply_in_the_theory_of_lr_growth.tex",
+		"/Users/tomas/Dropbox/inprogress/new school/AMI/Final/final.tex",
+		"/Users/tomas/Dropbox/inprogress/new school/AMI/Final/Index.tex",
+		"/Users/tomas/Dropbox/inprogress/new school/AMI/Study guide/6_lr_cap_utilization_harrodian_instability_plausability_of_neo-kaleckian_results.tex",
+		"/Users/tomas/Dropbox/inprogress/new school/AMI/Study guide/1_lr_competing_visions_of_the_long_run.tex",
+		"/C/Users/tomas/Dropbox/inprogress/new school/AMI/Study guide/5_lr_kalecki_robinson_tradition.tex",
+		"/C/Users/tomas/Dropbox/inprogress/new school/AMI/Study guide/3_lr_marxian_model.tex",
+		"/C/Users/tomas/Dropbox/inprogress/new school/AMI/Study guide/2_lr_neoclassical_growth_theory.tex",
+		"/C/Users/tomas/Dropbox/inprogress/new school/AMI/Study guide/4_lr_harrods_macrodynamics.tex",
+		"/C/Users/tomas/Dropbox/inprogress/new school/AMI/Study guide/6_lr_cap_utilization_harrodian_instability_plausability_of_neo-kaleckian_results.tex",
+		"/Users/tomas/Dropbox/inprogress/new school/AMI/Fourth problem set/fourth_problem_set.tex",
+		"/C/Users/Tomas.Gonzalez/Dropbox/inprogress/new school/AMI/Study guide/1_lr_competing_visions_of_the_long_run.tex",
+		"/C/Users/Tomas.Gonzalez/Dropbox/inprogress/new school/AMI/Study guide/Index.tex",
+		"/C/Users/Tomas.Gonzalez/Dropbox/inprogress/new school/AMI/Study guide/5_lr_kalecki_robinson_tradition.tex",
+		"/C/Users/Tomas.Gonzalez/Dropbox/inprogress/new school/AMI/Study guide/3_lr_marxian_model.tex",
+		"/C/Users/Tomas.Gonzalez/Dropbox/inprogress/new school/AMI/Study guide/4_lr_harrods_macrodynamics.tex",
+		"/C/Users/Tomas.Gonzalez/Dropbox/inprogress/new school/AMI/Study guide/6_lr_cap_utilization_harrodian_instability_plausability_of_neo-kaleckian_results.tex",
+		"/C/Users/Tomas.Gonzalez/Dropbox/inprogress/new school/AMI/Study guide/7_lr_modern_kaldorian_growth_theory.tex",
+		"/C/Users/Tomas.Gonzalez/Dropbox/inprogress/new school/AMI/Study guide/8_lr_reconciling_demand_and_supply_in_the_theory_of_lr_growth.tex",
+		"/C/Users/Tomas.Gonzalez/Dropbox/inprogress/new school/AMI/Study guide/2_lr_neoclassical_growth_theory.tex",
+		"/C/Users/Tomas.Gonzalez/Dropbox/inprogress/new school/AMI/Study guide/lr_modern_kaldorian_growth_theory.tex",
+		"/C/Users/Tomas.Gonzalez/Dropbox/inprogress/new school/AMI/Study guide/lr_kalecki_robinson_tradition.tex",
+		"/C/Users/Tomas.Gonzalez/Dropbox/inprogress/new school/AMI/Study guide/lr_harrods_macrodynamics.tex",
+		"/C/Users/Tomas.Gonzalez/Dropbox/inprogress/new school/AMI/Study guide/lr_cap_utilization_harrodian_instability_plausability_of_neo-kaleckian_results.tex",
+		"/C/Users/Tomas.Gonzalez/Dropbox/inprogress/new school/AMI/Study guide/am1.pdf",
+		"/C/Users/Tomas.Gonzalez/Dropbox/inprogress/new school/AMI/Study guide/lr_marxian_model.tex",
+		"/C/Users/Tomas.Gonzalez/Dropbox/inprogress/new school/AMI/Study guide/lr_reconciling_demand_and_supply_in_the_theory_of_lr_growth.tex",
+		"/C/Users/tomas/Dropbox/inprogress/new school/AMI/Study guide/lr_neoclassical_growth_theory.tex",
+		"/C/Users/tomas/Dropbox/inprogress/new school/AMI/Study guide/lr_marxian_model.tex",
+		"/C/Users/tomas/Dropbox/inprogress/new school/AMI/Study guide/lr_competing_visions_of_the_long_run.tex",
+		"/C/Users/tomas/Dropbox/inprogress/new school/AMI/Study guide/Index.tex",
+		"/C/Users/Tomas.Gonzalez/Dropbox/inprogress/new school/AMI/Study guide/lr_neoclassical_growth_theory.tex",
+		"/C/Users/Tomas.Gonzalez/Dropbox/inprogress/new school/AMI/Study guide/library.bib",
+		"/C/Users/Tomas.Gonzalez/Dropbox/inprogress/new school/AMI/Study guide/am1_bibliography.bib",
+		"/C/Users/Tomas.Gonzalez/Dropbox/inprogress/new school/AMI/Study guide/am1 study guide.sublime-project",
+		"/C/Users/Tomas.Gonzalez/Dropbox/inprogress/new school/AMI/Study guide/lr_introduction.tex",
+		"/C/Users/Tomas.Gonzalez/Dropbox/inprogress/new school/AMI/Study guide/am1.tex",
+		"/C/Users/Tomas.Gonzalez/Dropbox/inprogress/new school/AMI/Study guide/lr_classical_newoclassical_keynesian.tex",
+		"/C/Users/Tomas.Gonzalez/Dropbox/inprogress/new school/AMI/Study guide/Long_run.tex",
+		"/C/Users/Tomas.Gonzalez/Dropbox/inprogress/new school/AMI/Study guide/lr_neoclassical_growth_theory"
+	],
+	"find":
+	{
+		"height": 54.0
+	},
+	"find_in_files":
+	{
+		"height": 134.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"head",
+			"HEAD"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 5,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "/Users/tomas/OneDrive - United Nations/charterflight/src/index.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 291,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								142,
+								142
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/Users/tomas/OneDrive - United Nations/charterflight/package.json",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 754,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								167,
+								167
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/zzz A File Icon zzz/aliases/JSON (NPM).sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/Users/tomas/OneDrive - United Nations/charterflight/.babelrc",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 38,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								35,
+								35
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/zzz A File Icon zzz/aliases/JSON (Babel).sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "/Users/tomas/OneDrive - United Nations/charterflight/webpack.config.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1525,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1436,
+								1436
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/zzz A File Icon zzz/aliases/JavaScript (Webpack).sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 616.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "/Users/tomas/OneDrive - United Nations/charterflight/src/linechart.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 9234,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								200,
+								200
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": ".babelrc",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 104,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/zzz A File Icon zzz/aliases/JSON (Babel).sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 30.0
+	},
+	"input":
+	{
+		"height": 51.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.latextools":
+	{
+		"height": 132.0
+	},
+	"pinned_build_system": "",
+	"project": "charterflight.sublime-project",
+	"replace":
+	{
+		"height": 56.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"chapter_8_simultaneous_move_games.tex"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"C:\\Users\\Tomas.Gonzalez\\Dropbox\\Coding\\datascrapper2\\datascrapper.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": false,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 220.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
