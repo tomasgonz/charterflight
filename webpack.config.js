@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 var libraryName = 'charterflight';
 var outputFile = libraryName + '.js';
 
+
 module.exports = {
 	mode: "development", // "production" | "development" | "none",
   	// Chosen mode tells webpack to use its built-in optimizations accordingly.
@@ -14,7 +15,8 @@ module.exports = {
 			path: path.resolve(__dirname, 'dist'),
 			library: libraryName,
 			libraryTarget: 'umd',
-			umdNamedDefine: true
+			umdNamedDefine: true,
+			globalObject: `(typeof self !== 'undefined' ? self : this)`
 	  },
 	  module: {
 		rules: [{
