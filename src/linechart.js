@@ -9,11 +9,7 @@ import LineChartStyles from "./linechart.styles";
 import * as utils from "./utils";
 
 export default class LineChart {
-
-  Width = 200;
-  Height = 200;
-  svg = null;
-
+  
   constructor(height=400, width=400)
   {
     this.el = null;

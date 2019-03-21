@@ -1,4 +1,4 @@
-var CharterFlight =
+var charterflight =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -29147,8 +29147,6 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 
 
 
@@ -29164,12 +29162,6 @@ function () {
     var width = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 400;
 
     _classCallCheck(this, LineChart);
-
-    _defineProperty(this, "Width", 200);
-
-    _defineProperty(this, "Height", 200);
-
-    _defineProperty(this, "svg", null);
 
     this.el = null;
     this.Width = width;
