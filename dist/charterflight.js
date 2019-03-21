@@ -29115,12 +29115,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
- //import BarChart from './barchart';
 
- //export {default as BarChart} from './barchart;';
-// Expose the modules to the window object
-//window.LineChart = LineChart;
-//window.barchart = BarChart;
+
+window.LineChart = _linechart__WEBPACK_IMPORTED_MODULE_0__["default"]; //window.barchart = BarChart;
 
 /***/ }),
 
