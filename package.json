@@ -14,14 +14,13 @@
   "description": "An implementation of the wonderful d3 library to generate charts quickly.",
   "module": "src/index.js",
   "main": "dist/charterflight.js",
-  "modules.root": "charterflight",
   "dependencies": {
-    "@babel/plugin-proposal-class-properties": "^7.2.3",
-    "@babel/polyfill": "^7.0.0",
+    "@babel/plugin-proposal-class-properties": "^7.4.0",
+    "@babel/polyfill": "^7.4.0",
     "babel-cli": "^6.26.0",
     "babel-plugin-add-module-exports": "^1.0.0",
     "babel-polyfill": "^6",
-    "d3": "^5",
+    "d3": "^5.9.2",
     "express": "^4.16.4",
     "npm": "^5"
   },
