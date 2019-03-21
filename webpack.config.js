@@ -6,7 +6,7 @@ var outputFile = libraryName + '.js';
 
 
 module.exports = {
-	mode: "production", // "production" | "development" | "none",
+	mode: "development", // "production" | "development" | "none",
   	// Chosen mode tells webpack to use its built-in optimizations accordingly.
 		entry: './src/index.js',
 		devtool: 'source-map',
@@ -41,7 +41,8 @@ module.exports = {
 			  commonjs: 'lodash',
 			  commonjs2: 'lodash',
 			  amd: 'lodash',
-			  root: '_'
+			  root: '_',
+			  var: '_'
 			}
 		  },
   entry:
