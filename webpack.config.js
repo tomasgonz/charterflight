@@ -1,6 +1,6 @@
 var webpack = require('webpack');
 var path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+//const HtmlWebpackPlugin = require('html-webpack-plugin');
 var libraryName = 'charterflight';
 var outputFile = libraryName + '.js';
 
@@ -33,9 +33,7 @@ module.exports = {
 		resolve: {
 			extensions: ['.js']
 		  },
-		  plugins: [
-			new HtmlWebpackPlugin()
-		],
+		  plugins: [],
 		externals: {
 			lodash: {
 			  commonjs: 'lodash',
