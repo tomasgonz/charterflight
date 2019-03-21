@@ -1,6 +1,5 @@
 var webpack = require('webpack');
 var path = require('path');
-//const HtmlWebpackPlugin = require('html-webpack-plugin');
 var libraryName = 'charterflight';
 var outputFile = libraryName + '.js';
 
@@ -43,12 +42,11 @@ module.exports = {
 			  var: '_'
 			}
 		  },
-  entry:
-    './src/index.js',
+  entry:'./src/index.js',
   output: {
     filename: 'charterflight.js',
     path: path.resolve(__dirname, 'dist'),
-    library: 'CharterFlight',
+    library: 'charterflight',
     umdNamedDefine: true
   },
     module: {
