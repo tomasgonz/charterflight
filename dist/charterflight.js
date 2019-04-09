@@ -29243,8 +29243,9 @@ function () {
 
       if (_self.Title != "") {
         d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).append("div").attr("id", "Title").text(_self.Title).style("font", _utils__WEBPACK_IMPORTED_MODULE_5__["scale_font_size"](_self.Width + _self.Height) + " sans-serif").style("text-align", "center");
-      } // Check that the #Chart element exists and, on the contrary, create it
+      }
 
+      _self.el = d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select("#Chart"); // Check that the #Chart element exists and, on the contrary, create it
 
       if (d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select("#Chart").empty()) {
         _self.DivChart = d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).append("div").attr("id", "Chart").style("margin", "0.1em 0.1em 0 0.1em");

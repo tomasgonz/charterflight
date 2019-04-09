@@ -109,6 +109,8 @@ export default class LineChart {
           .style("text-align", "center");
       }
 
+      _self.el = d3.select(_self.el).select("#Chart");
+      
       // Check that the #Chart element exists and, on the contrary, create it
       if (d3.select(_self.el).select("#Chart").empty())
       {
