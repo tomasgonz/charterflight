@@ -46,6 +46,10 @@ export default class LineChart {
     this.Data = null;
 
     this.ShowLegend = true;
+
+    this.entityField = 'entity';
+    this.pivotField = 'date';
+    this.valueField = 'value';
   }
 
   Draw()
@@ -59,11 +63,19 @@ export default class LineChart {
     var parseTime = d3.timeParse("%Y");
 
     // Coerce the data into the right format
-    var data = _self.Data.map(({entity, date, value}) => ({
-      entity,
-      date: parseTime(date),
-      value: +value
-    }), this);
+
+    var data = [];
+
+    console.log(_self.Data.length);
+
+    for (let i = 0; i < _self.Data.length; i++)
+    {
+      let obj = {};
+      obj[_self.entityField] = _self.Data[i][_self.entityField];
+      obj[_self.pivotField] = parseTime(_self.Data[i][_self.pivotField]);
+      obj[_self.valueField] = parseFloat(_self.Data[i][_self.valueField]);
+      data.push(obj);
+    }
 
     // then we need to nest the data on entity since we want to only draw one
     // line per entity
