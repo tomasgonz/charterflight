@@ -7,12 +7,8 @@ class Blurb {
 
   Draw()
   {
-    //var currClass = d3.select(this).attr("class");
-    //d3.select(this).attr("class", currClass + " current");
     var entityCode = this.Data.key;
-    /*var entityVals = startEnd[entityCode];
-    var percentChange = 100 * (entityVals['endVal'] - entityVals['startVal']) / entityVals['startVal'];*/
-
+    
     /* Put years in array to calculate max and min*/
     var years = [];
     var values = [];

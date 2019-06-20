@@ -29187,7 +29187,7 @@ function () {
 
     this.Data = null;
     this.ShowLegend = true;
-    this.entityField = 'entity';
+    this.entityField = 'country';
     this.pivotField = 'date';
     this.valueField = 'value';
   }
@@ -29203,7 +29203,6 @@ function () {
       var parseTime = d3__WEBPACK_IMPORTED_MODULE_2__["timeParse"]("%Y"); // Coerce the data into the right format
 
       var data = [];
-      console.log(_self.Data.length);
 
       for (var i = 0; i < _self.Data.length; i++) {
         var obj = {};
@@ -29215,15 +29214,14 @@ function () {
       // line per entity
 
 
-      data = d3__WEBPACK_IMPORTED_MODULE_2__["nest"]().key(function (_ref) {
-        var entity = _ref.entity;
-        return entity;
+      data = d3__WEBPACK_IMPORTED_MODULE_2__["nest"]().key(function (d) {
+        return d[_self.entityField];
       }).entries(data); // varNames and color.domain are important to link colors of lines
       // to the legend
 
       var varNames = [];
-      data.forEach(function (_ref2) {
-        var key = _ref2.key;
+      data.forEach(function (_ref) {
+        var key = _ref.key;
         varNames.push(key);
       });
       var x = d3__WEBPACK_IMPORTED_MODULE_2__["scaleTime"]().range([0, width]);
@@ -29231,16 +29229,16 @@ function () {
       var color = d3__WEBPACK_IMPORTED_MODULE_2__["scaleOrdinal"](d3__WEBPACK_IMPORTED_MODULE_2__["schemeAccent"]);
       var xAxis = d3__WEBPACK_IMPORTED_MODULE_2__["axisBottom"](x);
       var yAxis = d3__WEBPACK_IMPORTED_MODULE_2__["axisLeft"](y);
-      var line = d3__WEBPACK_IMPORTED_MODULE_2__["line"]().curve(this.curveType).x(function (_ref3) {
-        var date = _ref3.date;
+      var line = d3__WEBPACK_IMPORTED_MODULE_2__["line"]().curve(this.curveType).x(function (_ref2) {
+        var date = _ref2.date;
         return x(date);
-      }).y(function (_ref4) {
-        var value = _ref4.value;
+      }).y(function (_ref3) {
+        var value = _ref3.value;
         return y(value);
-      }).defined(function (_ref5) {
-        var value = _ref5.value;
+      }).defined(function (_ref4) {
+        var value = _ref4.value;
         return value;
-      }); // Select the elemnt based on the chartplaceholder property
+      }); // Select the element based on the chartplaceholder property
 
       _self.el = document.getElementById(_self.ChartPlaceHolder); // Draw title of the chart
 
@@ -29260,34 +29258,34 @@ function () {
       d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select("#Chart").select("svg").remove();
       var svg = d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select("#Chart").append("svg").style("fill", "none").attr("width", width + _self.Margin.left + _self.Margin.right).attr("height", height + _self.Margin.top + _self.Margin.bottom).append("g").attr("transform", 'translate(' + _self.Margin.left + ',' + _self.Margin.top + ')');
       color.domain(d3__WEBPACK_IMPORTED_MODULE_2__["keys"](data[0]).filter(function (key) {
-        return key == "entity";
+        return key == _self.entityField;
       }));
       color.domain(varNames);
-      var maxDate = d3__WEBPACK_IMPORTED_MODULE_2__["max"](data, function (_ref6) {
-        var values = _ref6.values;
-        return d3__WEBPACK_IMPORTED_MODULE_2__["max"](values, function (_ref7) {
-          var date = _ref7.date;
+      var maxDate = d3__WEBPACK_IMPORTED_MODULE_2__["max"](data, function (_ref5) {
+        var values = _ref5.values;
+        return d3__WEBPACK_IMPORTED_MODULE_2__["max"](values, function (_ref6) {
+          var date = _ref6.date;
           return date;
         });
       });
-      var minDate = d3__WEBPACK_IMPORTED_MODULE_2__["min"](data, function (_ref8) {
-        var values = _ref8.values;
-        return d3__WEBPACK_IMPORTED_MODULE_2__["min"](values, function (_ref9) {
-          var date = _ref9.date;
+      var minDate = d3__WEBPACK_IMPORTED_MODULE_2__["min"](data, function (_ref7) {
+        var values = _ref7.values;
+        return d3__WEBPACK_IMPORTED_MODULE_2__["min"](values, function (_ref8) {
+          var date = _ref8.date;
           return date;
         });
       });
-      var maxValue = d3__WEBPACK_IMPORTED_MODULE_2__["max"](data, function (_ref10) {
-        var values = _ref10.values;
-        return d3__WEBPACK_IMPORTED_MODULE_2__["max"](values, function (_ref11) {
-          var value = _ref11.value;
+      var maxValue = d3__WEBPACK_IMPORTED_MODULE_2__["max"](data, function (_ref9) {
+        var values = _ref9.values;
+        return d3__WEBPACK_IMPORTED_MODULE_2__["max"](values, function (_ref10) {
+          var value = _ref10.value;
           return value;
         });
       });
-      var minValue = d3__WEBPACK_IMPORTED_MODULE_2__["min"](data, function (_ref12) {
-        var values = _ref12.values;
-        return d3__WEBPACK_IMPORTED_MODULE_2__["min"](values, function (_ref13) {
-          var value = _ref13.value;
+      var minValue = d3__WEBPACK_IMPORTED_MODULE_2__["min"](data, function (_ref11) {
+        var values = _ref11.values;
+        return d3__WEBPACK_IMPORTED_MODULE_2__["min"](values, function (_ref12) {
+          var value = _ref12.value;
           return value;
         });
       });
@@ -29296,8 +29294,8 @@ function () {
       y.domain([minValue, maxValue + y_padding]);
       svg.append("g").attr("class", "x axis").style("font", _self.Style.Axis.x.font).attr("transform", "translate(0,".concat(height, ")")).call(xAxis);
       svg.append("g").attr("class", " axis").style("font", _self.Style.Axis.y.font).call(yAxis);
-      var entities = svg.selectAll(".entity").data(data, function (_ref14) {
-        var key = _ref14.key;
+      var entities = svg.selectAll(".entity").data(data, function (_ref13) {
+        var key = _ref13.key;
         return key;
       }).enter().append("g").attr("class", "entity"); // DIV que funciona como tooltip
 
@@ -29319,49 +29317,50 @@ function () {
           return "translate(0," + i * 20 + ")";
         }).style("font", _utils__WEBPACK_IMPORTED_MODULE_5__["scale_font_size"](_self.Width) + " sans-serif").call(l.Legend);
         return d.key.sanitize();
-      }).attr("d", function (_ref15) {
-        var values = _ref15.values;
+      }).attr("d", function (_ref14) {
+        var values = _ref14.values;
         return line(values);
       }).on("mouseover", function (d) {
         d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select("#" + d.key.sanitize()).style("stroke-width", _self.Style.StrokeWidth * 2);
         d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select('#legend-label-' + d.key.sanitize()).style("color", "#fff").style("background-color", color(d.key));
         d3__WEBPACK_IMPORTED_MODULE_2__["selectAll"]("#circle-" + d.key.sanitize()).attr("r", 6);
-      }).on("mouseout", function (_ref16) {
-        var key = _ref16.key;
+      }).on("mouseout", function (_ref15) {
+        var key = _ref15.key;
         d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select("#" + key.sanitize()).style("stroke-width", _self.Style.StrokeWidth);
         d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select('#legend-label-' + key.sanitize()).style("color", color(key)).style("border-color", color(key)).style("background-color", "#fff");
         d3__WEBPACK_IMPORTED_MODULE_2__["selectAll"]("#circle-" + key.sanitize()).attr("r", 3);
-      }).style("stroke", function (_ref17) {
-        var key = _ref17.key;
+      }).style("stroke", function (_ref16) {
+        var key = _ref16.key;
         return color(key);
       }).style("border-width", _self.Style.StrokeWidth); // Display the tooltip when we hover over data points
 
       if (_self.Style.ShowDataPoint == true) {
         // Append dots to display data points
-        entities.append("g").selectAll("circle").data(function (_ref18) {
-          var values = _ref18.values;
+        entities.append("g").selectAll("circle").data(function (_ref17) {
+          var values = _ref17.values;
           return values;
-        }).enter().append(_self.Style.DataPoint.ShapeDataPoint).attr("r", _self.Style.DataPoint.SizeDataPoint).attr("cx", function (_ref19) {
-          var date = _ref19.date;
+        }).enter().append(_self.Style.DataPoint.ShapeDataPoint).attr("r", _self.Style.DataPoint.SizeDataPoint).attr("cx", function (_ref18) {
+          var date = _ref18.date;
           return x(date);
-        }).attr("cy", function (_ref20) {
-          var value = _ref20.value;
+        }).attr("cy", function (_ref19) {
+          var value = _ref19.value;
           return y(value);
-        }).attr("id", function (_ref21) {
-          var entity = _ref21.entity;
+        }).attr("id", function (_ref20) {
+          var entity = _ref20.entity;
           return "circle-" + entity;
-        }).style("stroke", function (_ref22) {
-          var entity = _ref22.entity;
+        }).style("stroke", function (_ref21) {
+          var entity = _ref21.entity;
           return color(entity);
-        }).style("stroke-width", _self.Style.DataPoint.StrokeWidth).style("fill", function (_ref23) {
-          var entity = _ref23.entity;
+        }).style("stroke-width", _self.Style.DataPoint.StrokeWidth).style("fill", function (_ref22) {
+          var entity = _ref22.entity;
           return _utils__WEBPACK_IMPORTED_MODULE_5__["shade_color"](color(entity), 0.4);
-        }).on("mouseover", function (_ref24) {
-          var entity = _ref24.entity,
-              date = _ref24.date,
-              value = _ref24.value;
+        }).on("mouseover", function (_ref23) {
+          var entity = _ref23.entity,
+              date = _ref23.date,
+              value = _ref23.value;
           div.style("left", "".concat(d3__WEBPACK_IMPORTED_MODULE_2__["event"].pageX, "px")).style("top", "".concat(d3__WEBPACK_IMPORTED_MODULE_2__["event"].pageY, "px")).style("border", _self.Style.ToolTip.border).style("font", _self.Style.ToolTip.font).style("border-radius", _self.Style.ToolTip.border_radius).style("box-shadow", _self.Style.ToolTip.box_shadow).style("padding", _self.Style.ToolTip.padding).style("background-color", _self.Style.ToolTip.background_color).style("position", _self.Style.ToolTip.position);
           div.transition().duration(500).style("opacity", 500);
+          console.log(entity);
           div.html("<p>Entity: ".concat(entity, "<br />Date: ").concat(date.getFullYear(), "<br/>Value: ").concat(value, "</p>"));
           d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select("#" + entity.sanitize()).style("stroke-width", _self.Style.StrokeWidth * 2);
           d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select('#legend-label-' + entity.sanitize()).style("color", "#fff").style("background-color", color(entity));

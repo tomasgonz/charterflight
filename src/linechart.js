@@ -47,7 +47,7 @@ export default class LineChart {
 
     this.ShowLegend = true;
 
-    this.entityField = 'entity';
+    this.entityField = 'country';
     this.pivotField = 'date';
     this.valueField = 'value';
   }
@@ -66,8 +66,6 @@ export default class LineChart {
 
     var data = [];
 
-    console.log(_self.Data.length);
-
     for (let i = 0; i < _self.Data.length; i++)
     {
       let obj = {};
@@ -79,7 +77,7 @@ export default class LineChart {
 
     // then we need to nest the data on entity since we want to only draw one
     // line per entity
-    data = d3.nest().key(({entity}) => entity).entries(data);
+    data = d3.nest().key( function(d) { return d[_self.entityField]; }).entries(data);
 
     // varNames and color.domain are important to link colors of lines
     // to the legend
@@ -107,7 +105,7 @@ export default class LineChart {
       .y(({value}) => y(value))
       .defined(({value}) => value);
 
-      // Select the elemnt based on the chartplaceholder property
+      // Select the element based on the chartplaceholder property
       _self.el = document.getElementById(_self.ChartPlaceHolder);
 
       // Draw title of the chart
@@ -149,7 +147,7 @@ export default class LineChart {
       .append("g")
       .attr("transform", 'translate('+ _self.Margin.left + ',' + _self.Margin.top + ')');
 
-    color.domain(d3.keys(data[0]).filter(key => key == "entity"));
+    color.domain(d3.keys(data[0]).filter(key => key == _self.entityField));
 
     color.domain(varNames);
 
@@ -291,6 +289,8 @@ export default class LineChart {
         .style("position",  _self.Style.ToolTip.position);
 
         div.transition().duration(500).style("opacity", 500);
+
+        console.log(entity);
 
         div.html(`<p>Entity: ${entity}<br />Date: ${date.getFullYear()}<br/>Value: ${value}</p>`);
 
