@@ -29058,13 +29058,11 @@ function getMaxOfArray(numArray) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return D3Legend; });
 /* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./utils */ "./src/utils.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
 
 
 
@@ -29079,7 +29077,7 @@ function () {
     key: "Legend",
     value: function Legend(gg) {
       gg.each(function (g) {
-        var g = d3__WEBPACK_IMPORTED_MODULE_0__["select"](this),
+        var g = d3__WEBPACK_IMPORTED_MODULE_0__["select"](this.LegendPlaceHolder),
             items = {},
             lb = g.selectAll(".legend-box").data([true]),
             li = g.selectAll(".legend-items").data([true]);
@@ -29195,6 +29193,8 @@ function () {
   _createClass(LineChart, [{
     key: "Draw",
     value: function Draw() {
+      var _this = this;
+
       // Necessary to keep a reference within an event handler
       var _self = this;
 
@@ -29313,6 +29313,7 @@ function () {
       }).attr("class", "line").attr("id", function (d) {
         // This function writes the legend
         var l = new _d3legend__WEBPACK_IMPORTED_MODULE_3__["default"]();
+        l.LegendPlaceHolder = _this.LegendPlacdeHolder;
         var legend = d3__WEBPACK_IMPORTED_MODULE_2__["select"]("#Legend").append("g").attr("class", "legend").attr("data-legend-label", d.key.sanitize()).attr("font-legend-size", _utils__WEBPACK_IMPORTED_MODULE_5__["scale_font_size"](_self.Width)).attr("data-legend-label-color", color(d.key)).attr("transform", function (d, i) {
           return "translate(0," + i * 20 + ")";
         }).style("font", _utils__WEBPACK_IMPORTED_MODULE_5__["scale_font_size"](_self.Width) + " sans-serif").call(l.Legend);
@@ -29360,7 +29361,6 @@ function () {
               value = _ref23.value;
           div.style("left", "".concat(d3__WEBPACK_IMPORTED_MODULE_2__["event"].pageX, "px")).style("top", "".concat(d3__WEBPACK_IMPORTED_MODULE_2__["event"].pageY, "px")).style("border", _self.Style.ToolTip.border).style("font", _self.Style.ToolTip.font).style("border-radius", _self.Style.ToolTip.border_radius).style("box-shadow", _self.Style.ToolTip.box_shadow).style("padding", _self.Style.ToolTip.padding).style("background-color", _self.Style.ToolTip.background_color).style("position", _self.Style.ToolTip.position);
           div.transition().duration(500).style("opacity", 500);
-          console.log(entity);
           div.html("<p>Entity: ".concat(entity, "<br />Date: ").concat(date.getFullYear(), "<br/>Value: ").concat(value, "</p>"));
           d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select("#" + entity.sanitize()).style("stroke-width", _self.Style.StrokeWidth * 2);
           d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select('#legend-label-' + entity.sanitize()).style("color", "#fff").style("background-color", color(entity));
