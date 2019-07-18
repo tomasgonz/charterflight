@@ -29058,13 +29058,11 @@ function getMaxOfArray(numArray) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return D3Legend; });
 /* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./utils */ "./src/utils.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
 
 
 
@@ -29079,14 +29077,14 @@ function () {
     key: "Legend",
     value: function Legend(gg) {
       gg.each(function (g) {
-        var g = d3__WEBPACK_IMPORTED_MODULE_0__["select"](this),
+        var h = d3__WEBPACK_IMPORTED_MODULE_0__["select"](this),
             items = {},
-            lb = g.selectAll(".legend-box").data([true]),
-            li = g.selectAll(".legend-items").data([true]);
+            lb = h.selectAll(".legend-box").data([true]),
+            li = h.selectAll(".legend-items").data([true]);
         lb.enter().append("rect").classed("legend-box", true);
         li.enter().append("g").classed("legend-items", true);
 
-        var _legendItem = lb.enter().append("div").attr("id", "legend-label-" + d3__WEBPACK_IMPORTED_MODULE_0__["select"](this).attr("data-legend-label")).style("float", "left").style("position", "relative").style("margin", "0.3em").style("padding", "0.2em").style("border", "1px solid").style("font", d3__WEBPACK_IMPORTED_MODULE_0__["select"](this).attr("font-legend-size") + " sans-serif").style("border-radius", "8px").style("color", d3__WEBPACK_IMPORTED_MODULE_0__["select"](this).attr("data-legend-label-color"));
+        var _legendItem = lb.enter().append("div").style("float", "left").style("position", "relative").style("margin", "0.3em").style("padding", "0.2em").style("border", "1px solid").style("font", d3__WEBPACK_IMPORTED_MODULE_0__["select"](this).attr("font-legend-size") + " sans-serif").style("border-radius", "8px").style("color", d3__WEBPACK_IMPORTED_MODULE_0__["select"](this).attr("data-legend-label-color"));
 
         _legendItem.append("text").text(d3__WEBPACK_IMPORTED_MODULE_0__["select"](this).attr("data-legend-label"));
       });
@@ -29196,8 +29194,10 @@ function () {
     key: "Draw",
     value: function Draw() {
       // Necessary to keep a reference within an event handler
-      var _self = this;
+      var _self = this; // Create ID for the legend
 
+
+      _self.LegendPlaceHolder = this.ChartPlaceHolder + "-" + "Legend";
       var width = _self.Width - _self.Margin.left - _self.Margin.right;
       var height = _self.Height - _self.Margin.top - _self.Margin.bottom;
       var parseTime = d3__WEBPACK_IMPORTED_MODULE_2__["timeParse"]("%Y"); // Coerce the data into the right format
@@ -29247,16 +29247,16 @@ function () {
       } // Check that the #Chart element exists and, on the contrary, create it
 
 
-      if (d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select("#Chart").empty()) {
-        _self.DivChart = d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).append("div").attr("id", "Chart").style("margin", "0.1em 0.1em 0 0.1em");
-        _self.DivLegend = d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).append("div").attr("id", "Legend").style("float", "left").style("width", _self.Width).style("margin", "0 0.1em 0.1em 3em");
+      if (d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select("#Chart-" + this.ChartPlaceHolder).empty()) {
+        _self.DivChart = d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).append("div").attr("id", "Chart-" + this.ChartPlaceHolder).style("margin", "0.1em 0.1em 0 0.1em");
+        _self.DivLegend = d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).append("div").attr("id", this.LegendPlaceHolder).style("float", "left").style("width", _self.Width).style("margin", "0 0.1em 0.1em 3em");
       } // First we have to remove svg
       // in case we are redrawing
       // the chart.
 
 
-      d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select("#Chart").select("svg").remove();
-      var svg = d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select("#Chart").append("svg").style("fill", "none").attr("width", width + _self.Margin.left + _self.Margin.right).attr("height", height + _self.Margin.top + _self.Margin.bottom).append("g").attr("transform", 'translate(' + _self.Margin.left + ',' + _self.Margin.top + ')');
+      d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select("#Chart-" + this.ChartPlaceHolder).select("svg").remove();
+      var svg = d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select("#Chart-" + this.ChartPlaceHolder).append("svg").style("fill", "none").attr("width", width + _self.Margin.left + _self.Margin.right).attr("height", height + _self.Margin.top + _self.Margin.bottom).append("g").attr("transform", 'translate(' + _self.Margin.left + ',' + _self.Margin.top + ')');
       color.domain(d3__WEBPACK_IMPORTED_MODULE_2__["keys"](data[0]).filter(function (key) {
         return key == _self.entityField;
       }));
@@ -29313,22 +29313,23 @@ function () {
       }).attr("class", "line").attr("id", function (d) {
         // This function writes the legend
         var l = new _d3legend__WEBPACK_IMPORTED_MODULE_3__["default"]();
-        var legend = d3__WEBPACK_IMPORTED_MODULE_2__["select"]("#Legend").append("g").attr("class", "legend").attr("data-legend-label", d.key.sanitize()).attr("font-legend-size", _utils__WEBPACK_IMPORTED_MODULE_5__["scale_font_size"](_self.Width)).attr("data-legend-label-color", color(d.key)).attr("transform", function (d, i) {
+        l.LegendPlaceHolder = _self.LegendPlaceHolder;
+        var legend = d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).append("g").attr("id", "legend-label" + _self.LegendPlaceHolder + "-" + d.key.sanitize()).attr("class", "legend").attr("data-legend-label", d.key.sanitize()).attr("font-legend-size", _utils__WEBPACK_IMPORTED_MODULE_5__["scale_font_size"](_self.Width)).attr("data-legend-label-color", color(d.key)).attr("transform", function (d, i) {
           return "translate(0," + i * 20 + ")";
         }).style("font", _utils__WEBPACK_IMPORTED_MODULE_5__["scale_font_size"](_self.Width) + " sans-serif").call(l.Legend);
-        return d.key.sanitize();
+        return "legend-line-" + _self.LegendPlaceHolder + "-" + d.key.sanitize();
       }).attr("d", function (_ref14) {
         var values = _ref14.values;
         return line(values);
       }).on("mouseover", function (d) {
-        d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select("#" + d.key.sanitize()).style("stroke-width", _self.Style.StrokeWidth * 2);
-        d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select('#legend-label-' + d.key.sanitize()).style("color", "#fff").style("background-color", color(d.key));
-        d3__WEBPACK_IMPORTED_MODULE_2__["selectAll"]("#circle-" + d.key.sanitize()).attr("r", 6);
+        d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select("#legend-line-" + _self.LegendPlaceHolder + "-" + d.key.sanitize()).style("stroke-width", _self.Style.StrokeWidth * 2);
+        d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select('#legend-label-' + _self.LegendPlaceHolder + "-" + d.key.sanitize()).style("color", "#fff").style("background-color", color(d.key));
+        d3__WEBPACK_IMPORTED_MODULE_2__["selectAll"]("#circle-" + _self.LegendPlaceHolder + "-" + d.key.sanitize()).attr("r", 6);
       }).on("mouseout", function (_ref15) {
         var key = _ref15.key;
-        d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select("#" + key.sanitize()).style("stroke-width", _self.Style.StrokeWidth);
-        d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select('#legend-label-' + key.sanitize()).style("color", color(key)).style("border-color", color(key)).style("background-color", "#fff");
-        d3__WEBPACK_IMPORTED_MODULE_2__["selectAll"]("#circle-" + key.sanitize()).attr("r", 3);
+        d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select("#legend-line-" + _self.LegendPlaceHolder + "-" + key.sanitize()).style("stroke-width", _self.Style.StrokeWidth);
+        d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select('#legend-label-' + _self.LegendPlaceHolder + "-" + key.sanitize()).style("color", color(key)).style("border-color", color(key)).style("background-color", "#fff");
+        d3__WEBPACK_IMPORTED_MODULE_2__["selectAll"]("#circle-" + _self.LegendPlaceHolder + "-" + key.sanitize()).attr("r", 3);
       }).style("stroke", function (_ref16) {
         var key = _ref16.key;
         return color(key);
@@ -29347,7 +29348,7 @@ function () {
           return y(value);
         }).attr("id", function (_ref20) {
           var entity = _ref20.entity;
-          return "circle-" + entity;
+          return "circle-" + _self.LegendPlaceHolder + "-" + entity;
         }).style("stroke", function (_ref21) {
           var entity = _ref21.entity;
           return color(entity);
@@ -29360,16 +29361,15 @@ function () {
               value = _ref23.value;
           div.style("left", "".concat(d3__WEBPACK_IMPORTED_MODULE_2__["event"].pageX, "px")).style("top", "".concat(d3__WEBPACK_IMPORTED_MODULE_2__["event"].pageY, "px")).style("border", _self.Style.ToolTip.border).style("font", _self.Style.ToolTip.font).style("border-radius", _self.Style.ToolTip.border_radius).style("box-shadow", _self.Style.ToolTip.box_shadow).style("padding", _self.Style.ToolTip.padding).style("background-color", _self.Style.ToolTip.background_color).style("position", _self.Style.ToolTip.position);
           div.transition().duration(500).style("opacity", 500);
-          console.log(entity);
           div.html("<p>Entity: ".concat(entity, "<br />Date: ").concat(date.getFullYear(), "<br/>Value: ").concat(value, "</p>"));
-          d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select("#" + entity.sanitize()).style("stroke-width", _self.Style.StrokeWidth * 2);
+          d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select("#legend-line-" + _self.LegendPlaceHolder + "-" + entity.sanitize()).style("stroke-width", _self.Style.StrokeWidth * 2);
           d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select('#legend-label-' + entity.sanitize()).style("color", "#fff").style("background-color", color(entity));
-          d3__WEBPACK_IMPORTED_MODULE_2__["selectAll"]("#circle-" + entity.sanitize()).attr("r", 6);
+          d3__WEBPACK_IMPORTED_MODULE_2__["selectAll"]("#circle-" + _self.LegendPlaceHolder + "-" + entity.sanitize()).attr("r", 6);
         }).on("mouseout", function (entity) {
           div.transition().duration(2000).style("opacity", 0);
-          d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select("#" + entity.entity.sanitize()).style("stroke-width", _self.Style.StrokeWidth);
-          d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select('#legend-label-' + entity.entity.sanitize()).style("border-color", color(entity.entity)).style("color", color(entity.entity)).style("background-color", "#fff");
-          d3__WEBPACK_IMPORTED_MODULE_2__["selectAll"]("#circle-" + entity.entity.sanitize()).attr("r", 3);
+          d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select("#legend-line-" + _self.LegendPlaceHolder + "-" + entity.entity.sanitize()).style("stroke-width", _self.Style.StrokeWidth);
+          d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select('#legend-label-' + _self.LegendPlaceHolder + "-" + entity.entity.sanitize()).style("border-color", color(entity.entity)).style("color", color(entity.entity)).style("background-color", "#fff");
+          d3__WEBPACK_IMPORTED_MODULE_2__["selectAll"]("#circle-" + _self.LegendPlaceHolder + "-" + entity.entity.sanitize()).attr("r", 3);
         });
       } // We give access to svg object
 

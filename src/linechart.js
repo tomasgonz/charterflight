@@ -53,9 +53,12 @@ export default class LineChart {
   }
 
   Draw()
-  {
+  {    
     // Necessary to keep a reference within an event handler
     const _self = this;
+
+    // Create ID for the legend
+    _self.LegendPlaceHolder = this.ChartPlaceHolder + "-" + "Legend";
 
     const width = _self.Width - _self.Margin.left - _self.Margin.right;
     const height = _self.Height - _self.Margin.top - _self.Margin.bottom;
@@ -120,16 +123,16 @@ export default class LineChart {
       }
 
       // Check that the #Chart element exists and, on the contrary, create it
-      if (d3.select(_self.el).select("#Chart").empty())
+      if (d3.select(_self.el).select("#Chart-" + this.ChartPlaceHolder).empty())
       {
         _self.DivChart = d3.select(_self.el)
           .append("div")
-          .attr("id", "Chart")
+          .attr("id", "Chart-" + this.ChartPlaceHolder)
           .style("margin", "0.1em 0.1em 0 0.1em");
 
         _self.DivLegend = d3.select(_self.el)
         .append("div")
-        .attr("id", "Legend")
+        .attr("id", this.LegendPlaceHolder)
         .style("float", "left")
         .style("width", _self.Width)
         .style("margin", "0 0.1em 0.1em 3em");
@@ -138,9 +141,9 @@ export default class LineChart {
       // First we have to remove svg
       // in case we are redrawing
       // the chart.
-      d3.select(_self.el).select("#Chart").select("svg").remove();
+      d3.select(_self.el).select("#Chart-" + this.ChartPlaceHolder).select("svg").remove();
 
-    const svg = d3.select(_self.el).select("#Chart").append("svg")
+    const svg = d3.select(_self.el).select("#Chart-" + this.ChartPlaceHolder).append("svg")
       .style("fill", ("none"))
       .attr("width", width + _self.Margin.left + _self.Margin.right)
       .attr("height", height + _self.Margin.top + _self.Margin.bottom)
@@ -211,8 +214,10 @@ export default class LineChart {
 
       // This function writes the legend
       var l = new D3Legend();
+      l.LegendPlaceHolder = _self.LegendPlaceHolder;
 
-      const legend = d3.select("#Legend").append("g")
+      const legend = d3.select(_self.el).append("g")
+        .attr("id", "legend-label" + _self.LegendPlaceHolder + "-" + d.key.sanitize())
         .attr("class","legend")
         .attr("data-legend-label", d.key.sanitize())
         .attr("font-legend-size", utils.scale_font_size(_self.Width))
@@ -222,23 +227,23 @@ export default class LineChart {
               return "translate(0," + i * 20 + ")"
           })
         .style("font", utils.scale_font_size(_self.Width) + " sans-serif")
-        .call(l.Legend);
-
-        return (d.key.sanitize());
+        .call(l.Legend);        
+        
+        return ("legend-line-" + _self.LegendPlaceHolder + "-" + d.key.sanitize());
 
       })
       .attr("d", ({values}) => line(values))
       .on("mouseover", d => {
         d3.select(_self.el)
-        .select("#" + d.key.sanitize())
+        .select("#legend-line-" + _self.LegendPlaceHolder + "-" + d.key.sanitize())
         .style("stroke-width", (_self.Style.StrokeWidth * 2));
 
         d3.select(_self.el)
-        .select('#legend-label-' + d.key.sanitize())
+        .select('#legend-label-' + _self.LegendPlaceHolder + "-" + d.key.sanitize())
         .style("color", "#fff")
         .style("background-color", color(d.key));
 
-        d3.selectAll("#circle-" + d.key.sanitize())
+        d3.selectAll("#circle-" + _self.LegendPlaceHolder + "-" + d.key.sanitize())
         .attr("r", 6);
 
         }
@@ -246,16 +251,16 @@ export default class LineChart {
       .on("mouseout", ({key}) => {
 
         d3.select(_self.el)
-        .select("#" + key.sanitize())
+        .select("#legend-line-" + _self.LegendPlaceHolder + "-" + key.sanitize())
         .style("stroke-width", (_self.Style.StrokeWidth));
 
         d3.select(_self.el)
-        .select('#legend-label-' + key.sanitize())
+        .select('#legend-label-' + _self.LegendPlaceHolder + "-" + key.sanitize())
         .style("color", color(key))
         .style("border-color", color(key))
         .style("background-color", "#fff");
 
-        d3.selectAll("#circle-" + key.sanitize())
+        d3.selectAll("#circle-" + _self.LegendPlaceHolder + "-" + key.sanitize())
         .attr("r", 3);
 
     })
@@ -273,7 +278,7 @@ export default class LineChart {
       .attr("r", _self.Style.DataPoint.SizeDataPoint)
       .attr("cx", ({date}) => x(date))
       .attr("cy", ({value}) => y(value))
-      .attr("id", ({entity}) => "circle-" + entity)
+      .attr("id", ({entity}) => "circle-" + _self.LegendPlaceHolder + "-" + entity)
       .style("stroke", ({entity}) => color(entity))
       .style("stroke-width", _self.Style.DataPoint.StrokeWidth)
       .style("fill", ({entity}) => utils.shade_color(color(entity), 0.4))
@@ -290,12 +295,10 @@ export default class LineChart {
 
         div.transition().duration(500).style("opacity", 500);
 
-        console.log(entity);
-
         div.html(`<p>Entity: ${entity}<br />Date: ${date.getFullYear()}<br/>Value: ${value}</p>`);
-
+        
         d3.select(_self.el)
-        .select("#" + entity.sanitize())
+        .select("#legend-line-" + _self.LegendPlaceHolder + "-" + entity.sanitize())
         .style("stroke-width", (_self.Style.StrokeWidth * 2));
 
         d3.select(_self.el)
@@ -303,22 +306,22 @@ export default class LineChart {
         .style("color", "#fff")
         .style("background-color", color(entity));
 
-        d3.selectAll("#circle-" + entity.sanitize())
+        d3.selectAll("#circle-" + _self.LegendPlaceHolder + "-" + entity.sanitize())
         .attr("r", 6);
       })
       .on("mouseout", entity => {
         div.transition().duration(2000).style("opacity", 0)
         d3.select(_self.el)
-        .select("#" + entity.entity.sanitize())
+        .select("#legend-line-" + _self.LegendPlaceHolder + "-" + entity.entity.sanitize())
         .style("stroke-width", (_self.Style.StrokeWidth));
-
+        
         d3.select(_self.el)
-        .select('#legend-label-' + entity.entity.sanitize())
+        .select('#legend-label-' + _self.LegendPlaceHolder + "-" + entity.entity.sanitize())
         .style("border-color", color(entity.entity))
         .style("color", color(entity.entity))
         .style("background-color", "#fff");
 
-        d3.selectAll("#circle-" + entity.entity.sanitize())
+        d3.selectAll("#circle-" + _self.LegendPlaceHolder + "-" + entity.entity.sanitize())
         .attr("r", 3);
       });
 
