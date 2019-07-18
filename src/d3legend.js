@@ -1,5 +1,4 @@
 import * as d3 from 'd3';
-import * as utils from './utils';
 
 export default class D3Legend {
 
@@ -12,7 +11,7 @@ export default class D3Legend {
   {
 
     gg.each(function(g) {
-      var g = d3.select(this),
+      var g = d3.select(this.LegendPlaceHolder),
           items = {},
           lb = g.selectAll(".legend-box").data([true]),
           li = g.selectAll(".legend-items").data([true]);
@@ -37,5 +36,6 @@ export default class D3Legend {
     });
 
     return gg
+
   }
 }

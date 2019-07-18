@@ -211,6 +211,7 @@ export default class LineChart {
 
       // This function writes the legend
       var l = new D3Legend();
+      l.LegendPlaceHolder = this.LegendPlacdeHolder;
 
       const legend = d3.select("#Legend").append("g")
         .attr("class","legend")
@@ -289,8 +290,6 @@ export default class LineChart {
         .style("position",  _self.Style.ToolTip.position);
 
         div.transition().duration(500).style("opacity", 500);
-
-        console.log(entity);
 
         div.html(`<p>Entity: ${entity}<br />Date: ${date.getFullYear()}<br/>Value: ${value}</p>`);
 
