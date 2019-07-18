@@ -9,18 +9,18 @@ export default class D3Legend {
   
   Legend(gg)
   {
-
-    gg.each(function(g) {
-      var g = d3.select(this.LegendPlaceHolder),
+    
+    gg.each(function(g) {      
+      
+      var h = d3.select(this),
           items = {},
-          lb = g.selectAll(".legend-box").data([true]),
-          li = g.selectAll(".legend-items").data([true]);
+          lb = h.selectAll(".legend-box").data([true]),
+          li = h.selectAll(".legend-items").data([true]);
       
       lb.enter().append("rect").classed("legend-box",true);
-      li.enter().append("g").classed("legend-items",true);
-
+      li.enter().append("g").classed("legend-items",true);  
+      
       var _legendItem = lb.enter().append("div")
-      .attr("id", "legend-label-" + d3.select(this).attr("data-legend-label"))
       .style("float", "left")
       .style("position", "relative")
       .style("margin", "0.3em")
@@ -34,7 +34,7 @@ export default class D3Legend {
       .text(d3.select(this).attr("data-legend-label"));
       
     });
-
+    
     return gg
 
   }
