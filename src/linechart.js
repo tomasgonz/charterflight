@@ -121,21 +121,15 @@ export default class LineChart {
           .style("font", utils.scale_font_size(_self.Width + _self.Height)  + " sans-serif")
           .style("text-align", "center");
       }
-
+ 
       // Check that the #Chart element exists and, on the contrary, create it
       if (d3.select(_self.el).select("#Chart-" + this.ChartPlaceHolder).empty())
       {
         _self.DivChart = d3.select(_self.el)
           .append("div")
           .attr("id", "Chart-" + this.ChartPlaceHolder)
-          .style("margin", "0.1em 0.1em 0 0.1em");
-
-        _self.DivLegend = d3.select(_self.el)
-        .append("div")
-        .attr("id", this.LegendPlaceHolder)
-        .style("float", "left")
-        .style("clear", "both")
-        .style("margin", "0 0.1em 0.1em 3em");
+          .style("margin", "0.1em 0.1em 0 1em")
+          .style("padding", "0.1em 0.1em 0 1em");
       }
 
       // First we have to remove svg
@@ -176,7 +170,15 @@ export default class LineChart {
       .attr("class", "x axis")
       .style("font", _self.Style.Axis.x.font)
       .attr("transform", `translate(0,${height})`)
-      .call(xAxis);
+      .call(xAxis)
+      .selectAll("text")      
+      .attr("y", 0)
+      .attr("x", 7)
+      .attr("dy", ".01em")
+      .attr("transform", "rotate(90)")
+      .style("margin", "0px")
+      .style("font-size", "10px")
+      .style("text-anchor", "start");
 
     svg.append("g")
       .attr("class", " axis")
@@ -204,7 +206,19 @@ export default class LineChart {
   // .attr("data-legend",function(d) { return d.key})
   // allow us to generate the legend
   //
-    entities.append("svg:path")
+  if (_self.ShowLegend == true)
+  {
+  _self.DivLegend = d3.select(_self.el)
+  .append("div")
+  .attr("id", this.LegendPlaceHolder)
+  .style("float", "left")
+  .style("clear", "both")
+  .style("dislpay", "relative")
+  .style("width", _self.Width)   
+  .style("margin", "0 5em 0.1em 5em");
+  }
+    
+  entities.append("svg:path")
       .attr("data-legend",
       function(d) {
         return d.key
@@ -212,23 +226,22 @@ export default class LineChart {
       .attr("class", "line")
       .attr("id", d => {
 
-      // This function writes the legend
+        // This function writes the legend
       var l = new D3Legend();
       l.LegendPlaceHolder = _self.LegendPlaceHolder;
 
-      const legend = d3.select(_self.el).append("g")
+      const legend = d3.select("#" + _self.LegendPlaceHolder).append("g")
         .attr("id", "legend-label-" + _self.LegendPlaceHolder + "-" + d.key.sanitize())
         .attr("class","legend")
         .attr("data-legend-label", d.key.sanitize())
-        .attr("font-legend-size", utils.scale_font_size(_self.Width))
+        .attr("font-legend-size", "10px")
         .attr("data-legend-label-color", color(d.key))
-        .style("position", "relative")
         .style("float", "left")
         .attr("transform", function (d, i)
           {
               return "translate(0," + i * 20 + ")"
           })
-        .style("font", utils.scale_font_size(_self.Width) + " sans-serif")
+        .style("font", "10px")
         .call(l.Legend);        
         
         return ("legend-line-" + _self.LegendPlaceHolder + "-" + d.key.sanitize());
@@ -268,7 +281,7 @@ export default class LineChart {
     })
     .style("stroke", ({key}) => color(key))
     .style("border-width", _self.Style.StrokeWidth);
-
+  
     // Display the tooltip when we hover over data points
     if (_self.Style.ShowDataPoint == true)
     {      
