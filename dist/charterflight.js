@@ -29084,7 +29084,7 @@ function () {
         lb.enter().append("rect").classed("legend-box", true);
         li.enter().append("g").classed("legend-items", true);
 
-        var _legendItem = lb.enter().append("div").style("float", "left").style("position", "relative").style("margin", "0.3em").style("padding", "0.2em").style("border", "1px solid").style("font", d3__WEBPACK_IMPORTED_MODULE_0__["select"](this).attr("font-legend-size") + " sans-serif").style("border-radius", "8px").style("color", d3__WEBPACK_IMPORTED_MODULE_0__["select"](this).attr("data-legend-label-color"));
+        var _legendItem = lb.enter().append("div").attr("id", d3__WEBPACK_IMPORTED_MODULE_0__["select"](this).attr("id")).style("float", "left").style("position", "relative").style("margin", "0.3em").style("padding", "0.2em").style("border", "1px solid").style("font", d3__WEBPACK_IMPORTED_MODULE_0__["select"](this).attr("font-legend-size") + " sans-serif").style("border-radius", "8px").style("color", d3__WEBPACK_IMPORTED_MODULE_0__["select"](this).attr("data-legend-label-color"));
 
         _legendItem.append("text").text(d3__WEBPACK_IMPORTED_MODULE_0__["select"](this).attr("data-legend-label"));
       });
@@ -29193,6 +29193,8 @@ function () {
   _createClass(LineChart, [{
     key: "Draw",
     value: function Draw() {
+      var _this = this;
+
       // Necessary to keep a reference within an event handler
       var _self = this; // Create ID for the legend
 
@@ -29314,7 +29316,7 @@ function () {
         // This function writes the legend
         var l = new _d3legend__WEBPACK_IMPORTED_MODULE_3__["default"]();
         l.LegendPlaceHolder = _self.LegendPlaceHolder;
-        var legend = d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).append("g").attr("id", "legend-label" + _self.LegendPlaceHolder + "-" + d.key.sanitize()).attr("class", "legend").attr("data-legend-label", d.key.sanitize()).attr("font-legend-size", _utils__WEBPACK_IMPORTED_MODULE_5__["scale_font_size"](_self.Width)).attr("data-legend-label-color", color(d.key)).attr("transform", function (d, i) {
+        var legend = d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).append("g").attr("id", "legend-label-" + _self.LegendPlaceHolder + "-" + d.key.sanitize()).attr("class", "legend").attr("data-legend-label", d.key.sanitize()).attr("font-legend-size", _utils__WEBPACK_IMPORTED_MODULE_5__["scale_font_size"](_self.Width)).attr("data-legend-label-color", color(d.key)).attr("transform", function (d, i) {
           return "translate(0," + i * 20 + ")";
         }).style("font", _utils__WEBPACK_IMPORTED_MODULE_5__["scale_font_size"](_self.Width) + " sans-serif").call(l.Legend);
         return "legend-line-" + _self.LegendPlaceHolder + "-" + d.key.sanitize();
@@ -29346,30 +29348,24 @@ function () {
         }).attr("cy", function (_ref19) {
           var value = _ref19.value;
           return y(value);
-        }).attr("id", function (_ref20) {
-          var entity = _ref20.entity;
-          return "circle-" + _self.LegendPlaceHolder + "-" + entity;
-        }).style("stroke", function (_ref21) {
-          var entity = _ref21.entity;
-          return color(entity);
-        }).style("stroke-width", _self.Style.DataPoint.StrokeWidth).style("fill", function (_ref22) {
-          var entity = _ref22.entity;
-          return _utils__WEBPACK_IMPORTED_MODULE_5__["shade_color"](color(entity), 0.4);
-        }).on("mouseover", function (_ref23) {
-          var entity = _ref23.entity,
-              date = _ref23.date,
-              value = _ref23.value;
+        }).attr("id", function (e) {
+          return "circle-" + _self.LegendPlaceHolder + "-" + _self.valueField;
+        }).style("stroke", function (e) {
+          return color(e[_this.entityField].sanitize());
+        }).style("stroke-width", _self.Style.DataPoint.StrokeWidth).style("fill", function (e) {
+          return _utils__WEBPACK_IMPORTED_MODULE_5__["shade_color"](color(e[_this.entityField].sanitize()), 0.4);
+        }).on("mouseover", function (e) {
           div.style("left", "".concat(d3__WEBPACK_IMPORTED_MODULE_2__["event"].pageX, "px")).style("top", "".concat(d3__WEBPACK_IMPORTED_MODULE_2__["event"].pageY, "px")).style("border", _self.Style.ToolTip.border).style("font", _self.Style.ToolTip.font).style("border-radius", _self.Style.ToolTip.border_radius).style("box-shadow", _self.Style.ToolTip.box_shadow).style("padding", _self.Style.ToolTip.padding).style("background-color", _self.Style.ToolTip.background_color).style("position", _self.Style.ToolTip.position);
           div.transition().duration(500).style("opacity", 500);
-          div.html("<p>Entity: ".concat(entity, "<br />Date: ").concat(date.getFullYear(), "<br/>Value: ").concat(value, "</p>"));
-          d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select("#legend-line-" + _self.LegendPlaceHolder + "-" + entity.sanitize()).style("stroke-width", _self.Style.StrokeWidth * 2);
-          d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select('#legend-label-' + entity.sanitize()).style("color", "#fff").style("background-color", color(entity));
-          d3__WEBPACK_IMPORTED_MODULE_2__["selectAll"]("#circle-" + _self.LegendPlaceHolder + "-" + entity.sanitize()).attr("r", 6);
-        }).on("mouseout", function (entity) {
+          div.html("<p>Entity: ".concat(e[_this.entityField], "<br />Date: ").concat(e[_this.pivotField].getFullYear(), "<br/>Value: ").concat(e[_this.valueField], "</p>"));
+          d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select("#legend-line-" + _self.LegendPlaceHolder + "-" + e[_this.entityField].sanitize()).style("stroke-width", _self.Style.StrokeWidth * 2);
+          d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select('#legend-label-' + e[_this.entityField].sanitize()).style("color", "#fff").style("background-color", color(e[_this.entityField].sanitize()));
+          d3__WEBPACK_IMPORTED_MODULE_2__["selectAll"]("#circle-" + _self.LegendPlaceHolder + "-" + e[_this.entityField].sanitize()).attr("r", 6);
+        }).on("mouseout", function (e) {
           div.transition().duration(2000).style("opacity", 0);
-          d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select("#legend-line-" + _self.LegendPlaceHolder + "-" + entity.entity.sanitize()).style("stroke-width", _self.Style.StrokeWidth);
-          d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select('#legend-label-' + _self.LegendPlaceHolder + "-" + entity.entity.sanitize()).style("border-color", color(entity.entity)).style("color", color(entity.entity)).style("background-color", "#fff");
-          d3__WEBPACK_IMPORTED_MODULE_2__["selectAll"]("#circle-" + _self.LegendPlaceHolder + "-" + entity.entity.sanitize()).attr("r", 3);
+          d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select("#legend-line-" + _self.LegendPlaceHolder + "-" + e[_this.entityField].sanitize()).style("stroke-width", _self.Style.StrokeWidth);
+          d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select('#legend-label-' + _self.LegendPlaceHolder + "-" + e[_this.entityField].sanitize()).style("border-color", color(e[_this.entityField].sanitize())).style("color", color(e[_this.entityField].sanitize())).style("background-color", "#fff");
+          d3__WEBPACK_IMPORTED_MODULE_2__["selectAll"]("#circle-" + _self.LegendPlaceHolder + "-" + e[_this.entityField].sanitize()).attr("r", 3);
         });
       } // We give access to svg object
 

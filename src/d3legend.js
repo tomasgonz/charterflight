@@ -21,6 +21,7 @@ export default class D3Legend {
       li.enter().append("g").classed("legend-items",true);  
       
       var _legendItem = lb.enter().append("div")
+      .attr("id", d3.select(this).attr("id"))
       .style("float", "left")
       .style("position", "relative")
       .style("margin", "0.3em")
@@ -29,7 +30,7 @@ export default class D3Legend {
       .style("font",  d3.select(this).attr("font-legend-size") + " sans-serif")
       .style("border-radius", "8px")
       .style("color", d3.select(this).attr("data-legend-label-color"));
-      
+            
       _legendItem.append("text")
       .text(d3.select(this).attr("data-legend-label"));
       

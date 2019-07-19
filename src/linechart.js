@@ -217,7 +217,7 @@ export default class LineChart {
       l.LegendPlaceHolder = _self.LegendPlaceHolder;
 
       const legend = d3.select(_self.el).append("g")
-        .attr("id", "legend-label" + _self.LegendPlaceHolder + "-" + d.key.sanitize())
+        .attr("id", "legend-label-" + _self.LegendPlaceHolder + "-" + d.key.sanitize())
         .attr("class","legend")
         .attr("data-legend-label", d.key.sanitize())
         .attr("font-legend-size", utils.scale_font_size(_self.Width))
@@ -269,7 +269,7 @@ export default class LineChart {
 
     // Display the tooltip when we hover over data points
     if (_self.Style.ShowDataPoint == true)
-    {
+    {      
       // Append dots to display data points
       entities.append("g").selectAll("circle")
       .data(({values}) => values)
@@ -278,11 +278,11 @@ export default class LineChart {
       .attr("r", _self.Style.DataPoint.SizeDataPoint)
       .attr("cx", ({date}) => x(date))
       .attr("cy", ({value}) => y(value))
-      .attr("id", ({entity}) => "circle-" + _self.LegendPlaceHolder + "-" + entity)
-      .style("stroke", ({entity}) => color(entity))
+      .attr("id", (e) => "circle-" + _self.LegendPlaceHolder + "-" + _self.valueField)
+      .style("stroke", (e) => color(e[this.entityField].sanitize()))
       .style("stroke-width", _self.Style.DataPoint.StrokeWidth)
-      .style("fill", ({entity}) => utils.shade_color(color(entity), 0.4))
-      .on("mouseover", ({entity, date, value}) => {
+      .style("fill", (e) => utils.shade_color(color(e[this.entityField].sanitize()), 0.4))
+      .on("mouseover", (e) => {
         div.style("left", `${d3.event.pageX}px`)
         .style("top", `${d3.event.pageY}px`)
         .style("border", _self.Style.ToolTip.border)
@@ -295,33 +295,33 @@ export default class LineChart {
 
         div.transition().duration(500).style("opacity", 500);
 
-        div.html(`<p>Entity: ${entity}<br />Date: ${date.getFullYear()}<br/>Value: ${value}</p>`);
+        div.html(`<p>Entity: ${e[this.entityField]}<br />Date: ${e[this.pivotField].getFullYear()}<br/>Value: ${e[this.valueField]}</p>`);
         
         d3.select(_self.el)
-        .select("#legend-line-" + _self.LegendPlaceHolder + "-" + entity.sanitize())
+        .select("#legend-line-" + _self.LegendPlaceHolder + "-" + e[this.entityField].sanitize())
         .style("stroke-width", (_self.Style.StrokeWidth * 2));
 
         d3.select(_self.el)
-        .select('#legend-label-' + entity.sanitize())
+        .select('#legend-label-' + e[this.entityField].sanitize())
         .style("color", "#fff")
-        .style("background-color", color(entity));
+        .style("background-color", color(e[this.entityField].sanitize()));
 
-        d3.selectAll("#circle-" + _self.LegendPlaceHolder + "-" + entity.sanitize())
+        d3.selectAll("#circle-" + _self.LegendPlaceHolder + "-" + e[this.entityField].sanitize())
         .attr("r", 6);
       })
-      .on("mouseout", entity => {
+      .on("mouseout", e => {
         div.transition().duration(2000).style("opacity", 0)
         d3.select(_self.el)
-        .select("#legend-line-" + _self.LegendPlaceHolder + "-" + entity.entity.sanitize())
+        .select("#legend-line-" + _self.LegendPlaceHolder + "-" + e[this.entityField].sanitize())
         .style("stroke-width", (_self.Style.StrokeWidth));
         
         d3.select(_self.el)
-        .select('#legend-label-' + _self.LegendPlaceHolder + "-" + entity.entity.sanitize())
-        .style("border-color", color(entity.entity))
-        .style("color", color(entity.entity))
+        .select('#legend-label-' + _self.LegendPlaceHolder + "-" + e[this.entityField].sanitize())
+        .style("border-color", color(e[this.entityField].sanitize()))
+        .style("color", color(e[this.entityField].sanitize()))
         .style("background-color", "#fff");
 
-        d3.selectAll("#circle-" + _self.LegendPlaceHolder + "-" + entity.entity.sanitize())
+        d3.selectAll("#circle-" + _self.LegendPlaceHolder + "-" + e[this.entityField].sanitize())
         .attr("r", 3);
       });
 
