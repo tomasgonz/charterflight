@@ -134,7 +134,7 @@ export default class LineChart {
         .append("div")
         .attr("id", this.LegendPlaceHolder)
         .style("float", "left")
-        .style("width", _self.Width)
+        .style("clear", "both")
         .style("margin", "0 0.1em 0.1em 3em");
       }
 
@@ -222,6 +222,8 @@ export default class LineChart {
         .attr("data-legend-label", d.key.sanitize())
         .attr("font-legend-size", utils.scale_font_size(_self.Width))
         .attr("data-legend-label-color", color(d.key))
+        .style("position", "relative")
+        .style("float", "left")
         .attr("transform", function (d, i)
           {
               return "translate(0," + i * 20 + ")"

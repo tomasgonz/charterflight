@@ -29251,7 +29251,7 @@ function () {
 
       if (d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).select("#Chart-" + this.ChartPlaceHolder).empty()) {
         _self.DivChart = d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).append("div").attr("id", "Chart-" + this.ChartPlaceHolder).style("margin", "0.1em 0.1em 0 0.1em");
-        _self.DivLegend = d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).append("div").attr("id", this.LegendPlaceHolder).style("float", "left").style("width", _self.Width).style("margin", "0 0.1em 0.1em 3em");
+        _self.DivLegend = d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).append("div").attr("id", this.LegendPlaceHolder).style("float", "left").style("clear", "both").style("margin", "0 0.1em 0.1em 3em");
       } // First we have to remove svg
       // in case we are redrawing
       // the chart.
@@ -29316,7 +29316,7 @@ function () {
         // This function writes the legend
         var l = new _d3legend__WEBPACK_IMPORTED_MODULE_3__["default"]();
         l.LegendPlaceHolder = _self.LegendPlaceHolder;
-        var legend = d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).append("g").attr("id", "legend-label-" + _self.LegendPlaceHolder + "-" + d.key.sanitize()).attr("class", "legend").attr("data-legend-label", d.key.sanitize()).attr("font-legend-size", _utils__WEBPACK_IMPORTED_MODULE_5__["scale_font_size"](_self.Width)).attr("data-legend-label-color", color(d.key)).attr("transform", function (d, i) {
+        var legend = d3__WEBPACK_IMPORTED_MODULE_2__["select"](_self.el).append("g").attr("id", "legend-label-" + _self.LegendPlaceHolder + "-" + d.key.sanitize()).attr("class", "legend").attr("data-legend-label", d.key.sanitize()).attr("font-legend-size", _utils__WEBPACK_IMPORTED_MODULE_5__["scale_font_size"](_self.Width)).attr("data-legend-label-color", color(d.key)).style("position", "relative").style("float", "left").attr("transform", function (d, i) {
           return "translate(0," + i * 20 + ")";
         }).style("font", _utils__WEBPACK_IMPORTED_MODULE_5__["scale_font_size"](_self.Width) + " sans-serif").call(l.Legend);
         return "legend-line-" + _self.LegendPlaceHolder + "-" + d.key.sanitize();
